@@ -2,9 +2,9 @@
   "name": "phytongenx",
   "version": "1.0.0",
   "description": "SS",
-  "main": "index.js",
+  "main": "webserver/index.js",
   "scripts": {
-    "dev": "nodemon/index.js",
+    "dev": "nodemon/webserver/index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
