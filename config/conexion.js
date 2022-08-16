@@ -1,30 +1,21 @@
-const sql = require('mssql')
+const mysql = require("mysql")
 
-const sqlConfig = {
-  user: 'ss',
-  password: '1234',
-  database: 'phytogenx',
-  server: 'localhost',
-  pool: {
-    max: 10,
-    min: 0,
-    idleTimeoutMillis: 30000
-  },
-  options: {
-    encrypt: true, // for azure
-    trustServerCertificate: false // change to true for local dev / self-signed certs
-  }
-}
+var con = mysql.createConnection({
+    host:'localhost',
+    user: 'ss',
+    password: '1234',
+    database: 'pgenx-cmsqb',
+    server: 'localhost',
+});
 
-async () => {
- try {
-  // make sure that any items are correctly URL encoded in the connection string
-  await sql.connect(sqlConfig)
-  console.log('conexion de bd exitosa')
-  //const result = await sql.query`select * from mytable where id = ${value}`
-  //console.dir(result)
- } catch (err) {
-  // ... error checks
-  console.log(err)
- }
-}
+con.connect(
+    (err)=>{
+        if(!err){
+            console.log('Conexión con bd establecida')
+        }else{
+            console.log('Error bd: '+err);
+        }
+    }
+);
+
+module.exports = con;
