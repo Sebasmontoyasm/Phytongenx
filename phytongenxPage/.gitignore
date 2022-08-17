@@ -10,6 +10,7 @@
 # dependencies
 /node_modules
 /bootstrap-5.2.0-dist
+/.angular/cache
 
 # profiling files
 chrome-profiler-events*.json
