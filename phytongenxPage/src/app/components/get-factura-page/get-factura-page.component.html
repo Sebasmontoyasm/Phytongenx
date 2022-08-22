@@ -1,12 +1,35 @@
  <!-- Navigation-->
  <!DOCTYPE html>
  <html>
-     <body>
-         <div class="masthead bg-primary text-white">
-             <div class="container d-flex flex-column">
-                 <p class="masthead-subheading font-weight-light mb-2">Get Page</p>
-             </div>
-         </div>
-     </body>
+    <body>
+        <div class="masthead bg-primary">
+            <table class=" text-center table-primary table table-striped">
+                <thead>
+                    <tr class="table-primary">
+                        <th scope="col">#</th>
+                        <th scope="col">Factura</th>
+                        <th scope="col">Orden</th>
+                        <th scope="col">PDF</th>
+                        <th scope="col">Nombre PDF</th>
+                        <th scope="col">Fecha de Factura</th>
+                        <th scope="col">Fecha de Procesamiento</th>
+                        <th scope="col">Fecha de CSM</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class="table-primary" *ngFor="let factura of facturasList">
+                        <th scope="row">{{factura.ID}}</th>
+                        <td>{{factura.Invoice_Number}}</td>
+                        <td>{{factura.PO_Number}}</td>
+                        <td>{{factura.PDF_Name}}</td>
+                        <td>{{factura.NamePDF}}</td>
+                        <td>{{factura.Date_invoice_recieved}}</td>
+                        <td>{{factura.Date_Quickbooks_Processed}}</td>
+                        <td>{{factura.Date_CSM_Processed}}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </body>
  </html>
  

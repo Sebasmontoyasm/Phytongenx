@@ -8,6 +8,7 @@ import { PedroService } from 'src/app/services/pedro.service';
 })
 export class GetFacturaPageComponent implements OnInit {
 
+  facturasList:any=[];
   constructor(private PedroService:PedroService) { }
 
   ngOnInit(): void {
@@ -18,7 +19,8 @@ export class GetFacturaPageComponent implements OnInit {
   {
     this.PedroService.getPedro().subscribe(
       res=>{
-        console.log(res)
+        this.facturasList=res;
+        console.log(res);
       },
       err => console.log(err)
     );
