@@ -71,7 +71,8 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "browserTarget": "phytongenxPage:build:production"
+              "browserTarget": "phytongenxPage:build:production",
+              "proxyConfig": "proxy.conf.json"
             },
             "development": {
               "browserTarget": "phytongenxPage:build:development"

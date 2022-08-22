@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-
+import { PedroService } from '../../services/pedro.service';
 @Component({
   selector: 'app-add-factura-page',
   templateUrl: './add-factura-page.component.html',
@@ -7,9 +7,18 @@ import { Component, OnInit } from '@angular/core';
 })
 export class AddFacturaPageComponent implements OnInit {
 
-  constructor() { }
+  constructor(private PedroService:PedroService) { }
 
   ngOnInit(): void {
+  }
+
+  mostrarInformacion(){
+    this.PedroService.getPedro().subscribe(
+      res=>{
+        console.log(res)
+      },
+      err => console.log(err)
+    );
   }
 
 }

@@ -1,27 +1,20 @@
-require("./config/conexion");
-
 const express = require('express');
-const port = (process.env.port || 3000)
+var con = require("./config/conexion");
 
 const app = express();
 
-app.set('port',port)
-
-app.get('/pedro', function (req, res) {
-    res.send('GET request to the homepage');
+app.get('/pedro', (request, response) => {
+  //Revisar como ponerlo contra el localhost:4200/get
+  response.header('Access-Control-Allow-Origin', '*');
+  con.query('SELECT * FROM data', (error, result) => {
+    if (error) throw error;
+    response.send(result);
+  })
 });
 
 
-// GET method route
-app.get('/', function (req, res) {
-    res.send('GET request to the homepage');
-});
-
-app.listen(app.get('port'),(error)=>{
-    if(error){
-        console.log("Error al inciar el servidor"+error)
-    }else{
-        console.log('Servidor inciado en el puerto: '+port)
-    }
+const listener = app.listen(process.env.PORT || 3000, () => {
+    console.log('Your app is listening on port ' + listener.address().port)
 })
+
 
