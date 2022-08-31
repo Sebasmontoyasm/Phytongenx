@@ -1,0 +1,33 @@
+
+
+<table class=" text-center table-primary table table-striped">
+    <thead>
+        <tr class="table-primary">
+            <th scope="col">#</th>
+            <th scope="col">PO Number</th>
+            <th scope="col">Date CSM Processed</th>
+            <th scope="col">Lab Results PDF</th>
+            <th scope="col">Final PDF Name</th>
+            <th scope="col">Invoice</th>
+            <th scope="col">Date Invoice</th>
+            <th scope="col">Date QB Processed</th>  
+        </tr>
+    </thead>
+    <tbody>
+        <tr class="table-primary" *ngFor="let factura of facturasList">
+            <th scope="row">
+                <a href="/get/{{factura.ID}}">
+                    {{factura.ID}}
+                </a>
+            </th>
+            <td>{{factura.PO_Number}}</td>
+            <td>{{factura.Date_CSM_Processed}}</td>
+            <td>{{factura.PDF_Name}}</td>
+            <td>{{factura.NamePDF}}</td>
+            <td>{{factura.Invoice_Number}}</td>
+            <td>{{factura.Date_invoice_recieved}}</td>
+            <td>{{factura.Date_Quickbooks_Processed}}</td>
+            
+        </tr>
+    </tbody>
+</table>    

@@ -8,9 +8,17 @@ import { AddFacturaPageComponent } from './components/add-factura-page/add-factu
 import { EditFacturaPageComponent } from './components/edit-factura-page/edit-factura-page.component';
 import { GetFacturaPageComponent } from './components/get-factura-page/get-factura-page.component';
 import { SinginPageComponent } from './components/singin-page/singin-page.component'; 
-
-import {HttpClientModule} from '@angular/common/http';
-import {FormsModule} from '@angular/forms';
+import { BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import { HttpClientModule } from '@angular/common/http';
+import { FormsModule } from '@angular/forms';
+import { MatTableModule } from '@angular/material/table';
+import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatSortModule } from '@angular/material/sort';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatIconModule } from '@angular/material/icon';
+import { MatMenuModule } from '@angular/material/menu';
+import { UpdatecmdPageComponent } from './components/updatecmd-page/updatecmd-page.component';
 
 @NgModule({
   declarations: [
@@ -19,13 +27,22 @@ import {FormsModule} from '@angular/forms';
     AddFacturaPageComponent,
     EditFacturaPageComponent,
     GetFacturaPageComponent,
-    SinginPageComponent
+    SinginPageComponent,
+    UpdatecmdPageComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
+    BrowserAnimationsModule,
     HttpClientModule,
-    FormsModule
+    FormsModule,
+    MatTableModule,
+    MatPaginatorModule,
+    MatSortModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatIconModule,
+    MatMenuModule
   ],
   providers: [],
   bootstrap: [AppComponent]

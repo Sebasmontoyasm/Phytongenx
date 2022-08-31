@@ -11429,7 +11429,7 @@ html {
 }
 
 .masthead {
-  padding-top: calc(6rem + 74px);
+  padding-top: calc(1.5rem + 74px);
   padding-bottom: 6rem;
 }
 .masthead .masthead-heading {
@@ -11441,11 +11441,11 @@ html {
 }
 .masthead .masthead-avatar {
   width: 15rem;
+  padding-top: calc(1.5rem + 74px);
 }
-
 @media (min-width: 992px) {
   .masthead {
-    padding-top: calc(6rem + 104px);
+    padding-top: calc(1.5rem + 74px);
     padding-bottom: 6rem;
   }
   .masthead .masthead-heading {

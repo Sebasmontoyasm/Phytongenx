@@ -5,6 +5,7 @@ import { EditFacturaPageComponent } from './components/edit-factura-page/edit-fa
 import { GetFacturaPageComponent } from './components/get-factura-page/get-factura-page.component';
 import { SinginPageComponent } from './components/singin-page/singin-page.component';
 import { HomePageComponent } from './components/home-page/home-page.component';
+import { UpdatecmdPageComponent } from './components/updatecmd-page/updatecmd-page.component';
 
 const routes: Routes = [
   { path:'', redirectTo:'/HomePage', pathMatch:'full'},
@@ -12,7 +13,8 @@ const routes: Routes = [
   { path:'add', component: AddFacturaPageComponent},
   { path:'edit', component: EditFacturaPageComponent},
   { path:'get', component: GetFacturaPageComponent},
-  { path:'singin', component: SinginPageComponent}
+  { path:'singin', component: SinginPageComponent},
+  { path:'cms', component: UpdatecmdPageComponent}
 ];
 
 @NgModule({

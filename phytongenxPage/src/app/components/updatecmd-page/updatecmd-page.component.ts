@@ -17,14 +17,13 @@ export interface Pedro{
 }
 
 @Component({
-  selector: 'app-get-factura-page',
-  templateUrl: './get-factura-page.component.html',
-  styleUrls: ['./get-factura-page.component.css']
+  selector: 'app-updatecmd-page',
+  templateUrl: './updatecmd-page.component.html',
+  styleUrls: ['./updatecmd-page.component.css']
 })
+export class UpdatecmdPageComponent implements OnInit {
 
-export class GetFacturaPageComponent implements OnInit {
-  
-  title = 'data-table';
+  title = 'cms-table';
   displayedColumn: string[] =['ID','PO_Number','Date_CSM_Processed','PDF_Name','NamePDF','Invoice_Number','Date_invoice_recieved','Date_Quickbooks_Processed'];
   dataSource!: MatTableDataSource<Pedro>;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
@@ -33,7 +32,8 @@ export class GetFacturaPageComponent implements OnInit {
 
   posts:any;
 
-  constructor(private PedroService:PedroService) { }
+
+  constructor(private PedroService: PedroService) { }
 
   ngOnInit(): void {
     this.getPedro();
@@ -41,7 +41,7 @@ export class GetFacturaPageComponent implements OnInit {
 
   getPedro()
   {
-    this.PedroService.getPedro().subscribe(
+    this.PedroService.getPedrocms().subscribe(
       res=>{
         this.posts=res;
 
@@ -56,10 +56,5 @@ export class GetFacturaPageComponent implements OnInit {
   applyFilter(event: Event){
     const filterValue = (event.target as HTMLInputElement).value;
     this.dataSource.filter = filterValue.trim().toLowerCase();
-  }
-
-  menuTigger(event: Event) {
-    console.log("Evento Menu:"+event);
-    //this.trigger.openMenu();
   }
 }

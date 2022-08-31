@@ -17,6 +17,10 @@ export class PedroService {
     return this.http.get(this.url+'/'+id);
   }
 
+  getPedrocms(){
+    return this.http.get(this.url+'/'+"'cms/manually'");
+  }
+
   addPedro(pedro:any){
     return this.http.post(this.url,pedro);
   }
