@@ -3,75 +3,75 @@
  <html>
     <body>
         <div class="masthead bg-primary">
-            
-            <mat-form-field class="search-div" appearance="fill">
-                <button class="icon" mat-icon-button [matMenuTriggerFor]="menu">
-                    <mat-icon >assessment</mat-icon>
-                    <mat-menu #menu="matMenu" >
-                        <button mat-menu-item>
-                            <mat-icon>label_important</mat-icon>
-                            <span>Opcion 1</span>
-                        </button>
-                        <button mat-menu-item>
-                            <mat-icon>label_important</mat-icon>
-                            <span>Opcion 2</span>
-                        </button>
-                    </mat-menu>
-                </button>          
-                <input class="inputfilter" matInput placeholder="Filter Table" search (keyup)="applyFilter($event)" #filterinput/>
-            </mat-form-field>
-              
+            <div class="search-div">
+                    <button class="icon" mat-icon-button [matMenuTriggerFor]="menu">
+                        <mat-icon >assessment</mat-icon>
+                        <mat-menu #menu="matMenu" >
+                            <button mat-menu-item>
+                                <mat-icon>label_important</mat-icon>
+                                <span>CMS Performance</span>
+                            </button>
+                            <button mat-menu-item>
+                                <mat-icon>label_important</mat-icon>
+                                <span>Opcion 2</span>
+                            </button>
+                        </mat-menu>
+                    </button>          
+                    <input class="inputfilter" matInput placeholder="Filter Table" search (keyup)="applyFilter($event)" #input/>
+            </div>  
             <div>
                 <table class="table-primary table table-striped" mat-table matSort [dataSource]="dataSource">
                     <ng-container matColumnDef="ID">
-                        <th mat-header-cell *matHeaderCellDef mat-sort-header> # </th>
+                        <th *matHeaderCellDef mat-sort-header> # </th>
                         
-                        <td mat-cell *matCellDef="let row">
-                            {{row.ID}}
+                        <td *matCellDef="let row">
+                            <a href="http://localhost:4200/rol/id?">
+                                {{row.ID}}
+                            </a>
                             <mat-icon *ngIf="">announcement</mat-icon>
                         </td>
                     </ng-container>
 
                     <ng-container matColumnDef="PO_Number">
-                        <th mat-header-cell *matHeaderCellDef mat-sort-header> PO Number </th>
-                        <td mat-cell *matCellDef="let row">{{row.PO_Number}} </td>
+                        <th *matHeaderCellDef mat-sort-header> PO Number </th>
+                        <td *matCellDef="let row">{{row.PO_Number}} </td>
                     </ng-container>
                     <ng-container matColumnDef="Date_CSM_Processed">
-                        <th mat-header-cell *matHeaderCellDef mat-sort-header> Date CSM Processed </th>
-                        <td mat-cell *matCellDef="let row">{{row.Date_CSM_Processed}} </td>
+                        <th *matHeaderCellDef mat-sort-header> Date CSM Processed </th>
+                        <td *matCellDef="let row">{{row.Date_CSM_Processed}} </td>
                     </ng-container>
                     <ng-container matColumnDef="PDF_Name">
-                        <th mat-header-cell *matHeaderCellDef mat-sort-header> Lab Results PDF </th>
-                        <td mat-cell *matCellDef="let row">{{row.PDF_Name}} </td>
+                        <th *matHeaderCellDef mat-sort-header> Lab Results PDF </th>
+                        <td *matCellDef="let row">{{row.PDF_Name}} </td>
                     </ng-container>
                     <ng-container matColumnDef="NamePDF">
-                        <th mat-header-cell *matHeaderCellDef mat-sort-header> Final PDF Name </th>
-                        <td mat-cell *matCellDef="let row">{{row.NamePDF}} </td>
+                        <th *matHeaderCellDef mat-sort-header> Final PDF Name </th>
+                        <td *matCellDef="let row">{{row.NamePDF}} </td>
                     </ng-container>
                     <ng-container matColumnDef="Invoice_Number">
-                        <th mat-header-cell *matHeaderCellDef mat-sort-header> Invoice </th>
-                        <td mat-cell *matCellDef="let row">{{row.Invoice_Number}} </td>
+                        <th *matHeaderCellDef mat-sort-header> Invoice </th>
+                        <td *matCellDef="let row">{{row.Invoice_Number}} </td>
                     </ng-container>
                     <ng-container matColumnDef="Date_invoice_recieved">
-                        <th mat-header-cell *matHeaderCellDef mat-sort-header> Date Invoice </th>
-                        <td mat-cell *matCellDef="let row">{{row.Date_invoice_recieved}} </td>
+                        <th *matHeaderCellDef mat-sort-header> Date Invoice </th>
+                        <td *matCellDef="let row">{{row.Date_invoice_recieved}} </td>
                     </ng-container>
                     <ng-container matColumnDef="Date_Quickbooks_Processed">
-                        <th mat-header-cell *matHeaderCellDef mat-sort-header> Date QB Processed </th>
-                        <td mat-cell *matCellDef="let row">{{row.Date_Quickbooks_Processed}} </td>
+                        <th *matHeaderCellDef mat-sort-header> Date QB Processed </th>
+                        <td *matCellDef="let row">{{row.Date_Quickbooks_Processed}} </td>
                     </ng-container>
                     <tr mat-header-row *matHeaderRowDef="displayedColumn"></tr>
                     <tr mat-row *matRowDef="let row; columns: displayedColumn"></tr>
 
-                    <tr>
-                        <td class="mat-cell" colspan="4">
-                            The filter does not match any item in the data for this text {{filterinput.value}}
+                   <!-- SHOWS WHEN DATA DOES NOT EXIST -->
+                    <tr *matNoDataRow>
+                        <td class="mat-cell " colspan = "4" > 
+                            The filter does not match any item in the data for this text {{input.value}} 
                         </td>
                     </tr>
-
                 </table>
-
-                <mat-paginator class="text-white" [pageSizeOptions]="[9,20,30,40,50]" aria-labels="select page of data"></mat-paginator>
+                <mat-paginator class="bg-primary fs-6" [pageSizeOptions]="[10,20,30,40,50]" aria-labels="select page of data"></mat-paginator>    
+                
             </div>            
         </div>
     </body>

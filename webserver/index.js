@@ -22,7 +22,7 @@ app.get('/pedro/:id', (request, response) => {
   })
 });
 
-app.get('/pedro/qb/duplicated', (request, response) => {
+app.get('/qb/duplicated', (request, response) => {
   //Revisar como ponerlo contra el localhost:4200/get/id
   response.header('Access-Control-Allow-Origin', '*');
   con.query('SELECT * FROM data', (error, result) => {
@@ -31,12 +31,12 @@ app.get('/pedro/qb/duplicated', (request, response) => {
   })
 });
 
-app.get('/pedro/cms/manually', (request, response) => {
+app.get('/cms/manually', (request, response) => {
   //Revisar como ponerlo contra el localhost:4200/get/id
   response.header('Access-Control-Allow-Origin', '*');
-  con.query('call cmsupmanualprocedure2();', (error, result) => {
+  con.query('call cmsupmanualprocedure()', (error, result) => {
     if (error) throw error;
-    response.send(result);
+    response.send(result[0]);
   })
 });
 

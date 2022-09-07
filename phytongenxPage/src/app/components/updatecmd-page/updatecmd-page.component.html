@@ -1,42 +1,89 @@
-<!-- Navigation-->
-<!DOCTYPE html>
-<html>
-   <body>
-       <div class="masthead bg-primary">
-           
-           <mat-form-field class="search-div" appearance="fill">       
-               <input class="inputfilter" matInput placeholder="Filter Table" search (keyup)="applyFilter($event)" #filterinput/>
-           </mat-form-field>
-             
-           <div>
-               <table class="table-primary table table-striped" mat-table matSort [dataSource]="dataSource">
-                   <ng-container matColumnDef="ID">
-                       <th mat-header-cell *matHeaderCellDef mat-sort-header> # </th>
-                       
-                       <td mat-cell *matCellDef="let row">
-                           {{row.ID}}
-                           <mat-icon *ngIf="">announcement</mat-icon>
-                       </td>
-                   </ng-container>
+ <!-- Navigation-->
+ <!DOCTYPE html>
+ <html lang="en">
+    <body>
+        <div class="masthead bg-primary">   
+                <div class="search-div">
+                    <input class="inputfilter" matInput placeholder="Filter Table" search (keyup)="applyFilter($event)" #input/>
+                    <button class="bg-primary btn-form" type="submit"><mat-icon >check_circle</mat-icon></button>      
+                </div>
+                <div class="bg-primary">
+                    <table class="table-primary table table-striped" mat-table matSort [dataSource]="dataSource">
+                        <ng-container matColumnDef="ID">
+                            <th *matHeaderCellDef> # </th>
+                            
+                            <td class="center" *matCellDef="let col">
+                                {{col.ID}}
+                            </td>
+                        </ng-container>
+                        
+                        <ng-container  matColumnDef="PO_NUMBER">
+                            <th *matHeaderCellDef> PO Number </th>
+                            <td class="center" *matCellDef="let col"> {{col.PO_NUMBER}} </td>
+                        </ng-container>
 
-                   <ng-container matColumnDef="PO_Number">
-                       <th mat-header-cell *matHeaderCellDef mat-sort-header> PO Number </th>
-                       <td mat-cell *matCellDef="let row">{{row.PO_Number}} </td>
-                   </ng-container>
-                   
-                   <tr mat-header-row *matHeaderRowDef="displayedColumn"></tr>
-                   <tr mat-row *matRowDef="let row; columns: displayedColumn"></tr>
+                        <ng-container matColumnDef="Reason">
+                            <th *matHeaderCellDef> Reason </th>
+                            <td class="center" *matCellDef="let col">
+                                <select name="select">
+                                    <option value="1" selected>1</option>
+                                    <option value="2" >2</option>
+                                    <option value="3">Other</option>
+                                </select>
+                            </td>
+                        </ng-container>
 
-                   <tr>
-                       <td class="mat-cell" colspan="4">
-                           The filter does not match any item in the data for this text {{filterinput.value}}
-                       </td>
-                   </tr>
+                        <ng-container matColumnDef="Other">
+                            <th *matHeaderCellDef> Comments </th>
+                            <td class="center" *matCellDef="let col">
+                                <textarea name="textarea" rows="1" cols="40" disabled>Comments</textarea>
+                            </td>
+                        </ng-container>
 
-               </table>
+                        <ng-container matColumnDef="Date_CSM_Processed">
+                            <th *matHeaderCellDef> Data CSM Processed </th>
+                            <td class="center" *matCellDef="let col">  
+                                <input type="date">    
+                            </td>
+                        </ng-container>
 
-               <mat-paginator class="text-white" [pageSizeOptions]="[3,6,9,12,15]" aria-labels="select page of data"></mat-paginator>
-           </div>            
-       </div>
-   </body>
-</html>
+                        <ng-container matColumnDef="Upload_PDF">
+                            <th class="marg-th" *matHeaderCellDef>Upload PDF</th>
+                            <td class="center" *matCellDef="let col">
+                                <div ng-app="myApp" ng-controller="AppCtrl" layout-margin layout-padding>
+                                    <choose-file layout="row" flex="50">
+                                        <input id="fileInput" type="file" class="ng-hide">
+                                        <md-input-container flex class="md-block">
+                                            <input type="text" ng-model="fileName" hidden>
+                                        </md-input-container>           
+                                    </choose-file>      
+                                </div>
+                            </td>  
+                        </ng-container>
+
+                        <ng-container matColumnDef="Action">
+                            <th class="marg-th" *matHeaderCellDef> Action </th>
+                            <td class="center" *matCellDef="let col">
+                                <i class="marg-3 material-icons" (click)="openDialog('0ms', '0ms')">delete</i>
+                            </td>
+                        </ng-container>
+
+                        <tr mat-header-row *matHeaderRowDef="displayedColumn"></tr>
+                        <tr mat-row *matRowDef="let col; columns: displayedColumn"></tr>
+
+                        <!-- SHOWS WHEN DATA DOES NOT EXIST -->
+                        <tr *matNoDataRow>
+                        <td class="mat-cell" colspan = "4" > The filter does not match any
+                        item in the data for this text {{input.value}} </td>
+                        </tr>
+                    </table>
+                    <mat-paginator class="bg-primary" [pageSizeOptions]="[10,20,30,40,50]" aria-labels="select page of data">
+                    </mat-paginator>
+                </div>
+          
+        </div>
+    </body>
+ </html>
+
+ 
+

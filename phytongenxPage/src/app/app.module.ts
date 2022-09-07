@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 
 import { AppRoutingModule } from './app-routing.module';
@@ -10,7 +10,7 @@ import { GetFacturaPageComponent } from './components/get-factura-page/get-factu
 import { SinginPageComponent } from './components/singin-page/singin-page.component'; 
 import { BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import { HttpClientModule } from '@angular/common/http';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatTableModule } from '@angular/material/table';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatSortModule } from '@angular/material/sort';
@@ -19,6 +19,11 @@ import { MatInputModule } from '@angular/material/input';
 import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
 import { UpdatecmdPageComponent } from './components/updatecmd-page/updatecmd-page.component';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatNativeDateModule} from '@angular/material/core';
+import { DialogdeletePageComponent } from './components/dialogdelete-page/dialogdelete-page.component';
+import { MatDialogModule } from '@angular/material/dialog';
+
 
 @NgModule({
   declarations: [
@@ -28,7 +33,8 @@ import { UpdatecmdPageComponent } from './components/updatecmd-page/updatecmd-pa
     EditFacturaPageComponent,
     GetFacturaPageComponent,
     SinginPageComponent,
-    UpdatecmdPageComponent
+    UpdatecmdPageComponent,
+    DialogdeletePageComponent
   ],
   imports: [
     BrowserModule,
@@ -42,9 +48,15 @@ import { UpdatecmdPageComponent } from './components/updatecmd-page/updatecmd-pa
     MatFormFieldModule,
     MatInputModule,
     MatIconModule,
-    MatMenuModule
+    MatMenuModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
+    ReactiveFormsModule,
+    MatDialogModule
   ],
-  providers: [],
-  bootstrap: [AppComponent]
+  providers: [MatDatepickerModule,
+    MatNativeDateModule],
+  bootstrap: [AppComponent],
+  schemas: [ CUSTOM_ELEMENTS_SCHEMA ]
 })
 export class AppModule { }

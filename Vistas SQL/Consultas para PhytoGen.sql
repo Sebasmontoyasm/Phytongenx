@@ -1,5 +1,6 @@
 
 /**
+* NAME: CMS_PERFORMANCE
 * Estados de Laboratorio Genericos
 **/
 Qry_CMS_Performance
@@ -53,61 +54,3 @@ Qry_QBData
 SELECT Invoices_0.ID, STR_TO_DATE(Invoices_0.Date, '%m/%d/%Y %H:%i:%s') AS Date, Invoices_0.PONumber, Invoices_0.InvoiceNumber, Invoices_0.State
 FROM `pgenx-cmsqb`.Invoices Invoices_0
 ORDER BY Date
-
-/**
-* Tabla para eliminados 
-**/
-CREATE TABLE data LIKE data_delete;
-ALTER TABLE "data_delete" ADD "Status" VARCHAR(250) NOT NULL ;
-/**
-*
-*
-**/
-
-DELIMITER //
-DROP PROCEDURE IF EXISTS cmsupmanualprocedure//
-CREATE PROCEDURE cmsupmanualprocedure()
-BEGIN
-	DECLARE varid INT;
-	DECLARE varcount INT DEFAULT 0;
-
-	DECLARE cmsmanually CURSOR FOR SELECT ID FROM data WHERE Date_CSM_Processed="" AND PO_Number!="";
-
-	DECLARE CONTINUE HANDLER FOR NOT FOUND SET varcount = 1;
-
-	OPEN cmsmanually;
-
-	bucle: LOOP
-
-	FETCH cmsmanually INTO varid;
-
-	IF varcount = 1 THEN
-		LEAVE bucle;
-	END IF;
-
-	INSERT INTO temp(ID) VALUES (varid);
-
-	END LOOP bucle;
-	CLOSE cmsmanually;
-
-END;//
-DELIMITER ;
-
-call cmsupmanualprocedure()
-
-/**
-*
-*
-*/
-
-DELIMITER //
-DROP PROCEDURE IF EXISTS cmsupmanualprocedure2//
-CREATE PROCEDURE cmsupmanualprocedure2()
-BEGIN
-    SELECT ID,PO_NUMBER FROM data
-	WHERE Date_CSM_Processed="" AND PO_Number!="";
-END;//
-DELIMITER ;
-
-call cmsupmanualprocedure2()
-
