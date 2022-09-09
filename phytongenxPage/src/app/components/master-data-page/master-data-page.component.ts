@@ -2,10 +2,10 @@ import { Component, OnInit, ViewChild} from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
-import { PedroService } from 'src/app/services/pedro.service';
+import { MasterDataService } from 'src/app/services/masterdata.service';
 import { MatMenuTrigger } from '@angular/material/menu';
 
-export interface Pedro{
+export interface data{
   id:string;
   po_number: string;
   dateCSM: string;
@@ -17,31 +17,31 @@ export interface Pedro{
 }
 
 @Component({
-  selector: 'app-get-factura-page',
-  templateUrl: './get-factura-page.component.html',
-  styleUrls: ['./get-factura-page.component.css']
+  selector: 'app-master-data-page',
+  templateUrl: './master-data-page.component.html',
+  styleUrls: ['./master-data-page.component.css']
 })
 
-export class GetFacturaPageComponent implements OnInit {
+export class MasterDataPageComponent implements OnInit {
   
   title = 'data-table';
   displayedColumn: string[] =['ID','PO_Number','Date_CSM_Processed','PDF_Name','NamePDF','Invoice_Number','Date_invoice_recieved','Date_Quickbooks_Processed'];
-  dataSource!: MatTableDataSource<Pedro>;
+  dataSource!: MatTableDataSource<data>;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
   @ViewChild(MatMenuTrigger) trigger!: MatMenuTrigger;
 
   posts:any;
 
-  constructor(private PedroService:PedroService) { }
+  constructor(private MasterDataService:MasterDataService) { }
 
   ngOnInit(): void {
-    this.getPedro();
+    this.getMasterData();
   }
 
-  getPedro()
+  getMasterData()
   {
-    this.PedroService.getPedro().subscribe(
+    this.MasterDataService.getMasterData().subscribe(
       res=>{
         this.posts=res;
 

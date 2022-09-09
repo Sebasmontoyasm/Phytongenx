@@ -1,7 +1,17 @@
 {
-    "Pedro/*":{
+    "/api/*":{
         "target":"http://localhost:3000",
         "segure":"false",
         "logLevel":"debug"
-    }   
+    },
+    "/api/cms/*":{
+        "target":"http://localhost:3000/api/cms",
+        "segure":"false",
+        "logLevel":"debug"
+    },
+    "/api/pedro/*":{
+        "target":"http://localhost:3000/api/pedro",
+        "segure":"false",
+        "logLevel":"debug"
+    }
 }

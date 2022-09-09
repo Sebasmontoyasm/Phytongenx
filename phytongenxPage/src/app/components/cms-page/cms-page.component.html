@@ -64,7 +64,7 @@
                         <ng-container matColumnDef="Action">
                             <th class="marg-th" *matHeaderCellDef> Action </th>
                             <td class="center" *matCellDef="let col">
-                                <i class="marg-3 material-icons" (click)="openDialog('0ms', '0ms')">delete</i>
+                                <i class="marg-3 material-icons" (click)="getDeleteID(col.ID)" (click)="openDialog('0ms', '0ms')">delete</i>
                             </td>
                         </ng-container>
 

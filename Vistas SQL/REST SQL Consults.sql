@@ -1,4 +1,12 @@
 /**
+* Creación de Usuario SS con todo los permisos
+**/
+CREATE USER 'SS'@'localhost' IDENTIFIED VIA mysql_native_password USING '***';
+GRANT ALL PRIVILEGES ON *.* TO 'SS'@'localhost' REQUIRE NONE WITH GRANT OPTION
+    MAX_QUERIES_PER_HOUR 0 MAX_CONNECTIONS_PER_HOUR 0 MAX_UPDATES_PER_HOUR 0 MAX_USER_CONNECTIONS 0;
+GRANT ALL PRIVILEGES ON `pgenx-cmsqb`.* TO 'SS'@'localhost';
+
+/**
 * Tabla para almacenar la información eliminada por el usuario 
 * en caso de recuperación + un status de por que y quien fue eliminada.
 **/
@@ -46,13 +54,35 @@ CREATE TABLE userlogs(
 * Información en la que Pedro no proceso por que no ha encontrado la factura 
 * Se debe mostrar para realizarla de forma Manual.
 */
-
-DELIMITER //
 DROP PROCEDURE IF EXISTS cmsupmanualprocedure//
 CREATE PROCEDURE cmsupmanualprocedure()
 BEGIN
     SELECT ID,PO_Number FROM data
 	WHERE Date_CSM_Processed="" AND PO_Number!="";
 END;//
-DELIMITER 
+
 call cmsupmanualprocedure()
+
+/**
+* TESTING DELETING METHOD CMS
+*/
+INSERT INTO `data`(
+    `ID`,
+    `PO_Number`,
+    `Date_CSM_Processed`,
+    `PDF_Name`,
+    `Invoice_Number`,
+    `Date_invoice_recieved`,
+    `Date_Quickbooks_Processed`,
+    `NamePDF`
+    )
+    VALUES (
+        '515',
+        '22200B_Misc',
+        '',
+        '',
+        '48128',
+        '08/02/2022 03:19:23',
+        null,
+        null
+)

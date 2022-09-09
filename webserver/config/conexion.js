@@ -2,7 +2,7 @@ const mysql = require("mysql")
 
 var con = mysql.createConnection({
     host:'localhost',
-    user: 'ss',
+    user: 'SS',
     password: '1234',
     database: 'pgenx-cmsqb',
     server: 'localhost',

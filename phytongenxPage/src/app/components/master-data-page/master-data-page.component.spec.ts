@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { GetFacturaPageComponent } from './get-factura-page.component';
+import { MasterDataPageComponent } from './master-data-page.component';
 
-describe('GetFacturaPageComponent', () => {
-  let component: GetFacturaPageComponent;
-  let fixture: ComponentFixture<GetFacturaPageComponent>;
+describe('MasterDataPageComponent', () => {
+  let component: MasterDataPageComponent;
+  let fixture: ComponentFixture<MasterDataPageComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ GetFacturaPageComponent ]
+      declarations: [ MasterDataPageComponent ]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(GetFacturaPageComponent);
+    fixture = TestBed.createComponent(MasterDataPageComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

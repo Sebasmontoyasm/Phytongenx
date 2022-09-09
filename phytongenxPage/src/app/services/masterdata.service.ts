@@ -1,36 +1,39 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
-export class PedroService {
+export class MasterDataService {
   // Ojo se debe cambiar
-  url='http://localhost:3000/pedro';
+  errorMessage = ""
+  status: any
+  url='http://localhost:3000/api/data/';
+
+  
+
   constructor(private http: HttpClient) { }
 
-  getPedro(){
+  getMasterData(){
     return this.http.get(this.url);
   }
 
-  getPedroId(id:string){
-    return this.http.get(this.url+'/'+id);
+  getMasterDataID(id:string){
+    return this.http.get(this.url+id);
   }
 
-  addPedro(pedro:any){
+  addData(pedro:any){
     return this.http.post(this.url,pedro);
   }
 
-  deletePedro(id:string){
-    return this.http.delete(this.url+'/'+id);
+  deleteDataID(id: number): Observable<any>  {
+    return this.http.get(this.url+"delete/"+id)
   }
-
-  modificarPedro(id:string, pedro:any){
-    return this.http.put(this.url+"/"+id,pedro);
-  }
-
 }
 /**
+ * 
+  }
  * MasterData for MasterData View Page
  * ID number,
  * PO_Number string,
@@ -42,7 +45,7 @@ export class PedroService {
  * NamePDF string
  **/
 
-export interface Pedro{
+export interface data{
   id?:string;
   po_number?: string;
   dateCSM?: string;

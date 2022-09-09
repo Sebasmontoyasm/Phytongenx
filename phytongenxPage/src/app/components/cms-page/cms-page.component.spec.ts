@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { UpdatecmdPageComponent } from './updatecmd-page.component';
+import { CmsPageComponent } from './cms-page.component';
 
-describe('UpdatecmdPageComponent', () => {
-  let component: UpdatecmdPageComponent;
-  let fixture: ComponentFixture<UpdatecmdPageComponent>;
+describe('CmsPageComponent', () => {
+  let component: CmsPageComponent;
+  let fixture: ComponentFixture<CmsPageComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ UpdatecmdPageComponent ]
+      declarations: [ CmsPageComponent ]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(UpdatecmdPageComponent);
+    fixture = TestBed.createComponent(CmsPageComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

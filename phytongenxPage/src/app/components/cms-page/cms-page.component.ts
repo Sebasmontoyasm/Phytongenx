@@ -23,12 +23,12 @@ const COLUMNS_SCHEMA = [
 ];
 
 @Component({
-  selector: 'app-updatecmd-page',
-  templateUrl: './updatecmd-page.component.html',
-  styleUrls: ['./updatecmd-page.component.css']
+  selector: 'app-cms-page',
+  templateUrl: './cms-page.component.html',
+  styleUrls: ['./cms-page.component.css']
 })
 
-export class UpdatecmdPageComponent implements OnInit {
+export class CmsPageComponent implements OnInit {
 
   title = 'data-table';
 
@@ -41,6 +41,8 @@ export class UpdatecmdPageComponent implements OnInit {
   
   fileName = '';
 
+  public deleteID = 0;
+
   constructor(private cmsService:CmsService,public dialog: MatDialog) { }
 
   ngOnInit(): void {
@@ -52,9 +54,7 @@ export class UpdatecmdPageComponent implements OnInit {
     this.cmsService.getUpdatecms().subscribe(
       res=>{
         this.posts=res;
-        console.log(res);
         this.dataSource = new MatTableDataSource(this.posts);
-        console.log(this.dataSource);
         this.dataSource.paginator = this.paginator;
         this.dataSource.sort = this.sort;
       },
@@ -73,13 +73,21 @@ export class UpdatecmdPageComponent implements OnInit {
     console.log(filterValue);
   }
 
+
+  getDeleteID(id: number){
+    this.deleteID = id;
+  }
+
   openDialog(enterAnimationDuration: string, exitAnimationDuration: string): void {
       this.dialog.open(DialogdeletePageComponent, {
       width: '250px',
       enterAnimationDuration,
       exitAnimationDuration,
+      data:{ id: this.deleteID }
     });
   }
+
+
     /**
      * 
 

@@ -6,11 +6,11 @@ import { HttpClient } from '@angular/common/http';
 })
 export class CmsService {
 
-  url='http://localhost:3000/cms';
+  url='http://localhost:3000/api/cms/';
   constructor(private http: HttpClient){ }
     
   getUpdatecms(){
-    return this.http.get(this.url+'/'+"manually");
+    return this.http.get(this.url+"manually");
   }
 }
 
