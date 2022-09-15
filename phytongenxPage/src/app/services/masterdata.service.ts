@@ -28,12 +28,14 @@ export class MasterDataService {
   }
 
   deleteDataID(id: number): Observable<any>  {
-    return this.http.get(this.url+"delete/"+id)
+    return this.http.get(this.url+"delete/"+id);
+  }
+
+  dataDeleteBackup(id: number){
+    return this.http.get(this.url+"data_delete/"+id);
   }
 }
 /**
- * 
-  }
  * MasterData for MasterData View Page
  * ID number,
  * PO_Number string,
