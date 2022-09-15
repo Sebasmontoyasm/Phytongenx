@@ -1,0 +1,59 @@
+<!-- Navigation-->
+<!DOCTYPE html>
+<html>
+   <body>
+       <div class="masthead bg-primary">
+           <div class="search-div">    
+                   <input class="inputfilter" matInput placeholder="Filter Table" search (keyup)="applyFilter($event)" #input/>
+           </div>  
+           <div>
+               <table class="table-primary table table-striped" mat-table matSort [dataSource]="dataSource">
+                   <ng-container matColumnDef="PDFName">
+                       <th *matHeaderCellDef mat-sort-header> Lab Results PDF </th>
+                       <td *matCellDef="let row"> {{row.PDFName}} </td>
+                   </ng-container>
+
+                   <ng-container matColumnDef="PONumber">
+                       <th *matHeaderCellDef mat-sort-header> PO Number </th>
+                       <td *matCellDef="let row">{{row.PONumber}} </td>
+                   </ng-container>
+                   <ng-container matColumnDef="DateStart">
+                       <th *matHeaderCellDef mat-sort-header> Date Start </th>
+                       <td *matCellDef="let row">{{row.DateStart}} </td>
+                   </ng-container>
+                   <ng-container matColumnDef="DateEnd">
+                       <th *matHeaderCellDef mat-sort-header> Date End </th>
+                       <td *matCellDef="let row">{{row.DateEnd}} </td>
+                   </ng-container>
+                   <ng-container matColumnDef="CountPO">
+                       <th *matHeaderCellDef mat-sort-header> PO Counter  </th>
+                       <td *matCellDef="let row">{{row.CountPO}} </td>
+                   </ng-container>
+                   <ng-container matColumnDef="CountSublote">
+                       <th *matHeaderCellDef mat-sort-header> Sublote Counter </th>
+                       <td *matCellDef="let row">{{row.CountSublote}} </td>
+                   </ng-container>
+                   <ng-container matColumnDef="TestCount">
+                       <th *matHeaderCellDef mat-sort-header> Test Counter </th>
+                       <td *matCellDef="let row">{{row.TestCount}} </td>
+                   </ng-container>
+                   <ng-container matColumnDef="CountIssue">
+                       <th *matHeaderCellDef mat-sort-header> Issue Counter </th>
+                       <td *matCellDef="let row">{{row.CountIssue}} </td>
+                   </ng-container>
+                   <tr mat-header-row *matHeaderRowDef="displayedColumn"></tr>
+                   <tr mat-row *matRowDef="let row; columns: displayedColumn"></tr>
+
+                  <!-- SHOWS WHEN DATA DOES NOT EXIST -->
+                   <tr *matNoDataRow>
+                       <td class="mat-cell " colspan = "4" > 
+                           The filter does not match any item in the data for this text {{input.value}} 
+                       </td>
+                   </tr>
+               </table>
+               <mat-paginator class="bg-primary fs-6" [pageSizeOptions]="[10,20,30,40,50]" aria-labels="select page of data"></mat-paginator>    
+               
+           </div>            
+       </div>
+   </body>
+</html>

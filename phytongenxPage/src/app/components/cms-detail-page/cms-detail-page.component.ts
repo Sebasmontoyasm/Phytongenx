@@ -2,49 +2,43 @@ import { Component, OnInit, ViewChild} from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
-import { MasterDataService } from 'src/app/services/masterdata.service';
+import { CmsService } from 'src/app/services/cms.service';
 import { MatMenuTrigger } from '@angular/material/menu';
-
-export interface data{
-  id:string;
-  po_number: string;
-  dateCSM: string;
-  namePO: string;
-  invoice: string;
-  dateQP: string;
-  dateInv: string;
-  PDA_pdf: string;
-}
+import { CmsDetail } from 'src/app/interfaces/cms-detail';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
-  selector: 'app-master-data-page',
-  templateUrl: './master-data-page.component.html',
-  styleUrls: ['./master-data-page.component.css']
+  selector: 'app-cms-detail-page',
+  templateUrl: './cms-detail-page.component.html',
+  styleUrls: ['./cms-detail-page.component.css']
 })
-
-export class MasterDataPageComponent implements OnInit {
-  
+export class CmsDetailPageComponent implements OnInit {
+  id: any;
   title = 'data-table';
-  displayedColumn: string[] =['ID','PO_Number','Date_CSM_Processed','PDF_Name','NamePDF','Invoice_Number','Date_invoice_recieved','Date_Quickbooks_Processed'];
-  dataSource!: MatTableDataSource<data>;
+  displayedColumn: string[] =['ID','Date','PDFName','PONumber','SubloteCode','Test','State'];
+  dataSource!: MatTableDataSource<CmsDetail>;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
   @ViewChild(MatMenuTrigger) trigger!: MatMenuTrigger;
-
+  
   posts:any;
 
-  constructor(private MasterDataService:MasterDataService) { }
+  constructor(private cmsService:CmsService,
+              private route: ActivatedRoute) { }
 
   ngOnInit(): void {
-    this.getMasterData();
+    this.getCmsDetail();
   }
 
-  getMasterData()
+  getCmsDetail()
   {
-    this.MasterDataService.getMasterData().subscribe(
+    this.route.params.subscribe(params => {
+      this.id = Object.values(params);
+    });
+
+    this.cmsService.detail(this.id[0]).subscribe(
       res=>{
         this.posts=res;
-
         this.dataSource = new MatTableDataSource(this.posts);
         this.dataSource.paginator = this.paginator;
         this.dataSource.sort = this.sort;

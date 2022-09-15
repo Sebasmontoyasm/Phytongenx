@@ -2,49 +2,37 @@ import { Component, OnInit, ViewChild} from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
-import { MasterDataService } from 'src/app/services/masterdata.service';
+import { CmsService } from 'src/app/services/cms.service';
 import { MatMenuTrigger } from '@angular/material/menu';
-
-export interface data{
-  id:string;
-  po_number: string;
-  dateCSM: string;
-  namePO: string;
-  invoice: string;
-  dateQP: string;
-  dateInv: string;
-  PDA_pdf: string;
-}
+import { CmsPerformance } from 'src/app/interfaces/cms-performance'
 
 @Component({
-  selector: 'app-master-data-page',
-  templateUrl: './master-data-page.component.html',
-  styleUrls: ['./master-data-page.component.css']
+  selector: 'app-cms-performance-page',
+  templateUrl: './cms-performance-page.component.html',
+  styleUrls: ['./cms-performance-page.component.css']
 })
+export class CmsPerformancePageComponent implements OnInit {
 
-export class MasterDataPageComponent implements OnInit {
-  
   title = 'data-table';
-  displayedColumn: string[] =['ID','PO_Number','Date_CSM_Processed','PDF_Name','NamePDF','Invoice_Number','Date_invoice_recieved','Date_Quickbooks_Processed'];
-  dataSource!: MatTableDataSource<data>;
+  displayedColumn: string[] =['PDFName','PONumber','DateStart','DateEnd','CountPO','CountSublote','TestCount','CountIssue'];
+  dataSource!: MatTableDataSource<CmsPerformance>;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
   @ViewChild(MatMenuTrigger) trigger!: MatMenuTrigger;
 
   posts:any;
 
-  constructor(private MasterDataService:MasterDataService) { }
+  constructor(private cmsService:CmsService) { }
 
   ngOnInit(): void {
-    this.getMasterData();
+    this.getCmsPerformace();
   }
 
-  getMasterData()
+  getCmsPerformace()
   {
-    this.MasterDataService.getMasterData().subscribe(
+    this.cmsService.performace().subscribe(
       res=>{
         this.posts=res;
-
         this.dataSource = new MatTableDataSource(this.posts);
         this.dataSource.paginator = this.paginator;
         this.dataSource.sort = this.sort;

@@ -6,10 +6,21 @@ import { CmsService} from 'src/app/services/cms.service';
 import { MatDialog } from '@angular/material/dialog';
 import { DialogdeletePageComponent } from '../dialogdelete-page/dialogdelete-page.component';
 
-
 export interface Cms{
   id:string;
   po_number: string;
+}
+
+
+export interface UserLog{
+  user?:number;
+  rol?: string;
+  action?: string;
+  dateaction: string;
+  iddata: number;
+  idpo: number;
+  idinvoce: number;
+  comments: string;
 }
 
 const COLUMNS_SCHEMA = [
@@ -40,9 +51,21 @@ export class CmsPageComponent implements OnInit {
   displayedColumn: string[] = COLUMNS_SCHEMA.map((col) => col.key);
   
   fileName = '';
+  reason: string = "";
 
-  public deleteID = 0;
+  public deleteID = 0; 
 
+  usrlog: UserLog = {
+    user: 1,
+    rol: "Tester",
+    action: "",
+    dateaction: "",
+    iddata: 0,
+    idpo: 0,
+    idinvoce: 0,
+    comments: "",    
+  };
+  
   constructor(private cmsService:CmsService,public dialog: MatDialog) { }
 
   ngOnInit(): void {
@@ -51,14 +74,14 @@ export class CmsPageComponent implements OnInit {
 
   getCms()
   {
-    this.cmsService.getUpdatecms().subscribe(
+    this.cmsService.manually().subscribe(
       res=>{
         this.posts=res;
         this.dataSource = new MatTableDataSource(this.posts);
         this.dataSource.paginator = this.paginator;
         this.dataSource.sort = this.sort;
       },
-      err => console.log("Error: "+err)
+      err => console.log("Error CMS View: "+err)
     );
   }
 
@@ -83,31 +106,13 @@ export class CmsPageComponent implements OnInit {
       width: '250px',
       enterAnimationDuration,
       exitAnimationDuration,
-      data:{ id: this.deleteID }
+      data:{ id: this.deleteID, userlog: this.usrlog}
     });
   }
 
-
-    /**
-     * 
-
-      onFileSelected(event: Event) {
-        const file:File = event.target.files[0];
-
-        if (file) {
-
-            this.fileName = file.name;
-
-            const formData = new FormData();
-
-            formData.append("thumbnail", file);
-
-            const upload$ = this.http.post("/api/thumbnail-upload", formData);
-
-            upload$.subscribe();
-        }
-      }
-      **/
+  observerReasonOpt(id: number){
+    console.log("Click Option: "+id);    
+  }
 }
 
 

@@ -26,9 +26,9 @@
                             <th *matHeaderCellDef> Reason </th>
                             <td class="center" *matCellDef="let col">
                                 <select name="select">
-                                    <option value="1" selected>1</option>
-                                    <option value="2" >2</option>
-                                    <option value="3">Other</option>
+                                    <option (click)="observerReasonOpt(1)" selected>1</option>
+                                    <option (click)="observerReasonOpt(2)">2</option>
+                                    <option (click)="observerReasonOpt(3)">Other</option>
                                 </select>
                             </td>
                         </ng-container>
@@ -36,7 +36,7 @@
                         <ng-container matColumnDef="Other">
                             <th *matHeaderCellDef> Comments </th>
                             <td class="center" *matCellDef="let col">
-                                <textarea name="textarea" rows="1" cols="40" disabled>Comments</textarea>
+                                <textarea id=enableTextA name="textarea" rows="1" cols="40">Comments</textarea>
                             </td>
                         </ng-container>
 

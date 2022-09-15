@@ -1,4 +1,4 @@
- <!-- Navigation-->
+<!-- Navigation-->
  <!DOCTYPE html>
  <html>
     <body>
@@ -9,11 +9,11 @@
                         <mat-menu #menu="matMenu" >
                             <button mat-menu-item>
                                 <mat-icon>label_important</mat-icon>
-                                <span>CMS Performance</span>
+                                <a href="./cms/performance"><span>CMS Performance</span></a>
                             </button>
                             <button mat-menu-item>
                                 <mat-icon>label_important</mat-icon>
-                                <span>Opcion 2</span>
+                                <a href="./qb/performance"><span>QB Performance</span></a>
                             </button>
                         </mat-menu>
                     </button>          
@@ -24,17 +24,16 @@
                     <ng-container matColumnDef="ID">
                         <th *matHeaderCellDef mat-sort-header> # </th>
                         
-                        <td *matCellDef="let row">
-                            <a href="http://localhost:4200/rol/id?">
-                                {{row.ID}}
-                            </a>
-                            <mat-icon *ngIf="">announcement</mat-icon>
+                        <td *matCellDef="let row"> {{row.ID}}
+                            <a href="./rol"><mat-icon href="./rol" *ngIf="">announcement</mat-icon></a>
                         </td>
                     </ng-container>
 
                     <ng-container matColumnDef="PO_Number">
                         <th *matHeaderCellDef mat-sort-header> PO Number </th>
-                        <td *matCellDef="let row">{{row.PO_Number}} </td>
+                        <td *matCellDef="let row">
+                            <a href="./cms/detail/{{row.PO_Number}}"> {{row.PO_Number}} </a> 
+                        </td>
                     </ng-container>
                     <ng-container matColumnDef="Date_CSM_Processed">
                         <th *matHeaderCellDef mat-sort-header> Date CSM Processed </th>
@@ -50,7 +49,7 @@
                     </ng-container>
                     <ng-container matColumnDef="Invoice_Number">
                         <th *matHeaderCellDef mat-sort-header> Invoice </th>
-                        <td *matCellDef="let row">{{row.Invoice_Number}} </td>
+                        <td *matCellDef="let row"><a href="./qb/detail/{{row.Invoice_Number}}"> {{row.Invoice_Number}} </a></td>
                     </ng-container>
                     <ng-container matColumnDef="Date_invoice_recieved">
                         <th *matHeaderCellDef mat-sort-header> Date Invoice </th>

@@ -2,49 +2,45 @@ import { Component, OnInit, ViewChild} from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
-import { MasterDataService } from 'src/app/services/masterdata.service';
+import { QbService } from 'src/app/services/qb.service';
 import { MatMenuTrigger } from '@angular/material/menu';
+import { QbDetail } from 'src/app/interfaces/qb-detail';
+import { ActivatedRoute } from '@angular/router';
 
-export interface data{
-  id:string;
-  po_number: string;
-  dateCSM: string;
-  namePO: string;
-  invoice: string;
-  dateQP: string;
-  dateInv: string;
-  PDA_pdf: string;
-}
+
 
 @Component({
-  selector: 'app-master-data-page',
-  templateUrl: './master-data-page.component.html',
-  styleUrls: ['./master-data-page.component.css']
+  selector: 'app-qb-detail-page',
+  templateUrl: './qb-detail-page.component.html',
+  styleUrls: ['./qb-detail-page.component.css']
 })
-
-export class MasterDataPageComponent implements OnInit {
-  
+export class QbDetailPageComponent implements OnInit {
+  id: any;
   title = 'data-table';
-  displayedColumn: string[] =['ID','PO_Number','Date_CSM_Processed','PDF_Name','NamePDF','Invoice_Number','Date_invoice_recieved','Date_Quickbooks_Processed'];
-  dataSource!: MatTableDataSource<data>;
+  displayedColumn: string[] =['ID','Date','PONumber','InvoiceNumber','State'];
+  dataSource!: MatTableDataSource<QbDetail>;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
   @ViewChild(MatMenuTrigger) trigger!: MatMenuTrigger;
 
   posts:any;
 
-  constructor(private MasterDataService:MasterDataService) { }
+  constructor(private qbService:QbService,
+              private route: ActivatedRoute) { }
 
   ngOnInit(): void {
-    this.getMasterData();
+    this.getQbDetail();
   }
 
-  getMasterData()
+  getQbDetail()
   {
-    this.MasterDataService.getMasterData().subscribe(
+    this.route.params.subscribe(params => {
+      this.id = Object.values(params);
+    });
+
+    this.qbService.detail(this.id[0]).subscribe(
       res=>{
         this.posts=res;
-
         this.dataSource = new MatTableDataSource(this.posts);
         this.dataSource.paginator = this.paginator;
         this.dataSource.sort = this.sort;
@@ -57,4 +53,5 @@ export class MasterDataPageComponent implements OnInit {
     const filterValue = (event.target as HTMLInputElement).value;
     this.dataSource.filter = filterValue.trim().toLowerCase();
   }
+
 }

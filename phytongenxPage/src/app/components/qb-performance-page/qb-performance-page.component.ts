@@ -2,49 +2,37 @@ import { Component, OnInit, ViewChild} from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
-import { MasterDataService } from 'src/app/services/masterdata.service';
+import { QbService } from 'src/app/services/qb.service';
 import { MatMenuTrigger } from '@angular/material/menu';
-
-export interface data{
-  id:string;
-  po_number: string;
-  dateCSM: string;
-  namePO: string;
-  invoice: string;
-  dateQP: string;
-  dateInv: string;
-  PDA_pdf: string;
-}
+import { QbPerformance } from 'src/app/interfaces/qb-performance';
 
 @Component({
-  selector: 'app-master-data-page',
-  templateUrl: './master-data-page.component.html',
-  styleUrls: ['./master-data-page.component.css']
+  selector: 'app-qb-performance-page',
+  templateUrl: './qb-performance-page.component.html',
+  styleUrls: ['./qb-performance-page.component.css']
 })
+export class QbPerformancePageComponent implements OnInit {
 
-export class MasterDataPageComponent implements OnInit {
-  
   title = 'data-table';
-  displayedColumn: string[] =['ID','PO_Number','Date_CSM_Processed','PDF_Name','NamePDF','Invoice_Number','Date_invoice_recieved','Date_Quickbooks_Processed'];
-  dataSource!: MatTableDataSource<data>;
+  displayedColumn: string[] =['ID','LastDate','InvoiceNumber','Tries','LastPO','State'];
+  dataSource!: MatTableDataSource<QbPerformance>;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
   @ViewChild(MatMenuTrigger) trigger!: MatMenuTrigger;
 
   posts:any;
 
-  constructor(private MasterDataService:MasterDataService) { }
+  constructor(private qbService:QbService) { }
 
   ngOnInit(): void {
-    this.getMasterData();
+    this.getQbPerformace();
   }
 
-  getMasterData()
+  getQbPerformace()
   {
-    this.MasterDataService.getMasterData().subscribe(
+    this.qbService.performace().subscribe(
       res=>{
         this.posts=res;
-
         this.dataSource = new MatTableDataSource(this.posts);
         this.dataSource.paginator = this.paginator;
         this.dataSource.sort = this.sort;
