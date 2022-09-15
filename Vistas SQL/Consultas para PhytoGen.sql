@@ -66,16 +66,6 @@ DELIMITER ;
 
 call cms_data('22167F');
 
-
-/**
-* ?? PREGUNTAR
-**/
-Qry_MasterData
-===========================
-SELECT Data_0.ID, Data_0.PO_Number, STR_TO_DATE(Data_0.Date_CSM_Processed, '%m/%d/%Y %H:%i:%s') AS Date_CSM_Processed, Data_0.PDF_Name, Data_0.NamePDF as OutputPDF, NULLIF (Data_0.Invoice_Number, 0) as Invoice_Number, STR_TO_DATE(Data_0.Date_invoice_recieved, '%m/%d/%Y %H:%i:%s') Date_invoice_recieved, STR_TO_DATE(Data_0.Date_Quickbooks_Processed, '%m/%d/%Y %H:%i:%s') AS Date_Quickbooks_Processed 
-FROM `pgenx-cmsqb`.Data Data_0 where Data_0.ID>0
-ORDER BY Data_0.ID
-
 /**
 * Estado final de la factura con intentos de RPA 
 * NAME: QB_PERFORMANCE
@@ -105,7 +95,6 @@ DELIMITER ;
 
 
 call qb_performance();
-
 /**
 * Invoices a las que se les debe agregar el Link de acceso
 * en MasterData
@@ -114,15 +103,15 @@ call qb_performance();
 * @Update: 14/09/2022
 **/
 
-Data_Objetives
+Qb_Data_Objetives
 ===========================
 DELIMITER //
 DROP PROCEDURE IF EXISTS qb_data_objetives//
 CREATE PROCEDURE qb_data_objetives()
 BEGIN
-    SELECT InvoiceNumber, State
+    SELECT InvoiceNumber
 	FROM Invoices
-	GROUP BY Invoice_Number;
+	GROUP BY InvoiceNumber;
 END//
 DELIMITER ;
 

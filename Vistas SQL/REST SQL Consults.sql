@@ -138,3 +138,45 @@ BEGIN
 
 END//
 DELIMITER ;
+
+call qbduplicated();
+
+/**
+* DelayQb es el tiempo que obtiene las PO que no han sido procesadas por Pedro Invoice 
+* No se encontro la factura correspondiente a esa PO.
+**/
+
+DELIMITER //
+DROP PROCEDURE IF EXISTS DelayQb//
+CREATE PROCEDURE DelayQb()
+BEGIN
+    SELECT ID, DATEDIFF(STR_TO_DATE(Date_Quickbooks_Processed, '%m/%d/%Y'),STR_TO_DATE(Date_invoice_recieved, '%m/%d/%Y')) AS DaysSince
+    FROM data
+    WHERE (Date_Quickbooks_Processed!="" OR Date_invoice_recieved !="") AND (Date_Quickbooks_Processed!="" AND Date_invoice_recieved !="");
+END//
+DELIMITER ;
+
+call DelayQb()();
+
+/**
+* Daysince son los dias que han pasado sin que se halla encontrado una PO
+* Relacionada a una Factura Existente.
+* Se retiraron las que se realizarón manual que no tienen ni Invonce ni PO
+**/
+
+DELIMITER //
+DROP PROCEDURE IF EXISTS DaysSince//
+CREATE PROCEDURE DaysSince()
+BEGIN
+    SELECT ID,DATEDIFF(CURRENT_DATE,STR_TO_DATE(Date_invoice_recieved, '%m/%d/%Y')) as DaysSince
+	FROM data
+    WHERE Date_CSM_Processed="" AND Date_invoice_recieved!="";
+END//
+DELIMITER ;
+
+call DaysSince();
+
+
+    
+
+
