@@ -9,8 +9,18 @@
         "segure":"false",
         "logLevel":"debug"
     },
-    "/api/pedro/*":{
-        "target":"http://localhost:3000/api/pedro",
+    "/api/data/*":{
+        "target":"http://localhost:3000/api/data",
+        "segure":"false",
+        "logLevel":"debug"
+    },
+    "/api/userlogs/*":{
+        "target":"http://localhost:3000/api/userlogs",
+        "segure":"false",
+        "logLevel":"debug"
+    },
+    "/api/userlogs/post":{
+        "target":"http://localhost:3000/api/userlogs/post",
         "segure":"false",
         "logLevel":"debug"
     }

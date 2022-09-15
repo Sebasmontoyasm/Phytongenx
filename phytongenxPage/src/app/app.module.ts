@@ -20,6 +20,11 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule} from '@angular/material/core';
 import { DialogdeletePageComponent } from './components/dialogdelete-page/dialogdelete-page.component';
 import { MatDialogModule } from '@angular/material/dialog';
+import { CmsPerformancePageComponent } from './components/cms-performance-page/cms-performance-page.component';
+import { QbPerformancePageComponent } from './components/qb-performance-page/qb-performance-page.component';
+import { QbPageComponent } from './components/qb-page/qb-page.component';
+import { CmsDetailPageComponent } from './components/cms-detail-page/cms-detail-page.component';
+import { QbDetailPageComponent } from './components/qb-detail-page/qb-detail-page.component';
 
 
 @NgModule({
@@ -29,7 +34,12 @@ import { MatDialogModule } from '@angular/material/dialog';
     MasterDataPageComponent,
     SinginPageComponent,
     CmsPageComponent,
-    DialogdeletePageComponent
+    DialogdeletePageComponent,
+    CmsPerformancePageComponent,
+    QbPerformancePageComponent,
+    QbPageComponent,
+    CmsDetailPageComponent,
+    QbDetailPageComponent
   ],
   imports: [
     BrowserModule,
