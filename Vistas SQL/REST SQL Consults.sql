@@ -13,7 +13,6 @@ GRANT ALL PRIVILEGES ON `pgenx-cmsqb`.* TO 'SS'@'localhost';
 CREATE TABLE data_delete LIKE data;
 ALTER TABLE "data_delete" ADD "Status" VARCHAR(250) NOT NULL ;
 
-
 /**
 * Tabla para almacenar los cambios y que sean efectuados por Pedro en cms
 **/
@@ -51,19 +50,6 @@ CREATE TABLE userlogs(
 );
 
 /**
-* Información en la que Pedro no proceso por que no ha encontrado la factura 
-* Se debe mostrar para realizarla de forma Manual.
-*/
-DROP PROCEDURE IF EXISTS cmsupmanualprocedure//
-CREATE PROCEDURE cmsupmanualprocedure()
-BEGIN
-    SELECT ID,PO_Number FROM data
-	WHERE Date_CSM_Processed="" AND PO_Number!="";
-END;//
-
-call cmsupmanualprocedure()
-
-/**
 * TESTING DELETING METHOD CMS
 */
 INSERT INTO `data`(
@@ -85,4 +71,70 @@ INSERT INTO `data`(
         '08/02/2022 03:19:23',
         null,
         null
-)
+);
+
+/**
+* Información en la que Pedro no proceso por que no ha encontrado la factura 
+* Se debe mostrar para realizarla de forma Manual.
+*/
+DELIMITER
+DROP PROCEDURE IF EXISTS cmsupmanualprocedure//
+CREATE PROCEDURE cmsupmanualprocedure()
+DELIMITER //
+BEGIN
+    SELECT ID,PO_Number FROM data
+	WHERE Date_CSM_Processed="" AND PO_Number!="";
+END;//
+DELIMITER ;
+
+call cmsupmanualprocedure()
+
+/**
+* Backup archivos eliminados en cms
+* Posibilemente para todo
+*/
+DELIMITER //
+DROP PROCEDURE IF EXISTS databackup//
+CREATE PROCEDURE databackup(IN searchid INT)
+BEGIN
+    INSERT INTO data_delete
+    SELECT ID,PO_Number,Date_CSM_Processed,PDF_Name,Invoice_Number,Date_invoice_recieved,Date_Quickbooks_Processed,NamePDF FROM data
+    WHERE ID = searchid;
+
+    SELECT * FROM data_delete;
+END//
+DELIMITER ;
+
+call databackup(515);
+
+/**
+* Información en la que Pedro Calidad QB no proceso por que no ha encontrado la PO_NUMBER 
+* Se debe mostrar para realizarla de forma Manual.
+*/
+
+DELIMITER //
+DROP PROCEDURE IF EXISTS qbmanually//
+CREATE PROCEDURE qbmanually()
+BEGIN
+    SELECT ID,PO_Number,Invoice_Number,Date_CSM_Processed FROM data
+    WHERE Invoice_Number="" AND Date_CSM_Processed!="";
+END//
+DELIMITER ;
+
+call qbmanually();
+
+/**
+* Información en la que Pedro Calidad QB no proceso por que no ha encontrado la PO_NUMBER 
+* Se debe mostrar para realizarla de forma Manual.
+*/
+
+DELIMITER //
+DROP PROCEDURE IF EXISTS qbduplicated//
+CREATE PROCEDURE qbduplicated()
+BEGIN
+    SELECT ID,PO_Number,Invoice_Number,Date_CSM_Processed, COUNT(Invoice_Number) FROM data
+    WHERE Invoice_Number="" AND Date_CSM_Processed!=""
+    GROUP BY Invoice_Number;
+
+END//
+DELIMITER ;
