@@ -5,7 +5,6 @@ import { AppComponent } from './app.component';
 import { HomePageComponent } from './components/home-page/home-page.component';
 import { MasterDataPageComponent } from './components/master-data-page/master-data-page.component';
 import { SinginPageComponent } from './components/singin-page/singin-page.component'; 
-import { BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import { HttpClientModule } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatTableModule } from '@angular/material/table';
@@ -25,6 +24,8 @@ import { QbPerformancePageComponent } from './components/qb-performance-page/qb-
 import { QbPageComponent } from './components/qb-page/qb-page.component';
 import { CmsDetailPageComponent } from './components/cms-detail-page/cms-detail-page.component';
 import { QbDetailPageComponent } from './components/qb-detail-page/qb-detail-page.component';
+import { BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import { MatSnackBarModule} from '@angular/material/snack-bar';
 
 
 @NgModule({
@@ -39,12 +40,11 @@ import { QbDetailPageComponent } from './components/qb-detail-page/qb-detail-pag
     QbPerformancePageComponent,
     QbPageComponent,
     CmsDetailPageComponent,
-    QbDetailPageComponent
+    QbDetailPageComponent,
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
-    BrowserAnimationsModule,
     HttpClientModule,
     FormsModule,
     MatTableModule,
@@ -57,7 +57,9 @@ import { QbDetailPageComponent } from './components/qb-detail-page/qb-detail-pag
     MatDatepickerModule,
     MatNativeDateModule,
     ReactiveFormsModule,
-    MatDialogModule
+    MatDialogModule,
+    MatSnackBarModule,
+    BrowserAnimationsModule
   ],
   providers: [MatDatepickerModule,
     MatNativeDateModule],

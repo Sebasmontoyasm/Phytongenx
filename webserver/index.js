@@ -24,13 +24,44 @@ app.get('/api/data', (request, response) => {
   //Revisar como ponerlo contra el localhost:4200
   response.header('Access-Control-Allow-Origin', '*');
   response.header("Access-Control-Allow-Headers","*");
-  response.header("Access-Control-Allow-Methods","*");
+  response.header("Access-Control-Allow-Methods","GET");
 
-  con.query('SELECT * FROM data', (error, result) => {
+  con.query('CALL masterdata()', (error, result) => {
     if (error) throw error;
-    response.send(result);
+    response.send(result[0]);
   });
 });
+
+/**
+ * 
+ */
+app.get('/api/data/delayprocess', (request, response) => {
+  //Revisar como ponerlo contra el localhost:4200
+  response.header('Access-Control-Allow-Origin', '*');
+  response.header("Access-Control-Allow-Headers","*");
+  response.header("Access-Control-Allow-Methods","GET");
+
+  con.query('CALL DelayQb()', (error, result) => {
+    if (error) throw error;
+    response.send(result[0]);
+  });
+});
+
+/**
+ * 
+ */
+app.get('/api/data/dayssince', (request, response) => {
+  //Revisar como ponerlo contra el localhost:4200
+  response.header('Access-Control-Allow-Origin', '*');
+  response.header("Access-Control-Allow-Headers","*");
+  response.header("Access-Control-Allow-Methods","GET");
+  con.query('CALL DaysSince()', (error, result) => {
+    if (error) throw error;
+    response.send(result[0]);
+  });
+});
+
+
 
 /**
  * Consulta DB para obtener los cms que requieren 
@@ -145,6 +176,22 @@ app.get('/api/qb/detail/:id', (request, response) => {
   });
 });
 
+/**
+ * Lista de PO Numbers que poseen Detalles 
+ * En su procesamiento
+ */
+app.get('/api/qb/detailgroup', (request, response) => {
+  //Revisar como ponerlo contra el localhost:4200
+  response.header('Access-Control-Allow-Origin', '*');
+  response.header("Access-Control-Allow-Headers","*");
+  response.header("Access-Control-Allow-Methods","GET");
+  const id = request.params.id;
+
+  con.query('call qb_data_objetives()', function (err, result) {
+    if (err) throw err;
+    response.send(result[0]);
+  });
+});
 
 
 /**
