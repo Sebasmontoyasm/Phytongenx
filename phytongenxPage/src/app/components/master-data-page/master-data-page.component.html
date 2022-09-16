@@ -23,16 +23,24 @@
                 <table class="table-primary table table-striped" mat-table matSort [dataSource]="dataSource">
                     <ng-container matColumnDef="ID">
                         <th *matHeaderCellDef mat-sort-header> # </th>
-                        
-                        <td *matCellDef="let row"> {{row.ID}}
-                            <a href="./rol"><mat-icon href="./rol" *ngIf="">announcement</mat-icon></a>
+                        <td *matCellDef="let row"> 
+                            {{row.ID}}
+                            <button *ngIf="row.IDObject===row.ID" class="icon" >
+                                <mat-icon mat-stroked-button (click)="openSnackBar(row.comments)">announcement</mat-icon>      
+                            </button>   
+                           
                         </td>
                     </ng-container>
 
                     <ng-container matColumnDef="PO_Number">
                         <th *matHeaderCellDef mat-sort-header> PO Number </th>
                         <td *matCellDef="let row">
-                            <a href="./cms/detail/{{row.PO_Number}}"> {{row.PO_Number}} </a> 
+                            <tr *ngIf="row.PO_NumberObj===row.PO_Number">
+                                <a href="./cms/detail/{{row.PO_Number}}">{{row.PO_Number}}</a>
+                            </tr>
+                            <tr *ngIf="row.PO_NumberObj!=row.PO_Number">
+                                {{row.PO_Number}}
+                            </tr>
                         </td>
                     </ng-container>
                     <ng-container matColumnDef="Date_CSM_Processed">
@@ -49,7 +57,14 @@
                     </ng-container>
                     <ng-container matColumnDef="Invoice_Number">
                         <th *matHeaderCellDef mat-sort-header> Invoice </th>
-                        <td *matCellDef="let row"><a href="./qb/detail/{{row.Invoice_Number}}"> {{row.Invoice_Number}} </a></td>
+                        <td *matCellDef="let row">
+                            <tr *ngIf="row.InvoiceObj===row.Invoice_Number">
+                                <a href="./qb/detail/{{row.Invoice_Number}}">{{row.Invoice_Number}}</a>
+                            </tr>
+                            <tr *ngIf="row.InvoiceObj!=row.Invoice_Number">
+                                {{row.Invoice_Number}}
+                            </tr>
+                        </td>
                     </ng-container>
                     <ng-container matColumnDef="Date_invoice_recieved">
                         <th *matHeaderCellDef mat-sort-header> Date Invoice </th>
@@ -59,9 +74,19 @@
                         <th *matHeaderCellDef mat-sort-header> Date QB Processed </th>
                         <td *matCellDef="let row">{{row.Date_Quickbooks_Processed}} </td>
                     </ng-container>
+                    <ng-container matColumnDef="DelayQb">
+                        <th *matHeaderCellDef mat-sort-header> Delay QB process </th>
+                        <td class="center" *matCellDef="let row">{{row.DelayQb}} </td>
+                    </ng-container>
+                    <ng-container matColumnDef="DaysSince">
+                        <th *matHeaderCellDef mat-sort-header> Days since recived </th>
+                        <td class="center" *matCellDef="let row">{{row.DaysSince}} </td>
+                    </ng-container>
+
                     <tr mat-header-row *matHeaderRowDef="displayedColumn"></tr>
                     <tr mat-row *matRowDef="let row; columns: displayedColumn"></tr>
-
+                    
+                    <td *matCellDef="let row"> 5 </td>
                    <!-- SHOWS WHEN DATA DOES NOT EXIST -->
                     <tr *matNoDataRow>
                         <td class="mat-cell " colspan = "4" > 

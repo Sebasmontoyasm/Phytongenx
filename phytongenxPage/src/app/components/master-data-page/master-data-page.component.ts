@@ -4,17 +4,8 @@ import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { MasterDataService } from 'src/app/services/masterdata.service';
 import { MatMenuTrigger } from '@angular/material/menu';
-
-export interface data{
-  id:string;
-  po_number: string;
-  dateCSM: string;
-  namePO: string;
-  invoice: string;
-  dateQP: string;
-  dateInv: string;
-  PDA_pdf: string;
-}
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { Data } from 'src/app/interfaces/data';
 
 @Component({
   selector: 'app-master-data-page',
@@ -25,15 +16,19 @@ export interface data{
 export class MasterDataPageComponent implements OnInit {
   
   title = 'data-table';
-  displayedColumn: string[] =['ID','PO_Number','Date_CSM_Processed','PDF_Name','NamePDF','Invoice_Number','Date_invoice_recieved','Date_Quickbooks_Processed'];
-  dataSource!: MatTableDataSource<data>;
+  displayedColumn: string[] =['ID','PO_Number','Date_CSM_Processed','PDF_Name','NamePDF','Invoice_Number','Date_invoice_recieved','Date_Quickbooks_Processed','DelayQb','DaysSince'];
+  dataSource!: MatTableDataSource<Data>;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
   @ViewChild(MatMenuTrigger) trigger!: MatMenuTrigger;
 
   posts:any;
+  delayProcess:any;
+  invsNumber:any;
+  arrayList:Array<number> = [];
 
-  constructor(private MasterDataService:MasterDataService) { }
+  constructor(private masterDataService:MasterDataService,
+              private _snackBar: MatSnackBar) { }
 
   ngOnInit(): void {
     this.getMasterData();
@@ -41,10 +36,9 @@ export class MasterDataPageComponent implements OnInit {
 
   getMasterData()
   {
-    this.MasterDataService.getMasterData().subscribe(
+    this.masterDataService.getMasterData().subscribe(
       res=>{
         this.posts=res;
-
         this.dataSource = new MatTableDataSource(this.posts);
         this.dataSource.paginator = this.paginator;
         this.dataSource.sort = this.sort;
@@ -56,5 +50,9 @@ export class MasterDataPageComponent implements OnInit {
   applyFilter(event: Event){
     const filterValue = (event.target as HTMLInputElement).value;
     this.dataSource.filter = filterValue.trim().toLowerCase();
+  }
+
+  openSnackBar(message: string) {
+    this._snackBar.open("Comment: "+message, "Done");
   }
 }

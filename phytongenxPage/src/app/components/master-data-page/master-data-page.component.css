@@ -63,4 +63,7 @@ input::placeholder {
     padding-top: 12px;
 }
 
+.mat-form-field {
+    margin-right: 12px;
+  }
 
