@@ -150,7 +150,7 @@ DELIMITER //
 DROP PROCEDURE IF EXISTS DelayQb//
 CREATE PROCEDURE DelayQb()
 BEGIN
-    SELECT ID, DATEDIFF(STR_TO_DATE(Date_Quickbooks_Processed, '%m/%d/%Y'),STR_TO_DATE(Date_invoice_recieved, '%m/%d/%Y')) AS DaysSince
+    SELECT ID, DATEDIFF(STR_TO_DATE(Date_Quickbooks_Processed, '%m/%d/%Y'),STR_TO_DATE(Date_invoice_recieved, '%m/%d/%Y')) AS DelayQb
     FROM data
     WHERE (Date_Quickbooks_Processed!="" OR Date_invoice_recieved !="") AND (Date_Quickbooks_Processed!="" AND Date_invoice_recieved !="");
 END//
@@ -175,8 +175,41 @@ END//
 DELIMITER ;
 
 call DaysSince();
-
-
     
+DELIMITER //
+DROP PROCEDURE IF EXISTS masterdata//
+CREATE PROCEDURE masterdata()
+BEGIN 
+    SELECT a.ID,a.PO_Number,a.Date_CSM_Processed,a.PDF_Name,a.Invoice_Number,a.Date_invoice_recieved,a.Date_Quickbooks_Processed,a.NamePDF,b.DaysSince,c.DelayQb,d.InvoiceObj, e.PO_NumberObj, f.IDObject, f.comments
+	FROM (
+        SELECT ID,PO_Number,Date_CSM_Processed,PDF_Name,Invoice_Number,Date_invoice_recieved,Date_Quickbooks_Processed,NamePDF
+        FROM data
+	) a 
+	LEFT JOIN (
+		SELECT ID,DATEDIFF(CURRENT_DATE,STR_TO_DATE(Date_invoice_recieved, '%m/%d/%Y')) as DaysSince
+	    FROM data
+        WHERE Date_CSM_Processed="" AND Date_invoice_recieved!=""
+	) b ON (a.ID = b.ID) LEFT JOIN (
+        SELECT ID, DATEDIFF(STR_TO_DATE(Date_Quickbooks_Processed, '%m/%d/%Y'),STR_TO_DATE(Date_invoice_recieved, '%m/%d/%Y')) AS DelayQb
+        FROM data
+        WHERE (Date_Quickbooks_Processed!="" OR Date_invoice_recieved !="") AND (Date_Quickbooks_Processed!="" AND Date_invoice_recieved !="")
+    ) c ON(a.ID = c.ID) LEFT JOIN (
+        SELECT CAST(InvoiceNumber AS INT) as InvoiceObj
+	    FROM Invoices
+	    GROUP BY InvoiceObj    
+    ) d ON(a.Invoice_Number = d.InvoiceObj) LEFT JOIN (
+        SELECT da.PO_Number as PO_NumberObj
+	    FROM data da, LabResults l
+	    WHERE l.PONumber = CONCAT("PO # ",da.PO_Number)
+        GROUP BY PO_Number
+    ) e ON(a.PO_NUMBER = e.PO_NumberObj) LEFT JOIN (
+        SELECT daf.ID as IDObject, uslog.comments as comments
+	    FROM data daf, userlogs uslog
+	    WHERE daf.ID = uslog.IDDATA and uslog.COMMENTS !=""
+    ) f ON(a.ID = f.IDObject) GROUP BY ID;    
+END//
+DELIMITER ;
+
+CALL masterdata();
 
 
