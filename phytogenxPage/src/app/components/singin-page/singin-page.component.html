@@ -1,0 +1,40 @@
+<div mat-dialog-content>
+    <mat-card class="wight-card">
+        <mat-card-title>Sing In</mat-card-title>
+        <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+        <form [formGroup]="singInForm" (ngSubmit)="onSingin()">
+            <mat-card-content>
+            
+                <mat-form-field class="full-width-input">
+                    <mat-label>User Name</mat-label>
+                    <input type="text" 
+                    formControlName="username" 
+                    matInput [formControl]="usernameFormControl" pattern="[a-zA-Z]*" placeholder="firstname.lastname">
+                    <mat-error *ngIf="usernameFormControl.hasError('username') && !usernameFormControl.hasError('required')">
+                        Please enter a valid user name.
+                    </mat-error>
+                    <mat-error *ngIf="usernameFormControl.hasError('required')">
+                    <strong>is required.</strong>
+                    </mat-error>
+                </mat-form-field>
+                <mat-form-field class="full-width-input"> 
+                    <mat-label>Password</mat-label>
+                    <input type="password"
+                    formControlName="password"
+                    matInput [formControl]="passwordFormControl" placeholder="password">
+                    <mat-error *ngIf="passwordFormControl.hasError('required')">
+                    <strong>is required.</strong>
+                    </mat-error>
+                </mat-form-field>  
+            </mat-card-content>
+            <mat-divider inset></mat-divider>
+            <mat-card-actions>
+                <button type="button" (click)="closeSingIn()" mat-raised-button color="secondary">Cancel</button>
+                <button type="submit" mat-raised-button color="primary">Submit</button>
+            </mat-card-actions>
+        </form>
+        <mat-card-footer>
+          <mat-divider inset></mat-divider>
+        </mat-card-footer>
+    </mat-card>
+</div>

@@ -1,0 +1,23 @@
+.mat-card {
+    margin: 2rem auto;
+    text-align: center;
+    font-weight: 400px;
+    border-color: blueviolet;
+}
+.mat-error{
+    font-size: medium;    
+}
+.mat-card-title{
+    color: black;
+}
+
+.full-width-input{
+    width: 100%;
+    margin: 3%;
+    padding: 3%;
+    font-size: medium;
+}
+
+button{
+    width: 40%;
+}

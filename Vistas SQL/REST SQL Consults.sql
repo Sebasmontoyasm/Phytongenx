@@ -34,21 +34,19 @@ CREATE TABLE users(
     LASTLOGIN DATE
 );
 
-INSERT INTO `USERS`(
-    `ID`,
-    `FULLNAME`,
+INSERT INTO `USER`(
+    `NAME`,
     `USERNAME`,
     `PASSWORD`,
     `ROL`,
     `CREATEDAT`,
-    `LASTLOGIN`
+    `UPDATEAT`
     )
     VALUES (
-        1,
         'Sebastian Montoya',
         'sebastian.montoya',
-        '1234',
-        'Administrator',
+        '123456',
+        'administrator',
         CURRENT_DATE,
         null
 );
