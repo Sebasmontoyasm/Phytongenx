@@ -1,21 +1,26 @@
-const express = require('express');
 var con = require("./config/conexion");
-const bodyParser = require("body-parser");
-var multer = require('multer');
-var upload = multer();
-
+var cors = require('cors');
+var helmet = require('helmet');
+var reflect = require('reflect-metadata');
+const express = require('express');
 const app = express();
 
-// for parsing application/json
-app.use(bodyParser.json()); 
-
-// for parsing application/xwww-
-app.use(bodyParser.urlencoded({ extended: true })); 
-//form-urlencoded
-
-// for parsing multipart/form-data
-app.use(upload.array()); 
-app.use(express.static('public'));
+app.use(
+  cors({ 
+      origin: 'http://localhost:4200', 
+      methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+      allowedHeaders: [
+          'Content-Type', 
+          'Authorization', 
+          'Origin', 
+          'x-access-token', 
+          'XSRF-TOKEN'
+      ], 
+      preflightContinue: false 
+  }),
+  helmet(),
+  express.json()
+);
 
 /**
  * Obtiene la información para la View Master Data
@@ -61,8 +66,6 @@ app.get('/api/data/dayssince', (request, response) => {
   });
 });
 
-
-
 /**
  * Consulta DB para obtener los cms que requieren 
  * procesamiento manual por fallo.
@@ -79,6 +82,7 @@ app.get('/api/cms/manually', (request, response) => {
     response.send(result[0]);
   });
 });
+
 
 /**
  * Consulta el detalle de las PO Relacionadas
@@ -252,6 +256,22 @@ app.get('/api/data/delete/:id', (request, response) => {
     } 
     response.send({status: 0, info: "La información ha sido eliminada con exito."});
   });
+});
+
+/**
+ * 
+ */
+
+ app.post('/api/auth/singin', (req, response)=> {
+  response.header("Access-Control-Allow-Origin", "*");
+  response.header("Access-Control-Allow-Headers","*");
+  response.header("Access-Control-Allow-Methods","POST");
+
+  console.log("cors ok");
+  user = Object.values(req.body);
+
+  
+  
 });
 
 const listener = app.listen(process.env.PORT || 3000, () => {
