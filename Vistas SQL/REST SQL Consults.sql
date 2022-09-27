@@ -14,25 +14,44 @@ CREATE TABLE data_delete LIKE data;
 ALTER TABLE "data_delete" ADD "Status" VARCHAR(250) NOT NULL ;
 
 /**
-* Tabla para almacenar los cambios y que sean efectuados por Pedro en cms
+* Notificación a pedro de que el usuario o cliente local ha realizado un cambio.
+* 0: Sin cambio
+* 1: Se realiza cambio
 **/
 
-CREATE TABLE temp_cms LIKE data;
-ALTER TABLE temp_cms 
-DROP COLUMN Invoice_Number,
-DROP COLUMN Date_invoice_recieved,
-DROP COLUMN Date_Quickbooks_Processed;
+CREATE TABLE observablePedro(
+    STATUS INT NOT NULL);
 
-/**
-* Tabla para almacenar los cambios y que sean efectuados por Pedro en qb
-**/
+INSERT INTO observablePedro values(0);
 
-CREATE TABLE temp_qb LIKE data;
-ALTER TABLE temp_qb 
-DROP COLUMN Date_CSM_Processed, DROP COLUMN NamePDF;
+CREATE TABLE users(
+    ID INT NOT NULL PRIMARY KEY AUTO_INCREMENT ,
+    FULLNAME varchar(255) NOT NULL,
+    USERNAME varchar(255) NOT NULL,
+    PASSWORD varchar(255) NOT NULL,
+    ROL varchar(255) NOT NULL,
+    CREATEDAT DATE NOT NULL,
+    LASTLOGIN DATE
+);
 
-CREATE TABLE data_delete LIKE data;
-ALTER TABLE "data_delete" ADD "Status" VARCHAR(250) NOT NULL ;
+INSERT INTO `USERS`(
+    `ID`,
+    `FULLNAME`,
+    `USERNAME`,
+    `PASSWORD`,
+    `ROL`,
+    `CREATEDAT`,
+    `LASTLOGIN`
+    )
+    VALUES (
+        1,
+        'Sebastian Montoya',
+        'sebastian.montoya',
+        '1234',
+        'Administrator',
+        CURRENT_DATE,
+        null
+);
 
 /**
 * Tabla para almacenar los cambios hechos por el usuario y los comentarios 
@@ -40,7 +59,8 @@ ALTER TABLE "data_delete" ADD "Status" VARCHAR(250) NOT NULL ;
 
 CREATE TABLE userlogs(
     ID INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    USER int NOT NULL, ROL varchar(255) NOT NULL,
+    USERNAME VARCHAR(255) NOT NULL,
+    ROL varchar(255) NOT NULL,
     ACTION varchar(255) NOT NULL,
     DATEACTION varchar(255) NOT NULL,
     IDDATA int NOT NULL ,
@@ -142,6 +162,25 @@ DELIMITER ;
 call qbduplicated();
 
 /**
+* Información en la que Pedro Calidad QB no proceso por que no ha encontrado la PO_NUMBER 
+* Se debe mostrar para realizarla de forma Manual.
+*/
+
+DELIMITER //
+DROP PROCEDURE IF EXISTS qbduplicated//
+CREATE PROCEDURE qbduplicated()
+BEGIN
+    SELECT ID,PO_Number,Invoice_Number,Date_CSM_Processed, COUNT(Invoice_Number) FROM data
+    WHERE Invoice_Number="" AND Date_CSM_Processed!=""
+    GROUP BY Invoice_Number;
+    LEFT JOIN (
+
+END//
+DELIMITER ;
+
+call qbduplicated();
+
+/**
 * DelayQb es el tiempo que obtiene las PO que no han sido procesadas por Pedro Invoice 
 * No se encontro la factura correspondiente a esa PO.
 **/
@@ -156,7 +195,7 @@ BEGIN
 END//
 DELIMITER ;
 
-call DelayQb()();
+call DelayQb();
 
 /**
 * Daysince son los dias que han pasado sin que se halla encontrado una PO
