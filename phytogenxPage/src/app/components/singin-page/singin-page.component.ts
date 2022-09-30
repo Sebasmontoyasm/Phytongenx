@@ -1,43 +1,63 @@
 import { Component, OnInit } from '@angular/core';
-import {FormControl, Validators} from '@angular/forms';
 import { AuthService } from 'src/app/services/auth.service';
-import { FormBuilder } from '@angular/forms';
-import { DatePipe } from '@angular/common';
+import { FormBuilder, Validators, ValidationErrors } from '@angular/forms';
 import { Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
+import { User } from '../../interfaces/user';
 
 @Component({
   selector: 'app-singin-page',
   templateUrl: './singin-page.component.html',
   styleUrls: ['./singin-page.component.css']
 })
-export class SinginPageComponent implements OnInit {
-
-  usernameFormControl = new FormControl('', [Validators.required, Validators.pattern('[a-zA-Z ]*')]);
-  passwordFormControl = new FormControl('', [Validators.required]);
-  today = new Date();
-  pipe = new DatePipe('en-US');
-
-  singInForm = this.fb.group({
-    username: ['sebastian.montoya'],
-    password: ['1234'],
-    lastlogin: this.pipe.transform(this.today, 'dd/MM/YYYY')
+export class SinginPageComponent implements OnInit{
+  hide = false;
+  private isValidusername = /\S+\.\S+/;
+  singInForm: FormBuilder | any  = this.fb.group({
+    username: ['',[Validators.required,Validators.pattern(this.isValidusername)]],
+    password: ['',[Validators.required, Validators.minLength(6)]]
   });
 
-  constructor(private authService: AuthService, private fb:FormBuilder,private router: Router, private singin: MatDialog) { }
+  constructor(private authService: AuthService,
+              private fb:FormBuilder,
+              private router: Router,
+              private singin: MatDialog,
+              ) { }
 
   ngOnInit(): void {
+    
   }
 
+  getErrorMessage(field: string): string{
+    let message:string = "";
+
+    if(this.singInForm.get(field).hasError('required')){ 
+      message = 'You must enter a value.';
+    }else if(this.singInForm.get(field).hasError('pattern')){
+      message = 'Not a valid username.';
+    }else if(this.singInForm.get(field).hasError('minlength')){
+      message = 'This field must be longer.';
+    }
+    return message;
+    
+  }
+
+  isValidField(field: string):boolean{
+    return this.singInForm.get(field).touched || this.singInForm.get(field).dirty && !this.singInForm.get(field).valid;
+  }
   onSingin(): void{
-    const formValue:any = this.singInForm.value;
-    console.log(formValue);
+    if(this.singInForm.invalid){
+      return;
+    }
+    
+    const formValue: User | any = this.singInForm.value;
     this.authService.login(formValue).subscribe(res => {
       if(res){
         this.router.navigate(['']);
+        this.closeSingIn();
       }
 
-    })
+    });
   }
 
   closeSingIn(): void{
