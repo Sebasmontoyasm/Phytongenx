@@ -1,10 +1,9 @@
-import { Entity, PrimaryGeneratedColumn, Column, Unique, CreateDateColumn, UpdateDateColumn} from "typeorm"
+import { Entity, PrimaryGeneratedColumn, Column, Unique, UpdateDateColumn} from "typeorm"
 import { MinLength, IsNotEmpty} from "class-validator";
 import * as bcrypt from 'bcryptjs';
 
 @Entity()
 @Unique(['username'])
-@Unique(['id'])
 export class User {
 
     @PrimaryGeneratedColumn('increment')
@@ -29,8 +28,7 @@ export class User {
     password: string;
 
     @Column()
-    @CreateDateColumn()
-    @IsNotEmpty()
+    @UpdateDateColumn()
     createdAt: Date;
 
     @Column()

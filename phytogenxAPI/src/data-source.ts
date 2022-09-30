@@ -11,13 +11,13 @@ export const AppDataSource = new DataSource({
     database: "pgenx-cmsqb",
     synchronize: true,
     logging: false,
-    entities: [],
+    entities: [User],
     migrations: [],
     subscribers: [],
 })
 
 AppDataSource.initialize()
     .then(() => {
-        // here you can start to work with your database
+        console.log("Base de datos conectada");
     })
     .catch((error) => console.log(error))

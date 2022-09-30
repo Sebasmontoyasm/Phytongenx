@@ -56,6 +56,7 @@ export class UserController {
             await userRepository.save(user);
             response.status(201).json({ message: 'User created'});
         }catch(e){
+            console.log("Error: "+e);
             response.status(404).json({ message: 'Not result'});
         }
     };
