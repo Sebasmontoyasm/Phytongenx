@@ -5,6 +5,7 @@ import { Observable, throwError, BehaviorSubject } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { catchError, map } from 'rxjs/operators';
 import { JwtHelperService } from '@auth0/angular-jwt';
+import { Router } from '@angular/router';
 
 const helper = new JwtHelperService();
 
@@ -12,7 +13,7 @@ const headers= new HttpHeaders();
 
 headers.append('Content-Type', 'application/json');
 headers.append('Accept', 'application/json');
-headers.append('Access-Control-Allow-Origin', 'http://localhost:3000');
+headers.append('Access-Control-Allow-Origin', 'http://localhost:3001');
 headers.append('Access-Control-Allow-Methods','GET,HEAD,OPTIONS,POST,PUT');
 
 @Injectable({
@@ -20,7 +21,7 @@ headers.append('Access-Control-Allow-Methods','GET,HEAD,OPTIONS,POST,PUT');
 })
 export class AuthService {
   private loggedIn = new BehaviorSubject<boolean>(false);
-  constructor(private http: HttpClient) {
+  constructor(private http: HttpClient, private router: Router) {
     this.checkToken();
    }
 
@@ -35,7 +36,6 @@ export class AuthService {
       map((res:UserResponse) => {
         this.saveToken(res.token);
         this.loggedIn.next(true);
-        console.log("User Response: ",res);
         return res;
       }),
       catchError((err) => this.handlerError(err))
@@ -45,12 +45,12 @@ export class AuthService {
   loginout(): void {
     localStorage.removeItem('token');
     this.loggedIn.next(false);
+    this.router.navigate(['/homepage']);
   }
 
   private checkToken(): void {
     const userToken: any = localStorage.getItem('token');
     const isExpired = helper.isTokenExpired(userToken);
-    console.log('isExpired', isExpired);
 
       if(isExpired){
         this.loginout();
@@ -58,6 +58,10 @@ export class AuthService {
       else{
         this.loggedIn.next(true);
       }
+      console.log("LOGGED STATUS: ",this.loggedIn.value)
+  }
+  private readToken():void{
+    
   }
 
   private saveToken(token: string): void {
