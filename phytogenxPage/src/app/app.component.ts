@@ -1,6 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { MatDialog} from '@angular/material/dialog';
-import { SinginPageComponent } from './components/singin-page/singin-page.component';
 
 @Component({
   selector: 'app-root',
@@ -8,24 +6,10 @@ import { SinginPageComponent } from './components/singin-page/singin-page.compon
   styleUrls: ['./app.component.css']
 })
 export class AppComponent  implements OnInit {
-  title = 'PhytonGenX Web Tools';
-
-  constructor(public singin: MatDialog) { }
+  title = 'PhytoGenX Web Tools';
+  
+  constructor() { }
 
   ngOnInit(): void {
-  }
-
-  closeSingIn(){
-    this.singin.closeAll();
-  }
-  openSingIn(enterAnimationDuration: string, exitAnimationDuration: string): void {
-    this.singin.open(SinginPageComponent, {
-    position: {top: '130px'},
-    width: '40%',
-    height: '69%',
-    
-    enterAnimationDuration,
-    exitAnimationDuration
-  });
   }
 }

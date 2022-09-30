@@ -30,6 +30,9 @@ import { MatCardModule } from '@angular/material/card';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatButtonModule } from '@angular/material/button';
+import { FooterComponent } from './components/footer/footer.component';
+import { NotFoundComponent } from './components/not-found/not-found.component';
+import { HeaderComponent } from './components/header/header.component';
 
 @NgModule({
   declarations: [
@@ -44,6 +47,9 @@ import { MatButtonModule } from '@angular/material/button';
     QbPageComponent,
     CmsDetailPageComponent,
     QbDetailPageComponent,
+    FooterComponent,
+    NotFoundComponent,
+    HeaderComponent,
   ],
   imports: [
     BrowserModule,
