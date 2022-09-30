@@ -9,18 +9,19 @@ import { QbPageComponent } from './components/qb-page/qb-page.component';
 import { QbPerformancePageComponent } from './components/qb-performance-page/qb-performance-page.component';
 import { CmsDetailPageComponent } from './components/cms-detail-page/cms-detail-page.component';
 import { QbDetailPageComponent } from './components/qb-detail-page/qb-detail-page.component';
+import { CheckSinginGuard } from './guards/check-singin.guard';
 
 const routes: Routes = [
-  { path:'', redirectTo:'/HomePage', pathMatch:'full'},
-  { path:'HomePage', component: HomePageComponent},
-  { path:'get', component: MasterDataPageComponent},
-  { path:'singin', component: SinginPageComponent},
-  { path:'cms', component: CmsPageComponent},
-  { path:'cms/performance', component: CmsPerformancePageComponent},
-  { path:'cms/detail/:id?', component: CmsDetailPageComponent},
-  { path:'qb', component: QbPageComponent},
-  { path:'qb/performance', component: QbPerformancePageComponent},
-  { path:'qb/detail/:id?', component: QbDetailPageComponent},
+  { path:'', redirectTo:'/homepage', pathMatch:'full'},
+  { path:'homepage', component: HomePageComponent},
+  { path:'masterdata',canActivate:[CheckSinginGuard], component: MasterDataPageComponent},
+  { path:'singin',canActivate:[CheckSinginGuard], component: SinginPageComponent},
+  { path:'cms',canActivate:[CheckSinginGuard], component: CmsPageComponent},
+  { path:'cms/performance',canActivate:[CheckSinginGuard], component: CmsPerformancePageComponent},
+  { path:'cms/detail/:id?',canActivate:[CheckSinginGuard], component: CmsDetailPageComponent},
+  { path:'qb',canActivate:[CheckSinginGuard], component: QbPageComponent},
+  { path:'qb/performance',canActivate:[CheckSinginGuard], component: QbPerformancePageComponent},
+  { path:'qb/detail/:id?',canActivate:[CheckSinginGuard], component: QbDetailPageComponent},
 
 ];
 
