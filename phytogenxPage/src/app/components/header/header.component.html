@@ -1,0 +1,48 @@
+<body>
+    <!-- Navigation-->   
+    <nav class="navbar navbar-expand-lg bg-secondary text-uppercase fixed-top" id="mainNav">
+        <div class="container">
+            <a class="navbar-brand" href="/homepage">Phytogenx</a>  
+            <div class="collapse navbar-collapse" id="navbarResponsive">
+                <ul class="navbar-nav ms-auto">
+                    <li *ngIf="isLogged" class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded" href="/masterdata">Master Data</a></li>
+                    <li *ngIf="isLogged" class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded" href="/cms">CMS</a></li>
+                    <li *ngIf="isLogged" class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded" href="/qb">QB</a></li>
+                    <li class="nav-item mx-0 mx-lg-1">
+                        <span *ngIf="!isLogged" class=" nav-link-white py-3 px-0 px-lg-3 rounded color-white" (click)="closeSingIn()" (click)="openSingIn('1000ms', '1000ms')">
+                            Sing In
+                        </span> 
+                    </li>
+                    <li class="nav-item mx-0 mx-lg-1">
+                        <span *ngIf="isLogged" class=" nav-link-white py-3 px-0 px-lg-3 rounded color-white" (click)="onSinginout()">
+                            Sing out
+                        </span> 
+                    </li>
+                    <button *ngIf="isAdmin" class="btn-icon" mat-icon-button [matMenuTriggerFor]="settings">
+                        <mat-icon>settings</mat-icon>
+                    </button>
+                    <mat-menu #settings="matMenu" >
+                        <button mat-menu-item>
+                        </button>
+                        <button mat-menu-item>
+                            <span>Users</span>
+                            <mat-icon class="icon">account_circle</mat-icon>
+                        </button>
+                        <button mat-menu-item>
+                            <span>Create User</span>
+                            <mat-icon class="icon">add_box</mat-icon>
+                        </button>
+                        <button mat-menu-item>
+                            <span>Users Logs</span>
+                            <mat-icon class="icon">assignment</mat-icon>
+                        </button>
+                        <button mat-menu-item>
+                            <span>Restore Data</span>
+                            <mat-icon class="icon">restore</mat-icon>
+                        </button>
+                    </mat-menu>
+                </ul>
+            </div>
+        </div>
+    </nav>
+</body>
