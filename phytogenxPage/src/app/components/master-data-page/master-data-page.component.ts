@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild} from '@angular/core';
+import { Component, OnInit, ViewChild,OnDestroy} from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
@@ -6,6 +6,8 @@ import { MasterDataService } from 'src/app/services/masterdata/masterdata.servic
 import { MatMenuTrigger } from '@angular/material/menu';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Data } from 'src/app/interfaces/data/data';
+import { takeUntil } from 'rxjs/operators';
+import { Subject } from 'rxjs';
 
 @Component({
   selector: 'app-master-data-page',
@@ -13,9 +15,10 @@ import { Data } from 'src/app/interfaces/data/data';
   styleUrls: ['./master-data-page.component.css']
 })
 
-export class MasterDataPageComponent implements OnInit {
+export class MasterDataPageComponent implements OnInit, OnDestroy {
   rol = "guest";
   title = 'data-table';
+  private destroy = new Subject<any>();
   displayedColumn: string[] =['ID','PO_Number','Date_CSM_Processed','PDF_Name','NamePDF','Invoice_Number','Date_invoice_recieved','Date_Quickbooks_Processed','DelayQb','DaysSince'];
   dataSource!: MatTableDataSource<Data>;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
@@ -34,6 +37,12 @@ export class MasterDataPageComponent implements OnInit {
     this.getMasterData();
     this.rol = this.checkrol();
   }
+
+  ngOnDestroy(): void {
+    this.destroy.next({});
+    this.destroy.complete();
+  }
+  
   checkrol(){
     const localitem: string | any = localStorage.getItem('user');
     const user = JSON.parse(localitem);
@@ -61,7 +70,9 @@ export class MasterDataPageComponent implements OnInit {
   }
   getMasterData()
   {
-    this.masterDataService.getMasterData().subscribe(
+    this.masterDataService.getMasterData().pipe(
+      takeUntil(this.destroy)
+    ).subscribe(
       res=>{
         this.posts=res;
         this.dataSource = new MatTableDataSource(this.posts);
