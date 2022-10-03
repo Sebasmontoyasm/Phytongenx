@@ -14,25 +14,26 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
-import { CmsPageComponent } from './components/cms-page/cms-page.component';
+import { CmsPageComponent } from './components/cms/cms-page/cms-page.component';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule} from '@angular/material/core';
-import { DialogdeletePageComponent } from './components/dialogdelete-page/dialogdelete-page.component';
+import { DialogdeletePageComponent } from './components/customs/dialogdelete-page/dialogdelete-page.component';
 import { MatDialogModule } from '@angular/material/dialog';
-import { CmsPerformancePageComponent } from './components/cms-performance-page/cms-performance-page.component';
-import { QbPerformancePageComponent } from './components/qb-performance-page/qb-performance-page.component';
-import { QbPageComponent } from './components/qb-page/qb-page.component';
-import { CmsDetailPageComponent } from './components/cms-detail-page/cms-detail-page.component';
-import { QbDetailPageComponent } from './components/qb-detail-page/qb-detail-page.component';
+import { CmsPerformancePageComponent } from './components/cms/cms-performance-page/cms-performance-page.component';
+import { QbPerformancePageComponent } from './components/qb/qb-performance-page/qb-performance-page.component';
+import { QbPageComponent } from './components/qb/qb-page/qb-page.component';
+import { CmsDetailPageComponent } from './components/cms/cms-detail-page/cms-detail-page.component';
+import { QbDetailPageComponent } from './components/qb/qb-detail-page/qb-detail-page.component';
 import { BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import { MatSnackBarModule} from '@angular/material/snack-bar';
 import { MatCardModule } from '@angular/material/card';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatButtonModule } from '@angular/material/button';
-import { FooterComponent } from './components/footer/footer.component';
-import { NotFoundComponent } from './components/not-found/not-found.component';
-import { HeaderComponent } from './components/header/header.component';
+import { FooterComponent } from './components/customs/footer/footer.component';
+import { NotFoundComponent } from './components/customs/not-found/not-found.component';
+import { HeaderComponent } from './components/customs/header/header.component';
+import { UsersComponent } from './components/users/users/users.component';
 
 @NgModule({
   declarations: [
@@ -50,6 +51,7 @@ import { HeaderComponent } from './components/header/header.component';
     FooterComponent,
     NotFoundComponent,
     HeaderComponent,
+    UsersComponent,
   ],
   imports: [
     BrowserModule,

@@ -1,6 +1,6 @@
 import { HttpClient, HttpHeaders} from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { User, UserResponse, Roles } from '../interfaces/user';
+import { User, UserResponse} from '../../interfaces/user/user';
 import { Observable, throwError, BehaviorSubject } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { catchError, map } from 'rxjs/operators';

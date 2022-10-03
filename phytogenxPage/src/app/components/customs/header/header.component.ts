@@ -2,8 +2,8 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { MatDialog} from '@angular/material/dialog';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-import { AuthService } from 'src/app/services/auth.service';
-import { SinginPageComponent } from '../singin-page/singin-page.component';
+import { AuthService } from 'src/app/services/auth/auth.service';
+import { SinginPageComponent } from '../../singin-page/singin-page.component';
 
 @Component({
   selector: 'app-header',
@@ -16,7 +16,7 @@ export class HeaderComponent implements OnInit, OnDestroy{
 
   private destroy = new Subject<any>();
 
-  constructor(public singin: MatDialog,private authService: AuthService) { }
+  constructor(public singin: MatDialog, private authService: AuthService) { }
 
   ngOnInit(): void {
     this.authService.isLogged.pipe(

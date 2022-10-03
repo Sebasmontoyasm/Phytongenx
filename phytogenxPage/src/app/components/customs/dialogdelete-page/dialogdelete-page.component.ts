@@ -1,7 +1,7 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { MasterDataService } from 'src/app/services/masterdata.service';
-import { UserlogService } from 'src/app/services/userlog.service';
+import { MasterDataService } from 'src/app/services/masterdata/masterdata.service';
+import { UserlogService } from 'src/app/services//userlog/userlog.service';
 import { DatePipe } from '@angular/common';
 
 export interface UserLog{

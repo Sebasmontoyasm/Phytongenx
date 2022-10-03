@@ -2,21 +2,21 @@ import { Component, OnInit, ViewChild} from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
-import { QbService } from 'src/app/services/qb.service';
+import { QbService } from 'src/app/services/qb/qb.service';
 import { MatMenuTrigger } from '@angular/material/menu';
-import { QbDetail } from 'src/app/interfaces/qb-detail';
-import { ActivatedRoute, Router } from '@angular/router';
+import { QbPerformance } from 'src/app/interfaces/qb/qb-performance';
+import { Router } from '@angular/router';
 
 @Component({
-  selector: 'app-qb-detail-page',
-  templateUrl: './qb-detail-page.component.html',
-  styleUrls: ['./qb-detail-page.component.css']
+  selector: 'app-qb-performance-page',
+  templateUrl: './qb-performance-page.component.html',
+  styleUrls: ['./qb-performance-page.component.css']
 })
-export class QbDetailPageComponent implements OnInit {
-  id: any;
+export class QbPerformancePageComponent implements OnInit {
+
   title = 'data-table';
-  displayedColumn: string[] =['ID','Date','PONumber','InvoiceNumber','State'];
-  dataSource!: MatTableDataSource<QbDetail>;
+  displayedColumn: string[] =['ID','LastDate','InvoiceNumber','Tries','LastPO','State'];
+  dataSource!: MatTableDataSource<QbPerformance>;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
   @ViewChild(MatMenuTrigger) trigger!: MatMenuTrigger;
@@ -24,20 +24,15 @@ export class QbDetailPageComponent implements OnInit {
   posts:any;
 
   constructor(private qbService:QbService,
-              private route: ActivatedRoute,
               private router: Router) { }
 
   ngOnInit(): void {
-    this.getQbDetail();
+    this.getQbPerformace();
   }
 
-  getQbDetail()
+  getQbPerformace()
   {
-    this.route.params.subscribe(params => {
-      this.id = Object.values(params);
-    });
-
-    this.qbService.detail(this.id[0]).subscribe(
+    this.qbService.performace().subscribe(
       res=>{
         this.posts=res;
         this.dataSource = new MatTableDataSource(this.posts);
@@ -56,5 +51,4 @@ export class QbDetailPageComponent implements OnInit {
   onReturn(){
     this.router.navigate(['/masterdata']);
   }
-
 }

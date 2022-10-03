@@ -2,37 +2,41 @@ import { Component, OnInit, ViewChild} from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
-import { QbService } from 'src/app/services/qb.service';
+import { CmsService } from 'src/app/services/cms/cms.service';
 import { MatMenuTrigger } from '@angular/material/menu';
-import { QbPerformance } from 'src/app/interfaces/qb-performance';
-import { Router } from '@angular/router';
-
+import { CmsDetail } from 'src/app/interfaces/cms/cms-detail';
+import { ActivatedRoute, Router } from '@angular/router';
 @Component({
-  selector: 'app-qb-performance-page',
-  templateUrl: './qb-performance-page.component.html',
-  styleUrls: ['./qb-performance-page.component.css']
+  selector: 'app-cms-detail-page',
+  templateUrl: './cms-detail-page.component.html',
+  styleUrls: ['./cms-detail-page.component.css']
 })
-export class QbPerformancePageComponent implements OnInit {
-
+export class CmsDetailPageComponent implements OnInit {
+  id: any;
   title = 'data-table';
-  displayedColumn: string[] =['ID','LastDate','InvoiceNumber','Tries','LastPO','State'];
-  dataSource!: MatTableDataSource<QbPerformance>;
+  displayedColumn: string[] =['ID','Date','PDFName','PONumber','SubloteCode','Test','State'];
+  dataSource!: MatTableDataSource<CmsDetail>;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
   @ViewChild(MatMenuTrigger) trigger!: MatMenuTrigger;
-
+  
   posts:any;
 
-  constructor(private qbService:QbService,
+  constructor(private cmsService:CmsService,
+              private route: ActivatedRoute,
               private router: Router) { }
 
   ngOnInit(): void {
-    this.getQbPerformace();
+    this.getCmsDetail();
   }
 
-  getQbPerformace()
+  getCmsDetail()
   {
-    this.qbService.performace().subscribe(
+    this.route.params.subscribe(params => {
+      this.id = Object.values(params);
+    });
+
+    this.cmsService.detail(this.id[0]).subscribe(
       res=>{
         this.posts=res;
         this.dataSource = new MatTableDataSource(this.posts);
@@ -47,7 +51,7 @@ export class QbPerformancePageComponent implements OnInit {
     const filterValue = (event.target as HTMLInputElement).value;
     this.dataSource.filter = filterValue.trim().toLowerCase();
   }
-  
+
   onReturn(){
     this.router.navigate(['/masterdata']);
   }

@@ -2,9 +2,9 @@ import { Component, OnInit, ViewChild} from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
-import { CmsService } from 'src/app/services/cms.service';
+import { CmsService } from 'src/app/services/cms/cms.service';
 import { MatMenuTrigger } from '@angular/material/menu';
-import { CmsPerformance } from 'src/app/interfaces/cms-performance'
+import { CmsPerformance } from 'src/app/interfaces/cms/cms-performance'
 import { Router } from '@angular/router';
 
 @Component({

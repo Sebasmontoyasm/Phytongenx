@@ -1,17 +1,16 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { MasterDataPageComponent } from './components/master-data-page/master-data-page.component';
-import { SinginPageComponent } from './components/singin-page/singin-page.component';
 import { HomePageComponent } from './components/home-page/home-page.component';
-import { CmsPageComponent } from './components/cms-page/cms-page.component';
-import { CmsPerformancePageComponent } from './components/cms-performance-page/cms-performance-page.component';
-import { QbPageComponent } from './components/qb-page/qb-page.component';
-import { QbPerformancePageComponent } from './components/qb-performance-page/qb-performance-page.component';
-import { CmsDetailPageComponent } from './components/cms-detail-page/cms-detail-page.component';
-import { QbDetailPageComponent } from './components/qb-detail-page/qb-detail-page.component';
-import { CheckSinginGuard } from './guards/check-singin.guard';
-import { NotFoundComponent } from './components/not-found/not-found.component';
-import { CheckRolGuard } from './guards/check-rol.guard';
+import { CmsPageComponent } from './components/cms/cms-page/cms-page.component';
+import { CmsPerformancePageComponent } from './components/cms/cms-performance-page/cms-performance-page.component';
+import { QbPageComponent } from './components/qb/qb-page/qb-page.component';
+import { QbPerformancePageComponent } from './components/qb/qb-performance-page/qb-performance-page.component';
+import { CmsDetailPageComponent } from './components/cms/cms-detail-page/cms-detail-page.component';
+import { QbDetailPageComponent } from './components/qb/qb-detail-page/qb-detail-page.component';
+import { CheckSinginGuard } from './guards/singin/check-singin.guard';
+import { NotFoundComponent } from './components/customs/not-found/not-found.component';
+import { CheckRolGuard } from './guards/rol/check-rol.guard';
 
 const routes: Routes = [
   { path:'', redirectTo:'/homepage', pathMatch:'full'},

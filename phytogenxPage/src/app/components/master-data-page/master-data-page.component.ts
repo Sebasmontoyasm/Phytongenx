@@ -2,11 +2,10 @@ import { Component, OnInit, ViewChild} from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
-import { MasterDataService } from 'src/app/services/masterdata.service';
+import { MasterDataService } from 'src/app/services/masterdata/masterdata.service';
 import { MatMenuTrigger } from '@angular/material/menu';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { Data } from 'src/app/interfaces/data';
-import { CheckRolGuard } from 'src/app/guards/check-rol.guard';
+import { Data } from 'src/app/interfaces/data/data';
 
 @Component({
   selector: 'app-master-data-page',

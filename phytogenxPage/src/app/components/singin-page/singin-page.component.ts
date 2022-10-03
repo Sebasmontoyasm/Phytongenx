@@ -1,9 +1,9 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { AuthService } from 'src/app/services/auth.service';
+import { AuthService } from 'src/app/services/auth/auth.service';
 import { FormBuilder, Validators} from '@angular/forms';
 import { Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
-import { User } from '../../interfaces/user';
+import { User } from '../../interfaces/user/user';
 import { takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs';
 

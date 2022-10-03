@@ -2,13 +2,13 @@ import { Component, OnInit, ViewChild} from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
-import { CmsService} from 'src/app/services/cms.service';
+import { CmsService} from 'src/app/services/cms/cms.service';
 import { MatDialog } from '@angular/material/dialog';
-import { DialogdeletePageComponent } from '../dialogdelete-page/dialogdelete-page.component';
+import { DialogdeletePageComponent } from '../../customs/dialogdelete-page/dialogdelete-page.component';
 import { HttpEventType, HttpResponse } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { Cms } from 'src/app/interfaces/cms';
-import { UserLog } from 'src/app/interfaces/userlog';
+import { Cms } from 'src/app/interfaces/cms/cms';
+import { UserLog } from 'src/app/interfaces/user/userlog';
 
 const COLUMNS_SCHEMA = [
   { key: 'ID', type: 'text', label: 'ID'},
