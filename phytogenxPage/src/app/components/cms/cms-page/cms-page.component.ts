@@ -25,7 +25,10 @@ const COLUMNS_SCHEMA = [
   templateUrl: './cms-page.component.html',
   styleUrls: ['./cms-page.component.css']
 })
-
+/**
+ * Pagina principal para actualización
+ * de CMS que se hicieron manual o tienen un error.
+ */
 export class CmsPageComponent implements OnInit {
 
   title = 'data-table';
@@ -58,6 +61,7 @@ export class CmsPageComponent implements OnInit {
     comments: "",    
   };
   
+
   constructor(private cmsService:CmsService,public dialog: MatDialog) { }
 
   ngOnInit(): void {
@@ -76,23 +80,40 @@ export class CmsPageComponent implements OnInit {
       err => console.log("Error CMS View: "+err)
     );
   }
-
+  /**
+   * Función de busqueda de filtro
+   * en el la tabla dinamacia de angular
+   * material 
+   * @param event cambios en el Filter Table para busqueda. 
+   */
   applyFilter(event: Event){
     const filterValue = (event.target as HTMLInputElement).value;
     this.dataSource.filter = filterValue.trim().toLowerCase();
   }
-
+  /**
+   * recolecta el PDF cargado para mandarlo al backend
+   * @param event PDF file.
+   */
   chooseFile(event: Event){
     const filterValue = (event.target as HTMLInputElement).value;
     this.dataSource.filter = filterValue.trim().toLowerCase();
     console.log(filterValue);
   }
 
-
+  /**
+   * Guarda el id del archivo que se desea eliminar.
+   * @param id PO Number que se desea eliminar.
+   */
   getDeleteID(id: number){
     this.deleteID = id;
   }
-
+  /**
+   * Animacion para abrir una ventana emergente
+   * Para confirmar eliminación de archivo.
+   * @param enterAnimationDuration animacion de ventana emergente
+   * @param exitAnimationDuration cerrado de animacion
+   * @parama data recolecta el id y el log con los comentarios para guardar
+   */
   openDialog(enterAnimationDuration: string, exitAnimationDuration: string): void {
       this.dialog.open(DialogdeletePageComponent, {
       width: '250px',
