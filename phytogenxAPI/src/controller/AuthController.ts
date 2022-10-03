@@ -9,6 +9,7 @@ export class AuthController {
     static singin = async (req: Request, res: Response) =>{
         const {username,password} = req.body;
         const singinDate = new Date();
+        let rol: string;
         if(!(username && password)) {
             return res.status(400).json({message: ' Username & Password are required!'});
         }
@@ -18,9 +19,8 @@ export class AuthController {
 
         try{
             user = await userRepository.findOneOrFail({where:{username:username}});
+            rol = user.rol;
         }catch(e){
-            console.log(username);
-            console.log(password);
             return res.status(400).json({
                 message: ' Username or password incorrect!'
             });
@@ -32,7 +32,7 @@ export class AuthController {
           return res.status(400).json({message: 'Username or Password are incorrect!'});
         }
         const token = jwt.sign({ userId: user.id, username: user.name }, config.jwtSecret, {expiresIn: '1h' });
-        res.json({message: 'Sing in successfull!', token});
+        res.json({message: 'Sing in successfull!', token, rol});
     };
 
 
