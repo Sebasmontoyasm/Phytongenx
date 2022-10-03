@@ -8,7 +8,6 @@ import { JwtHelperService } from '@auth0/angular-jwt';
 import { Router } from '@angular/router';
 
 const helper = new JwtHelperService();
-
 const headers= new HttpHeaders();
 
 headers.append('Content-Type', 'application/json');
@@ -22,6 +21,7 @@ headers.append('Access-Control-Allow-Methods','GET,HEAD,OPTIONS,POST,PUT');
 export class AuthService {
   private loggedIn = new BehaviorSubject<boolean>(false);
   private rol = new BehaviorSubject<string>('guest');
+  private userToken = new BehaviorSubject<string>('');
   constructor(private http: HttpClient, private router: Router) {
     this.checkToken();
    }
@@ -34,15 +34,20 @@ export class AuthService {
     return this.rol.asObservable();
   }
 
+  get userTokenValue(): string {
+    return this.userToken.getValue();
+  }
+
   login(authData: User): Observable<UserResponse | void> {
     return this.http.
     post<UserResponse>(`${environment.API_URL}/auth/singin`,authData, { 'headers': headers })
     .pipe(
-      map((res:UserResponse) => {
-        this.saveLocalStorange(res);
+      map((userReponse:UserResponse) => {
+        this.saveLocalStorange(userReponse);
         this.loggedIn.next(true);
-        this.rol.next(res.rol);
-        return res;
+        this.rol.next(userReponse.rol);
+        this.userToken.next(userReponse.token);
+        return userReponse;
       }),
       catchError((err) => this.handlerError(err))
     );
@@ -52,6 +57,7 @@ export class AuthService {
     localStorage.removeItem('user');
     this.loggedIn.next(false);
     this.rol.next('guest');
+    this.userToken.next('');
     this.router.navigate(['/homepage']);
   }
 
@@ -67,6 +73,7 @@ export class AuthService {
       else{
         this.loggedIn.next(true);
         this.rol.next(user.rol);
+        this.userToken.next(user.token);
       }
     }
   
