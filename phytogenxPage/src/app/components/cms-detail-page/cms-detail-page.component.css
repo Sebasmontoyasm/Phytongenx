@@ -62,3 +62,9 @@ input::placeholder {
     text-align: center;
 }
 
+.icon{
+    margin: 5px;   
+    align-items: center; 
+    background: none;
+    border:0ch;
+}

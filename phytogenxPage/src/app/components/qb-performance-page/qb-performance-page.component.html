@@ -2,7 +2,10 @@
 <html>
    <body>
         <div class="masthead bg-primary">
-            <div class="search-div">    
+            <div class="search-div">   
+                <button (click)=onReturn() class="icon">
+                    <mat-icon >arrow_back</mat-icon>
+                </button>      
                 <input class="inputfilter" matInput placeholder="Filter Table" search (keyup)="applyFilter($event)" #input/>
             </div>  
             <div>

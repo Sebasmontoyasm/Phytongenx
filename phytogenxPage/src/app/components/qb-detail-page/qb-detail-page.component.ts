@@ -5,9 +5,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import { QbService } from 'src/app/services/qb.service';
 import { MatMenuTrigger } from '@angular/material/menu';
 import { QbDetail } from 'src/app/interfaces/qb-detail';
-import { ActivatedRoute } from '@angular/router';
-
-
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-qb-detail-page',
@@ -26,7 +24,8 @@ export class QbDetailPageComponent implements OnInit {
   posts:any;
 
   constructor(private qbService:QbService,
-              private route: ActivatedRoute) { }
+              private route: ActivatedRoute,
+              private router: Router) { }
 
   ngOnInit(): void {
     this.getQbDetail();
@@ -52,6 +51,10 @@ export class QbDetailPageComponent implements OnInit {
   applyFilter(event: Event){
     const filterValue = (event.target as HTMLInputElement).value;
     this.dataSource.filter = filterValue.trim().toLowerCase();
+  }
+  
+  onReturn(){
+    this.router.navigate(['/masterdata']);
   }
 
 }

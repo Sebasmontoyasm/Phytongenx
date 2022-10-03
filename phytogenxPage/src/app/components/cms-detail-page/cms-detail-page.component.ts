@@ -5,8 +5,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import { CmsService } from 'src/app/services/cms.service';
 import { MatMenuTrigger } from '@angular/material/menu';
 import { CmsDetail } from 'src/app/interfaces/cms-detail';
-import { ActivatedRoute } from '@angular/router';
-
+import { ActivatedRoute, Router } from '@angular/router';
 @Component({
   selector: 'app-cms-detail-page',
   templateUrl: './cms-detail-page.component.html',
@@ -24,7 +23,8 @@ export class CmsDetailPageComponent implements OnInit {
   posts:any;
 
   constructor(private cmsService:CmsService,
-              private route: ActivatedRoute) { }
+              private route: ActivatedRoute,
+              private router: Router) { }
 
   ngOnInit(): void {
     this.getCmsDetail();
@@ -50,5 +50,9 @@ export class CmsDetailPageComponent implements OnInit {
   applyFilter(event: Event){
     const filterValue = (event.target as HTMLInputElement).value;
     this.dataSource.filter = filterValue.trim().toLowerCase();
+  }
+
+  onReturn(){
+    this.router.navigate(['/masterdata']);
   }
 }

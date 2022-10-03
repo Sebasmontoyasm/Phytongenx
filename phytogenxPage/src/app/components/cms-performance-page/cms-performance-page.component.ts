@@ -5,6 +5,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import { CmsService } from 'src/app/services/cms.service';
 import { MatMenuTrigger } from '@angular/material/menu';
 import { CmsPerformance } from 'src/app/interfaces/cms-performance'
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-cms-performance-page',
@@ -22,7 +23,8 @@ export class CmsPerformancePageComponent implements OnInit {
 
   posts:any;
 
-  constructor(private cmsService:CmsService) { }
+  constructor(private cmsService:CmsService,
+              private router: Router) { }
 
   ngOnInit(): void {
     this.getCmsPerformace();
@@ -44,5 +46,9 @@ export class CmsPerformancePageComponent implements OnInit {
   applyFilter(event: Event){
     const filterValue = (event.target as HTMLInputElement).value;
     this.dataSource.filter = filterValue.trim().toLowerCase();
+  }
+
+  onReturn(){
+    this.router.navigate(['/masterdata']);
   }
 }

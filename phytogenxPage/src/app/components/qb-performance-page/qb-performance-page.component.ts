@@ -5,6 +5,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import { QbService } from 'src/app/services/qb.service';
 import { MatMenuTrigger } from '@angular/material/menu';
 import { QbPerformance } from 'src/app/interfaces/qb-performance';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-qb-performance-page',
@@ -22,7 +23,8 @@ export class QbPerformancePageComponent implements OnInit {
 
   posts:any;
 
-  constructor(private qbService:QbService) { }
+  constructor(private qbService:QbService,
+              private router: Router) { }
 
   ngOnInit(): void {
     this.getQbPerformace();
@@ -44,5 +46,9 @@ export class QbPerformancePageComponent implements OnInit {
   applyFilter(event: Event){
     const filterValue = (event.target as HTMLInputElement).value;
     this.dataSource.filter = filterValue.trim().toLowerCase();
+  }
+  
+  onReturn(){
+    this.router.navigate(['/masterdata']);
   }
 }

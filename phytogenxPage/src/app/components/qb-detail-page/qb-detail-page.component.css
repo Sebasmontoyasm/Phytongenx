@@ -22,6 +22,7 @@ table{
     align-items: center; 
     background: none;
     border:0ch;
+    padding-right: 0.5px; 
 }
 
 .inputfilter{

@@ -6,6 +6,7 @@ import { MasterDataService } from 'src/app/services/masterdata.service';
 import { MatMenuTrigger } from '@angular/material/menu';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Data } from 'src/app/interfaces/data';
+import { CheckRolGuard } from 'src/app/guards/check-rol.guard';
 
 @Component({
   selector: 'app-master-data-page',
@@ -14,7 +15,7 @@ import { Data } from 'src/app/interfaces/data';
 })
 
 export class MasterDataPageComponent implements OnInit {
-  
+  rol = "guest";
   title = 'data-table';
   displayedColumn: string[] =['ID','PO_Number','Date_CSM_Processed','PDF_Name','NamePDF','Invoice_Number','Date_invoice_recieved','Date_Quickbooks_Processed','DelayQb','DaysSince'];
   dataSource!: MatTableDataSource<Data>;
@@ -32,8 +33,33 @@ export class MasterDataPageComponent implements OnInit {
 
   ngOnInit(): void {
     this.getMasterData();
+    this.rol = this.checkrol();
+  }
+  checkrol(){
+    const localitem: string | any = localStorage.getItem('user');
+    const user = JSON.parse(localitem);
+    return user.rol;
   }
 
+  checkrolqbdetail(): boolean {
+    const localitem: string | any = localStorage.getItem('user');
+    const user = JSON.parse(localitem);
+
+    if(user.rol == 'administrator' || user.rol == 'qb'){
+        return true;   
+    }
+    return false;
+  }
+
+  checkrolcmsdetail(): boolean {
+    const localitem: string | any = localStorage.getItem('user');
+    const user = JSON.parse(localitem);
+
+    if(user.rol == 'administrator' || user.rol == 'cms'){
+        return true;   
+    }
+    return false;
+  }
   getMasterData()
   {
     this.masterDataService.getMasterData().subscribe(

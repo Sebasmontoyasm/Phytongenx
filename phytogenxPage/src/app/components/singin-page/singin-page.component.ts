@@ -1,18 +1,21 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { AuthService } from 'src/app/services/auth.service';
-import { FormBuilder, Validators, ValidationErrors } from '@angular/forms';
+import { FormBuilder, Validators} from '@angular/forms';
 import { Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 import { User } from '../../interfaces/user';
+import { takeUntil } from 'rxjs/operators';
+import { Subject } from 'rxjs';
 
 @Component({
   selector: 'app-singin-page',
   templateUrl: './singin-page.component.html',
   styleUrls: ['./singin-page.component.css']
 })
-export class SinginPageComponent implements OnInit{
+export class SinginPageComponent implements OnInit, OnDestroy {
   hide = false;
   private isValidusername = /\S+\.\S+/;
+  private destroy = new Subject<any>();
   singInForm: FormBuilder | any  = this.fb.group({
     username: ['',[Validators.required,Validators.pattern(this.isValidusername)]],
     password: ['',[Validators.required, Validators.minLength(6)]]
@@ -25,7 +28,11 @@ export class SinginPageComponent implements OnInit{
               ) { }
 
   ngOnInit(): void {
-    
+  }
+
+  ngOnDestroy(): void {
+    this.destroy.next({});
+    this.destroy.complete();
   }
 
   getErrorMessage(field: string): string{
@@ -51,7 +58,9 @@ export class SinginPageComponent implements OnInit{
     }
     
     const formValue: User | any = this.singInForm.value;
-    this.authService.login(formValue).subscribe(res => {
+    this.authService.login(formValue).pipe(
+      takeUntil(this.destroy)
+    ).subscribe(res => {
       if(res){
         this.router.navigate(['']);
         this.closeSingIn();

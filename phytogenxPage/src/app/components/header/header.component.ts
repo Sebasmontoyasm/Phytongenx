@@ -1,5 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { MatDialog} from '@angular/material/dialog';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 import { AuthService } from 'src/app/services/auth.service';
 import { SinginPageComponent } from '../singin-page/singin-page.component';
 
@@ -8,18 +10,31 @@ import { SinginPageComponent } from '../singin-page/singin-page.component';
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.css']
 })
-export class HeaderComponent implements OnInit {
-  isAdmin = false;
+export class HeaderComponent implements OnInit, OnDestroy{
+  rol = "guest";
   isLogged = false;
+
+  private destroy = new Subject<any>();
+
   constructor(public singin: MatDialog,private authService: AuthService) { }
 
   ngOnInit(): void {
-    this.authService.isLogged.subscribe((res) => (this.isLogged = res));
+    this.authService.isLogged.pipe(
+      takeUntil(this.destroy)
+    ).subscribe((res) => (this.isLogged = res));
+    this.authService.isRol.pipe(
+      takeUntil(this.destroy)
+    ).
+      subscribe((res) => (this.rol = res));
+  }
+
+  ngOnDestroy(): void {
+    this.destroy.next({});
+    this.destroy.complete();
   }
 
   onSinginout(): void{
     this.authService.loginout();
-
   }
 
   closeSingIn(){

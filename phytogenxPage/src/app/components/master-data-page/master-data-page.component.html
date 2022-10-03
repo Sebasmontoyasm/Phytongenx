@@ -6,12 +6,12 @@
             <div class="search-div">
                     <button class="icon" mat-icon-button [matMenuTriggerFor]="menu">
                         <mat-icon >assessment</mat-icon>
-                        <mat-menu #menu="matMenu" >
-                            <button mat-menu-item>
+                        <mat-menu #menu="matMenu">
+                            <button *ngIf="rol === 'cms' || rol === 'administrator'" mat-menu-item>
                                 <mat-icon>label_important</mat-icon>
                                 <a href="./cms/performance"><span>CMS Performance</span></a>
                             </button>
-                            <button mat-menu-item>
+                            <button *ngIf="rol === 'qb' || rol === 'administrator'" mat-menu-item>
                                 <mat-icon>label_important</mat-icon>
                                 <a href="./qb/performance"><span>QB Performance</span></a>
                             </button>
@@ -35,8 +35,11 @@
                     <ng-container matColumnDef="PO_Number">
                         <th *matHeaderCellDef mat-sort-header> PO Number </th>
                         <td *matCellDef="let row">
-                            <tr *ngIf="row.PO_NumberObj===row.PO_Number">
+                            <tr *ngIf="row.PO_NumberObj===row.PO_Number && checkrolcmsdetail()">
                                 <a href="./cms/detail/{{row.PO_Number}}">{{row.PO_Number}}</a>
+                            </tr>
+                            <tr *ngIf="row.PO_NumberObj===row.PO_Number && !checkrolcmsdetail()">
+                                {{row.PO_Number}}
                             </tr>
                             <tr *ngIf="row.PO_NumberObj!=row.PO_Number">
                                 {{row.PO_Number}}
@@ -58,8 +61,11 @@
                     <ng-container matColumnDef="Invoice_Number">
                         <th *matHeaderCellDef mat-sort-header> Invoice </th>
                         <td *matCellDef="let row">
-                            <tr *ngIf="row.InvoiceObj===row.Invoice_Number">
+                            <tr *ngIf="row.InvoiceObj===row.Invoice_Number  && checkrolqbdetail()">
                                 <a href="./qb/detail/{{row.Invoice_Number}}">{{row.Invoice_Number}}</a>
+                            </tr>
+                            <tr *ngIf="row.InvoiceObj===row.Invoice_Number && !checkrolqbdetail()">
+                                {{row.Invoice_Number}}
                             </tr>
                             <tr *ngIf="row.InvoiceObj!=row.Invoice_Number">
                                 {{row.Invoice_Number}}
