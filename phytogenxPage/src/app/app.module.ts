@@ -5,7 +5,7 @@ import { AppComponent } from './app.component';
 import { HomePageComponent } from './components/home-page/home-page.component';
 import { MasterDataPageComponent } from './components/master-data-page/master-data-page.component';
 import { SinginPageComponent } from './components/singin-page/singin-page.component'; 
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatTableModule } from '@angular/material/table';
 import { MatPaginatorModule } from '@angular/material/paginator';
@@ -33,7 +33,8 @@ import { MatButtonModule } from '@angular/material/button';
 import { FooterComponent } from './components/customs/footer/footer.component';
 import { NotFoundComponent } from './components/customs/not-found/not-found.component';
 import { HeaderComponent } from './components/customs/header/header.component';
-import { UsersComponent } from './components/users/users/users.component';
+import { UsersPageComponent } from './components/users/users/usersPage.component';
+import { AdministratorInterceptor } from './interceptors/admnistrator-interceptor';
 
 @NgModule({
   declarations: [
@@ -51,7 +52,7 @@ import { UsersComponent } from './components/users/users/users.component';
     FooterComponent,
     NotFoundComponent,
     HeaderComponent,
-    UsersComponent,
+    UsersPageComponent,
   ],
   imports: [
     BrowserModule,
@@ -79,7 +80,12 @@ import { UsersComponent } from './components/users/users/users.component';
     ReactiveFormsModule
   ],
   providers: [MatDatepickerModule,
-    MatNativeDateModule],
+    MatNativeDateModule,
+    {
+      provide:HTTP_INTERCEPTORS,
+      useClass:AdministratorInterceptor,
+      multi:true
+    }],
   bootstrap: [AppComponent],
   schemas: [ CUSTOM_ELEMENTS_SCHEMA ]
 })
