@@ -3,6 +3,13 @@ table{
     margin:0 auto;
 
 }
+
+.marg-3{
+    margin: 3px;
+    align-items: center;
+    padding-left: 3px;
+    padding-bottom: 7px;
+}
 .search-div{
     margin: 1px;
     padding-top: 10px;

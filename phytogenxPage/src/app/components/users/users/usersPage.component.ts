@@ -11,6 +11,9 @@ import { User } from 'src/app/interfaces/user/user';
 import { DialogdeletePageComponent } from '../../customs/dialogdelete-page/dialogdelete-page.component';
 import { MatDialog } from '@angular/material/dialog';
 import { UserLog } from 'src/app/interfaces/user/userlog';
+import { UserCreatePageComponent } from '../userCreatePage/userCreate-page.component';
+import { UsereditPageComponent } from '../useredit-page/useredit-page.component';
+import { Overlay } from '@angular/cdk/overlay';
 
 @Component({
   selector: 'app-users',
@@ -19,30 +22,19 @@ import { UserLog } from 'src/app/interfaces/user/userlog';
 })
 export class UsersPageComponent implements OnInit,OnDestroy {
 
-  displayedColumn: string[] =['id','name','username','rol','createdAt','UpdateAt','Action'];
+  displayedColumn: string[] =['id','name','username','rol','createdAt','UpdateAt','Actions'];
   dataSource!: MatTableDataSource<User>;
   posts:any;
   rol = "guest";
   deleteID = 0;
   private destroy = new Subject<any>();
 
-  usrlog: UserLog = {
-    user: 1,
-    rol: "Tester",
-    action: "Delete User",
-    dateaction: "3/10/2022",
-    iddata: 0,
-    idpo: 0,
-    idinvoce: 0,
-    comments: "Automatic process",    
-  };
-
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
   @ViewChild(MatMenuTrigger) trigger!: MatMenuTrigger;
 
   constructor(private userService:UserService,
-    private _snackBar: MatSnackBar,private dialog: MatDialog) { }
+    private dialog: MatDialog, private overlay:Overlay) { }
 
   ngOnInit(): void {
     this.getUsers();
@@ -80,17 +72,34 @@ export class UsersPageComponent implements OnInit,OnDestroy {
     this.dataSource.filter = filterValue.trim().toLowerCase();
   }
 
-  onUserDeleteID(id: number){
-    this.deleteID = id;
+  openAddDialog(enterAnimationDuration: string, exitAnimationDuration: string): void {
+    this.dialog.open(UserCreatePageComponent, {
+      position: {top: '130px'},
+      width: '30%',
+      height: '80%',
+      enterAnimationDuration,
+      exitAnimationDuration
+    });
   }
 
-  openDialog(enterAnimationDuration: string, exitAnimationDuration: string): void {
+  openEditDialog(user = {},enterAnimationDuration: string, exitAnimationDuration: string): void {
+    this.dialog.open(UsereditPageComponent, {
+      position: {top: '130px'},
+      scrollStrategy: this.overlay.scrollStrategies.noop(),
+      width: '30%',
+      height: '68%',
+      enterAnimationDuration,
+      exitAnimationDuration,
+      data:{user:user}
+    });
+  }
+
+  openDeleteDialog(id:number,enterAnimationDuration: string, exitAnimationDuration: string): void {
     this.dialog.open(DialogdeletePageComponent, {
     width: '250px',
     enterAnimationDuration,
     exitAnimationDuration,
-    data:{ id: this.deleteID, userlog: this.usrlog}
-  });
-}
-
+    data:{ id,title:'users'}
+    });
+  }
 }

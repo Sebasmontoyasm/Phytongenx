@@ -119,7 +119,7 @@ export class CmsPageComponent implements OnInit {
       width: '250px',
       enterAnimationDuration,
       exitAnimationDuration,
-      data:{ id: this.deleteID, userlog: this.usrlog}
+      data:{ id: this.deleteID, userlog: this.usrlog,title:'cms'}
     });
   }
 

@@ -18,19 +18,16 @@ export class CheckRolGuard implements CanActivate {
 
     var regexp: RegExp = /cms\S?/;
     if(state.url.match(regexp) && (user.rol == 'administrator' || user.rol == 'cms')){
-      console.log("ROL ACEPTED CMS: ",user.rol);
       return true;
     }
 
     regexp = /qb\S?/;
     if(state.url.match(regexp) && (user.rol == 'administrator' || user.rol == 'qb')){
-      console.log("ROL ACEPTED QB: ",user.rol);
       return true;
     }
 
     regexp = /user\S?/;
     if(state.url.match(regexp) && (user.rol == 'administrator')){
-      console.log("ROL ACEPTED USER: ",user.rol);
       return true;
     }
 

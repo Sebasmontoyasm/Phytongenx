@@ -267,7 +267,6 @@ app.get('/api/data/delete/:id', (request, response) => {
   response.header("Access-Control-Allow-Headers","*");
   response.header("Access-Control-Allow-Methods","POST");
 
-  console.log("cors ok");
   user = Object.values(req.body);
 
   

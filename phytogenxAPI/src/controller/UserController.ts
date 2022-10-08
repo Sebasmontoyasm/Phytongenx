@@ -1,6 +1,6 @@
-import { NextFunction, Request, Response } from "express"
-import { User } from "../entity/User"
-import { AppDataSource } from "../data-source"
+import {Request, Response } from "express";
+import { User } from "../entity/User";
+import { AppDataSource } from "../data-source";
 import { validate} from "class-validator";
 
 export class UserController {
@@ -38,12 +38,11 @@ export class UserController {
         const userRepository = AppDataSource.getRepository(User);
         const {name,rol,username,password} = request.body;
         const user: User = new User;
-        
+
         user.name = name;
         user.rol = rol;
         user.username = username;
         user.password = password;
-
         const validationOpt = { validationError: { target: false, value: false } };
         const errors = await validate(user,validationOpt);
         
@@ -53,6 +52,7 @@ export class UserController {
 
         try{
             user.hashPassword();
+
             await userRepository.save(user);
             response.status(201).json({ message: 'User created'});
         }catch(e){
@@ -64,15 +64,13 @@ export class UserController {
     static update = async (request: Request, response: Response) =>{
 
         const userRepository = AppDataSource.getRepository(User);
-        const {name,rol,username,password} = request.body;
+        const {name,rol,password} = request.body;
         let user:User;
         const id = Number(request.params.id);
-
         try{
             user = await userRepository.findOneOrFail({where:{id:id}});
             user.name = name;
             user.rol = rol;
-            user.username = username;
             user.password = password;
         }catch(e){
             response.status(404).json({ message: 'User not found'});
@@ -85,6 +83,7 @@ export class UserController {
         }
 
         try{
+            user.hashPassword();
             await userRepository.save(user);
         }catch(e){
             return response.status(409).json({menssage: 'Username already in use'})

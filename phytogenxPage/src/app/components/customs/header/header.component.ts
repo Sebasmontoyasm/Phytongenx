@@ -45,7 +45,6 @@ export class HeaderComponent implements OnInit, OnDestroy{
     position: {top: '130px'},
     width: '40%',
     height: '69%',
-    
     enterAnimationDuration,
     exitAnimationDuration
   });

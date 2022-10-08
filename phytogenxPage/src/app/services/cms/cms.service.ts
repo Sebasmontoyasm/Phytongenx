@@ -27,7 +27,6 @@ export class CmsService {
   }
 
   detail(id:string){
-    console.log("Esto llega del Get: ",this.url+"detail/"+id);
     return this.http.get(this.url+"detail/"+id);
   }
 

@@ -11,3 +11,18 @@ export interface UserResponse {
     id: number;
     rol: Roles;
 }
+
+export interface UserCreate {
+    name: string;
+    rol: Roles;
+    username: string;
+    password: string;
+}
+
+export interface UserEdit {
+    id: number
+    name: string;
+    rol: Roles;
+    username: string;
+    password: string;
+}

@@ -4,6 +4,7 @@
    <body>
        <div class="masthead bg-primary">
            <div class="search-div">
+            <i class="marg-3 material-icons" (click)="openAddDialog('0ms', '0ms')">add_box</i>
                 <input class="inputfilter" matInput placeholder="Filter Table" search (keyup)="applyFilter($event)" #input/>
            </div>  
            <div>
@@ -11,7 +12,7 @@
                    <ng-container matColumnDef="id">
                        <th *matHeaderCellDef mat-sort-header> # </th>
                        <td *matCellDef="let row"> 
-                            <a href="./users/{{row.id}}">{{row.id}}</a>
+                            {{row.id}}
                        </td>
                    </ng-container>
 
@@ -44,10 +45,13 @@
                        <td *matCellDef="let row">{{row.UpdateAt}} </td>
                    </ng-container>
 
-                   <ng-container matColumnDef="Action">
-                    <th class="marg-th" *matHeaderCellDef> Action </th>
+                   <ng-container matColumnDef="Actions">
+                    <th class="marg-th" *matHeaderCellDef> Actions </th>
                     <td class="center" *matCellDef="let row">
-                        <i class="marg-3 material-icons" (click)="onUserDeleteID(row.ID)" (click)="openDialog('0ms', '0ms')">delete</i>
+                        <div class ="table-button-row">
+                            <i class="marg-3 material-icons" (click)="openEditDialog(row,'0ms','0ms')">edit</i>
+                            <i class="marg-3 material-icons" (click)="openDeleteDialog(row.id,'0ms', '0ms')">delete</i>
+                        </div>
                     </td>
                 </ng-container>
                 

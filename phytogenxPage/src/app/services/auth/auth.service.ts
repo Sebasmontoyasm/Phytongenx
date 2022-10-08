@@ -22,6 +22,7 @@ export class AuthService {
   private loggedIn = new BehaviorSubject<boolean>(false);
   private rol = new BehaviorSubject<string>('guest');
   private userToken = new BehaviorSubject<string>('');
+  
   constructor(private http: HttpClient, private router: Router) {
     this.checkToken();
    }

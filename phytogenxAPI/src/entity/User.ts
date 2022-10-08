@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column, Unique, UpdateDateColumn} from "typeorm"
+import { Entity, PrimaryGeneratedColumn, Column, Unique, CreateDateColumn} from "typeorm"
 import { MinLength, IsNotEmpty} from "class-validator";
 import * as bcrypt from 'bcryptjs';
 
@@ -28,11 +28,10 @@ export class User {
     password: string;
 
     @Column()
-    @UpdateDateColumn()
+    @CreateDateColumn()
     createdAt: Date;
 
     @Column()
-    @UpdateDateColumn()
     UpdateAt: Date;
 
     hashPassword(): void {

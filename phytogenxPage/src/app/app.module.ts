@@ -16,7 +16,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
 import { CmsPageComponent } from './components/cms/cms-page/cms-page.component';
 import { MatDatepickerModule } from '@angular/material/datepicker';
-import { MatNativeDateModule} from '@angular/material/core';
+import { MatNativeDateModule, MatOptionModule} from '@angular/material/core';
 import { DialogdeletePageComponent } from './components/customs/dialogdelete-page/dialogdelete-page.component';
 import { MatDialogModule } from '@angular/material/dialog';
 import { CmsPerformancePageComponent } from './components/cms/cms-performance-page/cms-performance-page.component';
@@ -35,6 +35,10 @@ import { NotFoundComponent } from './components/customs/not-found/not-found.comp
 import { HeaderComponent } from './components/customs/header/header.component';
 import { UsersPageComponent } from './components/users/users/usersPage.component';
 import { AdministratorInterceptor } from './interceptors/admnistrator-interceptor';
+import { UserCreatePageComponent } from './components/users/userCreatePage/userCreate-page.component';
+import { MatSelectModule } from '@angular/material/select';
+import { UsereditPageComponent } from './components/users/useredit-page/useredit-page.component';
+import { DatePipe } from '@angular/common';
 
 @NgModule({
   declarations: [
@@ -53,6 +57,8 @@ import { AdministratorInterceptor } from './interceptors/admnistrator-intercepto
     NotFoundComponent,
     HeaderComponent,
     UsersPageComponent,
+    UserCreatePageComponent,
+    UsereditPageComponent,
   ],
   imports: [
     BrowserModule,
@@ -77,15 +83,20 @@ import { AdministratorInterceptor } from './interceptors/admnistrator-intercepto
     MatProgressBarModule,
     MatFormFieldModule,
     MatButtonModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    MatSelectModule,
+    MatOptionModule
   ],
-  providers: [MatDatepickerModule,
+  providers: [
+    MatDatepickerModule,
     MatNativeDateModule,
     {
       provide:HTTP_INTERCEPTORS,
       useClass:AdministratorInterceptor,
       multi:true
-    }],
+    },
+    DatePipe,
+  ],
   bootstrap: [AppComponent],
   schemas: [ CUSTOM_ELEMENTS_SCHEMA ]
 })
