@@ -11,7 +11,7 @@ GRANT ALL PRIVILEGES ON `pgenx-cmsqb`.* TO 'SS'@'localhost';
 * en caso de recuperación + un status de por que y quien fue eliminada.
 **/
 CREATE TABLE data_delete LIKE data;
-ALTER TABLE "data_delete" ADD "Status" VARCHAR(250) NOT NULL ;
+ALTER TABLE data_delete  ADD Status VARCHAR(250) NOT NULL ;
 
 /**
 * Notificación a pedro de que el usuario o cliente local ha realizado un cambio.
@@ -95,10 +95,9 @@ INSERT INTO `data`(
 * Información en la que Pedro no proceso por que no ha encontrado la factura 
 * Se debe mostrar para realizarla de forma Manual.
 */
-DELIMITER
+DELIMITER //
 DROP PROCEDURE IF EXISTS cmsupmanualprocedure//
 CREATE PROCEDURE cmsupmanualprocedure()
-DELIMITER //
 BEGIN
     SELECT ID,PO_Number FROM data
 	WHERE Date_CSM_Processed="" AND PO_Number!="";
@@ -153,25 +152,6 @@ BEGIN
     SELECT ID,PO_Number,Invoice_Number,Date_CSM_Processed, COUNT(Invoice_Number) FROM data
     WHERE Invoice_Number="" AND Date_CSM_Processed!=""
     GROUP BY Invoice_Number;
-
-END//
-DELIMITER ;
-
-call qbduplicated();
-
-/**
-* Información en la que Pedro Calidad QB no proceso por que no ha encontrado la PO_NUMBER 
-* Se debe mostrar para realizarla de forma Manual.
-*/
-
-DELIMITER //
-DROP PROCEDURE IF EXISTS qbduplicated//
-CREATE PROCEDURE qbduplicated()
-BEGIN
-    SELECT ID,PO_Number,Invoice_Number,Date_CSM_Processed, COUNT(Invoice_Number) FROM data
-    WHERE Invoice_Number="" AND Date_CSM_Processed!=""
-    GROUP BY Invoice_Number;
-    LEFT JOIN (
 
 END//
 DELIMITER ;
