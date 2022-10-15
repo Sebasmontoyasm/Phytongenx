@@ -16,7 +16,15 @@ export class AdministratorInterceptor implements HttpInterceptor{
                 },
             });
             return next.handle(authReq);
-        }     
+        }else if(req.url.includes('masterdata')){
+            const authToken = this.authService.userTokenValue;
+            const authReq = req.clone({
+                setHeaders: {
+                    auth: authToken,
+                },
+            });
+            return next.handle(authReq);
+        }  
         return next.handle(req);
     }
         
