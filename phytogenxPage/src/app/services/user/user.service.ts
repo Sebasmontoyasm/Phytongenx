@@ -1,19 +1,9 @@
- import { HttpClient, HttpHeaders } from '@angular/common/http';
+ import { HttpClient} from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { JwtHelperService } from '@auth0/angular-jwt';
 import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { User } from 'src/app/interfaces/user/user';
 import { environment } from 'src/environments/environment';
-
-const helper = new JwtHelperService();
-
-const headers= new HttpHeaders();
-
-headers.append('Content-Type', 'application/json');
-headers.append('Accept', 'application/json');
-headers.append('Access-Control-Allow-Origin', 'http://localhost:3001');
-headers.append('Access-Control-Allow-Methods','GET,HEAD,OPTIONS,POST,PUT');
 
 @Injectable({
   providedIn: 'root'
@@ -60,6 +50,6 @@ export class UserService {
     }
 
     window.alert(errorMessage);
-    return throwError(errorMessage)
+    return throwError(errorMessage);
    }
 }
