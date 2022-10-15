@@ -29,12 +29,15 @@
                           </li>
                         </ul>
                       </div>
-
-
-                    <button class="icon" mat-icon-button>
-                        <mat-icon (click)="onUploadFile()">cloud_upload</mat-icon>
+                    
+                    <button type="button" class="icon" mat-icon-button>
+                        <i class="marg-3 material-icons" (click)="openAddDialog('0ms', '0ms')">add_box</i>
+                    </button>  
+                   
+                    <button type="button" class="icon" mat-icon-button>
+                        <mat-icon>cloud_upload</mat-icon>
                     </button>
-                    <input class="inputfilter" matInput placeholder="Filter Table" search (keyup)="applyFilter($event)" #input/>
+                    <input type="text" class="inputfilter" matInput placeholder="Filter Table" search (keyup)="applyFilter($event)" #input/>
                 </div>
                 <div class="bg-primary">
                     <table class="table-primary table table-striped" mat-table matSort [dataSource]="dataSource">
@@ -50,52 +53,91 @@
                             <th *matHeaderCellDef> PO Number </th>
                             <td class="center" *matCellDef="let col"> {{col.PO_Number}} </td>
                         </ng-container>
+                        <form [formGroup]="cmsUpdateForm">
+                            <ng-container matColumnDef="Reason">
+                                <th *matHeaderCellDef> 
+                                    Reason 
+                                    <mat-error *ngIf="isValidField('reason')">
+                                        {{getErrorMessage("reason")}}
+                                    </mat-error>
+                                </th>
+                                <td class="center" *matCellDef="let col">
+                                    <mat-form-field class="full-width-input">
+                                        <mat-label>Select reason</mat-label>
+                                        <mat-select formControlName="reason">   
+                                            <mat-option value="Opcion 1">1</mat-option>
+                                            <mat-option value="Opcion 2">2</mat-option>
+                                            <mat-option value="Other">Other</mat-option>
+                                        </mat-select>
+                                    </mat-form-field>
+                                </td>
+                            </ng-container>
 
-                        <ng-container matColumnDef="Reason">
-                            <th *matHeaderCellDef> Reason </th>
-                            <td class="center" *matCellDef="let col">
-                                <select name="select">
-                                    <option (click)="observerReasonOpt(1)" selected>1</option>
-                                    <option (click)="observerReasonOpt(2)">2</option>
-                                    <option (click)="observerReasonOpt(3)">Other</option>
-                                </select>
-                            </td>
-                        </ng-container>
+                            <ng-container matColumnDef="Comment">
+                                <th *matHeaderCellDef> 
+                                    Comment
+                                    <mat-error *ngIf="isValidField('comment')">
+                                        {{getErrorMessage("comment")}}
+                                    </mat-error>
+                                </th>
+                                <td class="center" *matCellDef="let col">
+                                    <mat-form-field class="full-width-input">
+                                        <mat-label>comment</mat-label>
+                                        <textarea matInput formControlName="comment" rows="1" cols="40">Comment</textarea>
+                                    </mat-form-field>
+                                </td>
+                            </ng-container>
 
-                        <ng-container matColumnDef="Other">
-                            <th *matHeaderCellDef> Comments </th>
-                            <td class="center" *matCellDef="let col">
-                                <textarea id=enableTextA name="textarea" rows="1" cols="40">Comments</textarea>
-                            </td>
-                        </ng-container>
+                            <ng-container matColumnDef="Date_CSM_Processed">
+                                <th *matHeaderCellDef> 
+                                    Data CSM Processed 
+                                    <mat-error *ngIf="isValidField('cmsDate')">
+                                        {{getErrorMessage("cmsDate")}}
+                                    </mat-error>
+                                </th>
+                                <td class="center" required *matCellDef="let col">  
+                                    <mat-form-field class="full-width-input">
+                                        <mat-label>Date</mat-label>
+                                        <input matInput formControlName="cmsDate" type="datetime-local" max="{{today}}">   
+                                    </mat-form-field>
+                                </td>
+                            </ng-container>
 
-                        <ng-container matColumnDef="Date_CSM_Processed">
-                            <th *matHeaderCellDef> Data CSM Processed </th>
-                            <td class="center" *matCellDef="let col">  
-                                <input type="date">    
-                            </td>
-                        </ng-container>
+                            <ng-container matColumnDef="Upload_PDF">
+                                <th class="marg-th" *matHeaderCellDef>
+                                    Upload PDF
+                                    <mat-error *ngIf="isValidField('file')">
+                                        {{getErrorMessage("file")}}
+                                    </mat-error>
+                                </th>
+                                <td class="center" *matCellDef="let col">
+                                    <div ng-controller="AppCtrl" layout-margin layout-padding>
+                                        <choose-file layout="row" flex="50">
+                                            <input id="fileInput" formControlName="file" type="file" class="ng-hide" name="File" (change)="onFileSelected($event)">
+                                        </choose-file>      
+                                    </div>
+                                    <md-input-container flex class="md-block" hidden>
+                                        <mat-form-field>
+                                            <input matInput type="text" formControlName="PDF_Name" value={{fileName}} ng-model="fileName">
+                                        </mat-form-field>
+                                    </md-input-container>
+                                </td>  
+                            </ng-container>
 
-                        <ng-container matColumnDef="Upload_PDF">
-                            <th class="marg-th" *matHeaderCellDef>Upload PDF</th>
-                            <td class="center" *matCellDef="let col">
-                                <div ng-controller="AppCtrl" layout-margin layout-padding>
-                                    <choose-file layout="row" flex="50">
-                                        <input id="fileInput" type="file" class="ng-hide" name="File" (change)="onFileSelected($event)">
-                                        <md-input-container flex class="md-block">
-                                            <input type="text" ng-model="fileName" hidden>
-                                        </md-input-container>           
-                                    </choose-file>      
-                                </div>
-                            </td>  
-                        </ng-container>
-
-                        <ng-container matColumnDef="Action">
-                            <th class="marg-th" *matHeaderCellDef> Action </th>
-                            <td class="center" *matCellDef="let col">
-                                <i class="marg-3 material-icons" (click)="getDeleteID(col.ID)" (click)="openDialog('0ms', '0ms')">delete</i>
-                            </td>
-                        </ng-container>
+                            <ng-container matColumnDef="Actions">
+                                <th class="marg-th" *matHeaderCellDef> Actions </th>
+                                <td class="center" *matCellDef="let col">
+                                    <button 
+                                    class="submit-button"
+                                    type="submit"
+                                    (click)="onUpdate(col.ID)"
+                                    [disabled]="cmsUpdateForm.invalid">
+                                        <mat-icon>cloud_upload</mat-icon>
+                                    </button>
+                                    <i class="marg-3 material-icons" (click)="openDialog(col.ID,'0ms', '0ms')">delete</i>
+                                </td>
+                            </ng-container>
+                        </form>
 
                         <tr mat-header-row *matHeaderRowDef="displayedColumn"></tr>
                         <tr mat-row *matRowDef="let col; columns: displayedColumn"></tr>

@@ -1,24 +1,19 @@
-import { Component, OnInit, ViewChild} from '@angular/core';
+import { Component,OnDestroy, OnInit, ViewChild} from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { CmsService} from 'src/app/services/cms/cms.service';
 import { MatDialog } from '@angular/material/dialog';
 import { DialogdeletePageComponent } from '../../customs/dialogdelete-page/dialogdelete-page.component';
+import { CmscreatePageComponent } from '../cmscreate-page/cmscreate-page.component';
 import { HttpEventType, HttpResponse } from '@angular/common/http';
-import { Observable } from 'rxjs';
-import { Cms } from 'src/app/interfaces/cms/cms';
+import { Observable, Subject } from 'rxjs';
+import { Cms, CmsUpdate } from 'src/app/interfaces/cms/cms';
 import { UserLog } from 'src/app/interfaces/user/userlog';
-
-const COLUMNS_SCHEMA = [
-  { key: 'ID', type: 'text', label: 'ID'},
-  { key: 'PO_NUMBER', type: 'text', label: 'PO_NUMBER'},
-  { key: 'Reason', type: 'text', pattern:"[A-Za-z0-9]", label: 'Reason'},
-  { key: 'Other', type: 'text', pattern:"[A-Za-z0-9]", label: 'Other'},
-  { key: 'Date_CSM_Processed', type: 'date', pattern:"[A-Za-z0-9]", label: 'Date CSM Processed'},
-  { key: 'Upload_PDF', type: 'button', label: 'Cargar PDF'},
-  { key: 'Action', type: 'button', label: 'Action'}
-];
+import { FormBuilder, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
+import { takeUntil } from 'rxjs/operators';
+import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'app-cms-page',
@@ -29,26 +24,27 @@ const COLUMNS_SCHEMA = [
  * Pagina principal para actualización
  * de CMS que se hicieron manual o tienen un error.
  */
-export class CmsPageComponent implements OnInit {
+export class CmsPageComponent implements OnInit, OnDestroy {
 
   title = 'data-table';
-
+  displayedColumn: string[] =['ID','PO_NUMBER','Reason','Comment','Date_CSM_Processed','Upload_PDF','Actions'];
   dataSource!: MatTableDataSource<Cms>;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
-  columnsSchema: any = COLUMNS_SCHEMA;
   posts:any = [];
-  displayedColumn: string[] = COLUMNS_SCHEMA.map((col) => col.key);
-  
+
   selectedFiles?: any;
   progress: number = 0;
   currentFile?: any;
   message= '';
   fileInfos?: Observable<any>;
 
-  reason: string = "";
+  fileName: string = '';
+  today = this.datePipe.transform(new Date(), 'yyyy-MM-ddTHH:mm')
+  date: string | null = '';
 
-  public deleteID = 0; 
+  reason: string = "";
+  idupdate = 0;
 
   usrlog: UserLog = {
     user: 1,
@@ -61,11 +57,33 @@ export class CmsPageComponent implements OnInit {
     comments: "",    
   };
   
+  private destroy = new Subject<any>();
+  validatePDF = /\S+\.pdf/; 
+  cmsUpdateForm: FormBuilder | any  = this.fb.group({
+    reason: ['',[Validators.required]],
+    comment: ['',[Validators.required,Validators.pattern(/\S+/)]],
+    cmsDate: [this.today,[Validators.required]],
+    PDF_Name: [''],
+    file: ['',[Validators.required,Validators.pattern(this.validatePDF)]]
 
-  constructor(private cmsService:CmsService,public dialog: MatDialog) { }
+  });
+
+  constructor(
+    private cmsService:CmsService,
+    private dialog: MatDialog,
+    private fb:FormBuilder,
+    private router: Router,
+    private datePipe: DatePipe
+    ) { 
+    }
 
   ngOnInit(): void {
     this.getCms();
+  }
+
+  ngOnDestroy(): void {
+    this.destroy.next({});
+    this.destroy.complete();
   }
 
   getCms()
@@ -77,19 +95,30 @@ export class CmsPageComponent implements OnInit {
         this.dataSource.paginator = this.paginator;
         this.dataSource.sort = this.sort;
       },
-      err => console.log("Error CMS View: "+err)
+      err => console.log("Error CMS Update: "+err)
     );
   }
-  /**
-   * Función de busqueda de filtro
-   * en el la tabla dinamacia de angular
-   * material 
-   * @param event cambios en el Filter Table para busqueda. 
-   */
-  applyFilter(event: Event){
-    const filterValue = (event.target as HTMLInputElement).value;
-    this.dataSource.filter = filterValue.trim().toLowerCase();
+
+  onUpdate(id: number): void{
+    if(this.cmsUpdateForm.invalid){
+      return;
+    }
+
+    if(this.checkPDF(this.cmsUpdateForm.value.PDF_Name)){
+      const formValue: CmsUpdate | any = this.cmsUpdateForm.value;
+      this.cmsService.update(id,formValue).pipe(
+        takeUntil(this.destroy),
+      ).subscribe(res => {
+        if(res){
+          window.alert('Update');
+        }
+  
+      });
+    }else{
+      window.alert('The format of the PDF is incorrect.');
+    }
   }
+  
   /**
    * recolecta el PDF cargado para mandarlo al backend
    * @param event PDF file.
@@ -97,49 +126,20 @@ export class CmsPageComponent implements OnInit {
   chooseFile(event: Event){
     const filterValue = (event.target as HTMLInputElement).value;
     this.dataSource.filter = filterValue.trim().toLowerCase();
-    console.log(filterValue);
-  }
-
-  /**
-   * Guarda el id del archivo que se desea eliminar.
-   * @param id PO Number que se desea eliminar.
-   */
-  getDeleteID(id: number){
-    this.deleteID = id;
-  }
-  /**
-   * Animacion para abrir una ventana emergente
-   * Para confirmar eliminación de archivo.
-   * @param enterAnimationDuration animacion de ventana emergente
-   * @param exitAnimationDuration cerrado de animacion
-   * @parama data recolecta el id y el log con los comentarios para guardar
-   */
-  openDialog(enterAnimationDuration: string, exitAnimationDuration: string): void {
-      this.dialog.open(DialogdeletePageComponent, {
-      width: '250px',
-      enterAnimationDuration,
-      exitAnimationDuration,
-      data:{ id: this.deleteID, userlog: this.usrlog,title:'cms'}
-    });
-  }
-
-  observerReasonOpt(id: number){
-    console.log("Click Option: "+id);    
   }
 
   onFileSelected(event:any):void{
     this.selectedFiles = event.target.files;
+    this.fileName = this.selectedFiles[0].name;
+    this.cmsUpdateForm.value.PDF_Name = this.fileName;
   }
 
   onUploadFile(){
       this.progress = 0;
-  
       if (this.selectedFiles) {
         const file: File | null = this.selectedFiles.item(0);
-  
         if (file) {
           this.currentFile = file;
-  
           this.cmsService.upload(this.currentFile).subscribe({
             next: (event: any) => {
               if (event.type === HttpEventType.UploadProgress) {
@@ -147,7 +147,7 @@ export class CmsPageComponent implements OnInit {
               } else if (event instanceof HttpResponse) {
                 this.message = event.body.message;
                 this.fileInfos = this.cmsService.getFiles();
-              }
+              }     
             },
             error: (err: any) => {
               console.log(err);
@@ -158,16 +158,81 @@ export class CmsPageComponent implements OnInit {
               } else {
                 this.message = 'Could not upload the file!';
               }
-  
               this.currentFile = undefined;
             }
           });
         }
-  
         this.selectedFiles = undefined;
       }
     }  
+  
+  /**
+   * Animacion para abrir una ventana emergente
+   * Para confirmar eliminación de archivo.
+   * @param enterAnimationDuration animacion de ventana emergente
+   * @param exitAnimationDuration cerrado de animacion
+   * @parama data recolecta el id y el log con los comentarios para guardar
+   */
+   openDialog(id:number, enterAnimationDuration: string, exitAnimationDuration: string): void {
+    this.dialog.open(DialogdeletePageComponent, {
+    width: '250px',
+    enterAnimationDuration,
+    exitAnimationDuration,
+    data:{ id: id, userlog: this.usrlog,title:'cms'}
+  });
+  }
+
+  isValidField(field: string):boolean{
+    return this.cmsUpdateForm.get(field).touched || this.cmsUpdateForm.get(field).dirty && !this.cmsUpdateForm.get(field).valid;
+  }
+
+  checkPDF(PDF_Name: string) {
+    let pdf:string[] = PDF_Name.split("."); 
+    
+    if(pdf[1] == undefined){
+      return false;
+    }else if(pdf[1].toUpperCase() === 'PDF'){
+      this.cmsUpdateForm.value.PDF_Name = pdf[0];
+      return true;
+    }
+
+    return false;
+  }
+
+  getErrorMessage(field: string): string{
+    let message:string = "";
+    if(this.cmsUpdateForm.get(field).hasError('required') && field === 'file'){
+      message = 'Select file.';  
+    }
+    else if(this.cmsUpdateForm.get(field).hasError('required')){ 
+      message = 'You must enter a value.';
+    }else if(this.cmsUpdateForm.get(field).hasError('pattern')){
+      message = 'Not a valid comment.';
+    }
+
+    return message;
+  }
+
+  /**
+   * Función de busqueda de filtro
+   * en el la tabla dinamacia de angular
+   * material 
+   * @param event cambios en el Filter Table para busqueda. 
+   */
+  applyFilter(event: Event){
+    const filterValue = (event.target as HTMLInputElement).value;
+    this.dataSource.filter = filterValue.trim().toLowerCase();
+  }
+
+  openAddDialog(enterAnimationDuration: string, exitAnimationDuration: string): void {
+    this.dialog.open(CmscreatePageComponent, {
+      position: {top: '130px'},
+      width: '40%',
+      height: '80%',
+      enterAnimationDuration,
+      exitAnimationDuration
+    });
+  }
+
 }
-
-
 
