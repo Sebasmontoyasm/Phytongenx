@@ -1,5 +1,6 @@
 import "reflect-metadata"
 import { DataSource } from "typeorm"
+import { Data } from "./entity/masterdata"
 import { User } from "./entity/User"
 
 export const AppDataSource = new DataSource({
@@ -11,7 +12,7 @@ export const AppDataSource = new DataSource({
     database: "pgenx-cmsqb",
     synchronize: true,
     logging: false,
-    entities: [User],
+    entities: [User,Data],
     migrations: [],
     subscribers: [],
 })
