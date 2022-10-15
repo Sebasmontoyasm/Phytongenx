@@ -1,37 +1,29 @@
-import { IsNotEmpty } from "class-validator";
-import { Entity, PrimaryGeneratedColumn, Column, Unique} from "typeorm"
+import { Entity, PrimaryGeneratedColumn, Column} from "typeorm"
 
 @Entity()
-@Unique(['ID'])
-export class Masterdata {
+export class Data {
+    @Column({type:"int", width:11})
     @PrimaryGeneratedColumn('increment')
     ID: number;
 
-    @IsNotEmpty()
-    @Column()
+    @Column({type:"varchar",length: 100,nullable:true})
     PO_Number: string;
 
-    @Column()
-    Date_CMS_Processed: string;
+    @Column({type:"varchar",length: 150,nullable:true})
+    Date_CSM_Processed: string;
 
-    @Column()
+    @Column({type:"varchar",length: 300,nullable:true})
     PDF_Name: string;
 
-    @Column()
+    @Column({type:"int", width:11,nullable:true})
     Invoice_Number: number;
 
-    @Column()
+    @Column({type:"varchar",length: 150,nullable:true})
     Date_invoice_recieved: string;
 
-    @Column()
+    @Column({type:"varchar",length: 150,nullable:true})
     Date_Quickbooks_Processed: string;
 
-    @Column()
-    NamePDF: string;
-
-    @Column()
-    DelayQb: number;
-
-    @Column()
-    Dayssince: number;
+    @Column({type:"varchar",length: 300,nullable:true})
+    NamePDF: string; 
 }
