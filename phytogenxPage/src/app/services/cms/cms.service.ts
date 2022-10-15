@@ -1,6 +1,9 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpRequest, HttpEvent } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { HttpClient, HttpRequest, HttpEvent} from '@angular/common/http';
+import { Observable, throwError } from 'rxjs';
+import { environment } from 'src/environments/environment';
+import { catchError} from 'rxjs/operators';
+import { Cms, CmsUpdate,CmsCreate } from 'src/app/interfaces/cms/cms';
 
 
 @Injectable({
@@ -46,16 +49,31 @@ export class CmsService {
 
     return this.http.request(req);
   }
+  update(id:number, CmsUpdate:CmsUpdate): Observable<any>{
+    return this.http.patch<any>(`${environment.API_URL}/masterdata/cms/${id}`,CmsUpdate)
+    .pipe(
+      catchError(this.handlerError)
+    );
+  }
+
+  private handlerError(err:any): Observable<never> {
+    let errorMessage = 'An error occurred retrienving data';
+    if(err){
+      errorMessage= `Error: code ${err.message}`
+    }
+    window.alert(errorMessage)  
+    return throwError(errorMessage);
+  }
 
   getFiles(): Observable<any> {
     return this.http.get(`${this.url}files`);
   }
 
+  new(cmsCreate: CmsCreate): Observable<any>{
+    return this.http.post<any>(`${environment.API_URL}/masterdata/cms`,cmsCreate).
+    pipe(
+      catchError(this.handlerError));
+   }
   
-}
-
-export interface Cms{
-  id?:string;
-  po_number?: string;
 }
 
