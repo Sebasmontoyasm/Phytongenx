@@ -48,6 +48,8 @@ export class AuthService {
         this.loggedIn.next(true);
         this.rol.next(userReponse.rol);
         this.userToken.next(userReponse.token);
+        console.log("token \n",userReponse.token);
+        console.log("rol: \n",userReponse.rol);
         return userReponse;
       }),
       catchError((err) => this.handlerError(err))
