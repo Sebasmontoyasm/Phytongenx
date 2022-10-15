@@ -10,7 +10,7 @@ export class QbController {
         const qbRepository = AppDataSource.getRepository(Data);
         let qbList: Data[];
         try{
-            qbList = await qbRepository.find();
+            qbList = await qbRepository.query('call qbmanually()');
         }catch(e){
             response.status(404).json({message: 'Somenthing goes wrong!'});
         }
