@@ -1,0 +1,45 @@
+<div mat-dialog-content>
+    <mat-card class="wight-card">
+        <mat-card-title class="align-center">Cms Manual Process</mat-card-title>
+        <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+        <form [formGroup]="cmsCreateForm" (ngSubmit)="onCmsManually()">
+            <mat-card-content>
+                <mat-form-field class="full-width-input">
+                    <mat-label>PO Number</mat-label>
+                    <input type="text" 
+                    formControlName="ponumber" 
+                    matInput
+                    required>
+                    <mat-error *ngIf="isValidField('ponumber')">
+                        {{getErrorMessage("ponumber")}}
+                    </mat-error>
+                </mat-form-field>
+                <div class="full-width-input">
+                    <input 
+                        class="form-control" type="file" 
+                        formControlName="file"
+                        (change)="onFileSelected($event)"
+                        required
+                    >
+                    <mat-error *ngIf="isValidField('file')">
+                        {{getErrorMessage("file")}}
+                    </mat-error>
+                    <mat-error *ngIf="isValidField('PDFName')">
+                        {{getErrorMessage("PDFName")}}
+                    </mat-error>
+                </div>
+            </mat-card-content>
+            <mat-divider inset></mat-divider>
+            <mat-card-actions>
+                <button type="button" (click)="closenewCms()" (click)="onUploadFile()" mat-raised-button color="secondary">Cancel</button>
+                <button type="submit"
+                        [disabled]="cmsCreateForm.invalid"
+                        mat-raised-button
+                        color="primary">Create</button>
+            </mat-card-actions>
+        </form>
+        <mat-card-footer>
+          <mat-divider inset></mat-divider>
+        </mat-card-footer>
+    </mat-card>
+</div>
