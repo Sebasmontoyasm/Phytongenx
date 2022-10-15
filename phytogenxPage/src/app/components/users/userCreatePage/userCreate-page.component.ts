@@ -37,7 +37,6 @@ export class UserCreatePageComponent implements OnInit, OnDestroy {
    private userlogService:UserlogService,
    private fb:FormBuilder,
    private newUser: MatDialog,
-   private router: Router,
    private today: DatePipe  
    ) {
    }
