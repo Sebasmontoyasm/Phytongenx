@@ -39,6 +39,7 @@ import { UserCreatePageComponent } from './components/users/userCreatePage/userC
 import { MatSelectModule } from '@angular/material/select';
 import { UsereditPageComponent } from './components/users/useredit-page/useredit-page.component';
 import { DatePipe } from '@angular/common';
+import { CmscreatePageComponent } from './components/cms/cmscreate-page/cmscreate-page.component';
 
 @NgModule({
   declarations: [
@@ -59,6 +60,7 @@ import { DatePipe } from '@angular/common';
     UsersPageComponent,
     UserCreatePageComponent,
     UsereditPageComponent,
+    CmscreatePageComponent,
   ],
   imports: [
     BrowserModule,

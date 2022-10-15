@@ -10,7 +10,7 @@ GRANT ALL PRIVILEGES ON `pgenx-cmsqb`.* TO 'SS'@'localhost';
 * Tabla para almacenar la información eliminada por el usuario 
 * en caso de recuperación + un status de por que y quien fue eliminada.
 **/
-CREATE TABLE data_delete LIKE data;
+CREATE TABLE IF NOT EXISTS data_delete LIKE data;
 ALTER TABLE data_delete  ADD Status VARCHAR(250) NOT NULL ;
 
 /**
@@ -19,7 +19,7 @@ ALTER TABLE data_delete  ADD Status VARCHAR(250) NOT NULL ;
 * 1: Se realiza cambio
 **/
 
-CREATE TABLE observablePedro(
+CREATE TABLE IF NOT EXISTS observablePedro(
     STATUS INT NOT NULL);
 
 INSERT INTO observablePedro values(0);
@@ -55,7 +55,7 @@ INSERT INTO `USER`(
 * Tabla para almacenar los cambios hechos por el usuario y los comentarios 
 **/
 
-CREATE TABLE userlogs(
+CREATE TABLE TABLE IF NOT EXISTS userlogs(
     ID INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
     USERNAME VARCHAR(255) NOT NULL,
     ROL varchar(255) NOT NULL,
