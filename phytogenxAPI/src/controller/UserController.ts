@@ -36,13 +36,14 @@ export class UserController {
 
     static new = async (request: Request, response: Response) => {
         const userRepository = AppDataSource.getRepository(User);
-        const {name,rol,username,password} = request.body;
+        const {name,rol,username,password,createdAt} = request.body;
         const user: User = new User;
 
         user.name = name;
         user.rol = rol;
         user.username = username;
         user.password = password;
+        user.createdAt = createdAt;
         const validationOpt = { validationError: { target: false, value: false } };
         const errors = await validate(user,validationOpt);
         

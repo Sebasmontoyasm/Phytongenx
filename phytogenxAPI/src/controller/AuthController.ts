@@ -7,8 +7,7 @@ import config from '../config/config';
 
 export class AuthController {
     static singin = async (req: Request, res: Response) =>{
-        const {username,password} = req.body;
-        const singinDate = new Date();
+        const {username,password,UpdateAt} = req.body;
         let rol: string;
         if(!(username && password)) {
             return res.status(400).json({message: ' Username & Password are required!'});
@@ -25,14 +24,14 @@ export class AuthController {
                 message: ' Username or password incorrect!'
             });
         }
-        user.UpdateAt = singinDate;
+        user.UpdateAt = UpdateAt;
         await userRepository.save(user);
 
         if(!user.checkPassword(password)){
           return res.status(400).json({message: 'Username or Password are incorrect!'});
         }
         const token = jwt.sign({ userId: user.id, username: user.name }, config.jwtSecret, {expiresIn: '1h' });
-        res.json({message: 'Sing in successfull!', token, rol});
+        res.json({message: 'Sing in successfull!', token,username, rol});
     };
 
 
@@ -65,7 +64,6 @@ export class AuthController {
           return res.status(400).json(errors);
         }
     
-        // Hash password
         user.hashPassword();
         userRepository.save(user);
     

@@ -1,21 +1,22 @@
 import {Request, Response } from "express";
 import { Data } from "../entity/masterdata";
+import { Masterdata } from  "../interface/masterdata";
 import { AppDataSource } from "../data-source";
-import { validate} from "class-validator";
+import { validate } from "class-validator";
 
 export class MDController {
 
     static getAll = async (request: Request, response: Response) => {
         const mdRepository = AppDataSource.getRepository(Data);
-        let mdList: Data[];
+        let mdList: Masterdata[];
         try{
-            mdList = await mdRepository.find();
+            mdList = await mdRepository.query('call masterdata()');
         }catch(e){
             response.status(404).json({message: 'Somenthing goes wrong!'});
         }
 
         if(mdList.length > 0){
-            response.send(mdList);
+            response.send(mdList[0]);
             
         }else{
             response.status(404).json({message: 'Not Result'});
@@ -33,60 +34,36 @@ export class MDController {
             response.status(404).json({ message: 'Not result'});
         }
     };
-
-    static newcms = async (request: Request, response: Response) => {
+    
+    static getLastId = async (request: Request, response: Response) => {
         const mdRepository = AppDataSource.getRepository(Data);
-        const {ponumber,Date_CSM_Processed,PDF_Name} = request.body;
-        const md: Data = new Data;
+        let data: Data[];
+        
+        try{
+            data = await mdRepository.find({order: { ID: 'DESC' }, take:1})
+            response.send(data[0]);
+        }catch(e){
+            response.status(404).json({message: 'Somenthing goes wrong!'});
+        }
+    }
 
-        md.PO_Number = ponumber;
-        md.Date_CSM_Processed =Date_CSM_Processed;
-        md.PDF_Name = PDF_Name;
-        md.Date_Quickbooks_Processed = 'Waiting for Pedro RPA.';
+    static new = async (request: Request, response: Response) => {
+        const mdRepository = AppDataSource.getRepository(Data);
 
         const validationOpt = { validationError: { target: false, value: false } };
-        const errors = await validate(md,validationOpt);
+        const errors = await validate(request.body,validationOpt);
         
         if(errors.length > 0){
             return response.status(400).json(errors);
         }
 
         try{
-            await mdRepository.save(md);
+            await mdRepository.save(request.body);
             response.status(201).json({ message: 'CMS process created'});
         }catch(e){
             console.log("Error: "+e);
             response.status(404).json({ message: 'Not result'});
         }
-    };
-
-    static updatecms = async (request: Request, response: Response) =>{
-        const mdRepository = AppDataSource.getRepository(Data);
-        const {cmsDate,PDF_Name} = request.body;
-        let md:Data;
-        const id = Number(request.params.id);
-        try{
-            md = await mdRepository.findOneOrFail({where:{ID:id}});
-            md.Date_CSM_Processed = cmsDate;
-            md.PDF_Name = PDF_Name;
-            md.Date_Quickbooks_Processed = 'Waiting for Pedro RPA.';
-        }catch(e){
-            response.status(404).json({ message: 'Cms not found'});
-        }
-        const validationOpt = { validationError: { target: false, value: false } };
-        const errors = await validate(md,validationOpt);
-        
-        if(errors.length > 0){
-            return response.status(400).json(errors);
-        }
-
-        try{
-            await mdRepository.save(md);
-        }catch(e){
-            return response.status(409).json({menssage: 'Unknown error, contact your administrator.'})
-        }
-
-        return response.status(201).json({message: 'Manual process performed.'});
     };
 
     static delete = async (request: Request, response: Response) =>{
@@ -102,7 +79,7 @@ export class MDController {
         
         mdRepository.delete(id);
 
-        response.status(201).json({message: 'User deleted'});
+        response.status(201).json({message: 'Data deleted'});
     };
 }
 
