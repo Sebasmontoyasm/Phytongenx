@@ -125,17 +125,16 @@ call qb_data_objetives();
 **/
 QBData
 ===========================
-
 DELIMITER //
 DROP PROCEDURE IF EXISTS qb_data//
-CREATE PROCEDURE qb_data(IN INVN INT)
+CREATE PROCEDURE qb_data(IN SELINV VARCHAR(255))
 BEGIN
    SELECT ID, Date, PONumber, InvoiceNumber, State
 	FROM Invoices
-	WHERE InvoiceNumber = INVN
+	WHERE InvoiceNumber = SELINV
 	ORDER BY Date;
 END//
 DELIMITER ;
 
-call qb_data(47144);
+call qb_data("47144");
 

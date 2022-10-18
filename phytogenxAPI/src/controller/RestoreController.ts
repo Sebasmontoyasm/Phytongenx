@@ -2,13 +2,14 @@ import { Request, Response } from "express";
 import { Restore } from "../entity/Restore";
 import { AppDataSource } from "../data-source";
 import { validate} from "class-validator";
+import { RestoreData } from "../interface/restore";
 
 export class RestoreController {
     static getAll = async (request: Request, response: Response) => {
         const restoreRepository = AppDataSource.getRepository(Restore);
-        let restores: Restore[];
+        let restores: RestoreData[];
         try{
-            restores = await restoreRepository.find();
+            restores = await restoreRepository.query("CALL restore_data()");
         }catch(e){
             response.status(404).json({message: 'Somenthing goes wrong!'});
         }

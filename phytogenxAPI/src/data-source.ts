@@ -6,6 +6,7 @@ import { User } from "./entity/User"
 import { Userlog } from "./entity/Userlog"
 import { LabResults } from "./entity/LabResults"
 import { observablepedro } from "./entity/observablepedro"
+import { Invoices } from "./entity/Invoices"
 
 export const AppDataSource = new DataSource({
     type: "mariadb",
@@ -16,7 +17,7 @@ export const AppDataSource = new DataSource({
     database: "pgenx-cmsqb",
     synchronize: true,
     logging: false,
-    entities: [User,Data,Userlog,Restore,LabResults,observablepedro],
+    entities: [User,Data,Userlog,Restore,LabResults,observablepedro,Invoices],
     migrations: [],
     subscribers: [],
 })

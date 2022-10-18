@@ -5,7 +5,7 @@ import * as cors from 'cors';
 import helmet from 'helmet';
 import routes from './routes';
 
-const PORT = process.env.PORT || 3001;
+const PORT = process.env.PORT || 3000;
 
 AppDataSource.initialize().then(async () => {
 

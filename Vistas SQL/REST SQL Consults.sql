@@ -246,4 +246,18 @@ DELIMITER ;
 
 CALL masterdata();
 
+/**
+*
+**/
+DELIMITER //
+DROP PROCEDURE IF EXISTS restore_data//
+CREATE PROCEDURE restore_data()
+BEGIN 
+    SELECT b.id,a.ID AS MDID,a.PO_Number,a.Date_CSM_Processed,a.PDF_Name,a.Invoice_Number,a.Date_invoice_recieved,a.Date_Quickbooks_Processed,a.NamePDF,b.action, b.date_action
+    FROM restore a, userlog b
+    WHERE a.ID = b.idrestore;
+END//
+DELIMITER ;
+
+CALL restore_data();
 

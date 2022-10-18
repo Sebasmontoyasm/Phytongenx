@@ -3,54 +3,85 @@ import {Request, Response } from "express";
 import { Data } from "../entity/masterdata";
 import { AppDataSource } from "../data-source";
 import { validate } from "class-validator";
+import { Invoices } from "../entity/Invoices";
+import { QbPerformance } from "../interface/qb_perfomance";
 
 export class QbController {
 
     static getAll = async (request: Request, response: Response) => {
-        const qbRepository = AppDataSource.getRepository(Data);
-        let qbList: Data[];
+        const mdRepository = AppDataSource.getRepository(Data);
+        let mdList: Data[];
         try{
-            qbList = await qbRepository.query('call qbmanually()');
+            mdList = await mdRepository.query('call qbmanually()');
         }catch(e){
             response.status(404).json({message: 'Somenthing goes wrong!'});
         }
 
-        if(qbList.length > 0){
-            response.send(qbList[0]);
+        if(mdList.length > 0){
+            response.send(mdList[0]);
             
         }else{
             response.status(404).json({message: 'Not Result'});
         }
     }
 
-    static getById = async (request: Request, response: Response) => {
-        const id = Number(request.params.id);
-        const qbRepository = AppDataSource.getRepository(Data);
+    static getPerformance = async (request: Request, response: Response) => {
+        const invoicesRepository = AppDataSource.getRepository(Invoices);
+        let qbPerformance: QbPerformance[];
+        try{
+            qbPerformance = await invoicesRepository.query('call qb_performance()');
+        }catch(e){
+            response.status(404).json({message: 'Somenthing goes wrong!'});
+        }
+
+        if(qbPerformance.length > 0){
+            response.send(qbPerformance[0]);
+        }else{
+            response.status(404).json({message: 'Not Result'});
+        }
+    }
+
+    static getByInvoice = async (request: Request, response: Response) => {
+        const invoice = request.params.invoice;
+        let qbdetails: Invoices[];
+        const invoiceRepository = AppDataSource.getRepository(Invoices);
         
         try{
-            const qb = await qbRepository.findOneOrFail({where:{ID:id}});
-            response.send(qb);
+            qbdetails = await invoiceRepository.find({
+                                                            where:{InvoiceNumber:invoice},
+                                                            order:{Date:"DESC"}
+                                                        });
         }catch(e){
-            response.status(404).json({ message: 'Not result'});
+            response.status(404).json({message: 'Somenthing goes wrong!'});
+        }
+
+        if(qbdetails.length > 0){
+            response.send(qbdetails);
+        }else{
+            response.status(404).json({message: 'Not Result'});
         }
     };
 
     static update = async (request: Request, response: Response) =>{
         const qbRepository = AppDataSource.getRepository(Data);
-        /**
-         * FALTA AQUI
-         * 
-         * const {cmsDate,PDF_Name} = request.body;
+        const {Invoice_Number,NamePDF,Date_invoice_recieved} = request.body;
+    
         let qb:Data;
         const id = Number(request.params.id);
         try{
             qb = await qbRepository.findOneOrFail({where:{ID:id}});
-            qb.Date_CSM_Processed = cmsDate;
-            qb.PDF_Name = PDF_Name;
-            qb.Date_Quickbooks_Processed = 'Waiting for Pedro RPA.';
+            if(Invoice_Number || Invoice_Number != 0){
+                qb.Invoice_Number = Invoice_Number;
+            }
+             
+            qb.NamePDF = NamePDF;
+            qb.Date_invoice_recieved = Date_invoice_recieved;
+            qb.Date_Quickbooks_Processed = 'Manual Proccess.';
+
         }catch(e){
             response.status(404).json({ message: 'Qb not found'});
         }
+
         const validationOpt = { validationError: { target: false, value: false } };
         const errors = await validate(qb,validationOpt);
         
@@ -64,8 +95,7 @@ export class QbController {
             return response.status(409).json({menssage: 'Unknown error, contact your administrator.'})
         }
 
-        return response.status(201).json({message: 'Manual process performed.'});
-         */
+        return response.status(201).json({message: 'Manual process qb performed.'});
         
     };
 
