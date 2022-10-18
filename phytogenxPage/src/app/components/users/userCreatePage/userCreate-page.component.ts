@@ -28,7 +28,8 @@ export class UserCreatePageComponent implements OnInit, OnDestroy {
     name: ['',[Validators.required,Validators.pattern(/\S+/)]],
     rol: ['',[Validators.required,Validators.pattern(/\S+/),Validators.minLength(2)]],
     username: ['',[Validators.required,Validators.pattern(this.isValidusername)]],
-    password: ['',[Validators.required, Validators.minLength(6)]]
+    password: ['',[Validators.required, Validators.minLength(6)]],
+    createAt: ['']
   });
 
   constructor(@Inject(MAT_DIALOG_DATA)
@@ -53,8 +54,14 @@ export class UserCreatePageComponent implements OnInit, OnDestroy {
     if(this.userCreateForm.invalid){
       return;
     }
+    const formValue: UserCreate | any = this.userCreateForm.value;
     
-    const formValue: UserCreate = this.userCreateForm.value;
+    let format: string = 'MM/dd/yyyy HH:mm:ss';
+    let date: Date = new Date();
+    let datepipe = new DatePipe('en-US').transform(date, format);
+
+    formValue.createdAt = datepipe;
+
     this.userService.new(formValue).pipe(
       takeUntil(this.destroy)
     ).subscribe(res => {

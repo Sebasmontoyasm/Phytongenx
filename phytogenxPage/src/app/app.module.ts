@@ -40,6 +40,8 @@ import { MatSelectModule } from '@angular/material/select';
 import { UsereditPageComponent } from './components/users/useredit-page/useredit-page.component';
 import { DatePipe } from '@angular/common';
 import { CmscreatePageComponent } from './components/cms/cmscreate-page/cmscreate-page.component';
+import { UserslogsPageComponent } from './components/userslogs-page/userslogs-page.component';
+import { RestorePageComponent } from './components/restore-page/restore-page.component';
 
 @NgModule({
   declarations: [
@@ -61,6 +63,8 @@ import { CmscreatePageComponent } from './components/cms/cmscreate-page/cmscreat
     UserCreatePageComponent,
     UsereditPageComponent,
     CmscreatePageComponent,
+    UserslogsPageComponent,
+    RestorePageComponent
   ],
   imports: [
     BrowserModule,

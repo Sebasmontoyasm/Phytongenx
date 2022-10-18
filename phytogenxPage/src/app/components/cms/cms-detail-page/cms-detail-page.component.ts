@@ -4,7 +4,7 @@ import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { CmsService } from 'src/app/services/cms/cms.service';
 import { MatMenuTrigger } from '@angular/material/menu';
-import { CmsDetail } from 'src/app/interfaces/cms/cms-detail';
+import { LabResult } from 'src/app/interfaces/cms/cms-labresult';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
@@ -25,7 +25,7 @@ export class CmsDetailPageComponent implements OnInit, OnDestroy {
   id: any;
   title = 'data-table';
   displayedColumn: string[] =['ID','Date','PDFName','PONumber','SubloteCode','Test','State'];
-  dataSource!: MatTableDataSource<CmsDetail>;
+  dataSource!: MatTableDataSource<LabResult>;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
   @ViewChild(MatMenuTrigger) trigger!: MatMenuTrigger;

@@ -1,33 +1,33 @@
 <div mat-dialog-content>
     <mat-card class="wight-card">
-        <mat-card-title class="align-center">Cms Manual Process</mat-card-title>
+        <mat-card-title class="align-center">CMS - Manual process</mat-card-title>
         <mat-progress-bar mode="indeterminate"></mat-progress-bar>
         <form [formGroup]="cmsCreateForm" (ngSubmit)="onCmsManually()">
             <mat-card-content>
                 <mat-form-field class="full-width-input">
                     <mat-label>PO Number</mat-label>
                     <input type="text" 
-                    formControlName="ponumber" 
+                    formControlName="PO_Number" 
                     matInput
                     required>
-                    <mat-error *ngIf="isValidField('ponumber')">
-                        {{getErrorMessage("ponumber")}}
+                    <mat-error class="margin-error" *ngIf="isValidField('PO_Number')">
+                        {{getErrorMessage("PO_Number")}}
                     </mat-error>
                 </mat-form-field>
-                <div class="full-width-input">
+                <div class="full-width-file">
                     <input 
                         class="form-control" type="file" 
                         formControlName="file"
                         (change)="onFileSelected($event)"
                         required
                     >
-                    <mat-error *ngIf="isValidField('file')">
+                    <mat-error class="margin-error" *ngIf="isValidField('file')">
                         {{getErrorMessage("file")}}
                     </mat-error>
-                    <mat-error *ngIf="isValidField('PDFName')">
-                        {{getErrorMessage("PDFName")}}
-                    </mat-error>
                 </div>
+         <mat-error class="margin-error" *ngIf="isValidField('PDF_Name')">
+             {{getErrorMessage("PDF_Name")}}
+         </mat-error>
             </mat-card-content>
             <mat-divider inset></mat-divider>
             <mat-card-actions>

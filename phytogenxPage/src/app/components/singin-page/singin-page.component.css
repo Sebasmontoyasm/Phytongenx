@@ -18,6 +18,11 @@
     font-size: medium;
 }
 
+.margin-error{
+    margin-top: 20px;
+
+}
+
 button{
     width: 40%;
 }

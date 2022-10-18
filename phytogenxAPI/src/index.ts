@@ -1,6 +1,5 @@
 import "reflect-metadata";
 import * as express from "express";
-import { Request, Response } from "express";
 import { AppDataSource } from "./data-source";
 import * as cors from 'cors';
 import helmet from 'helmet';

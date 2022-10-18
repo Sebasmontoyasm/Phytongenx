@@ -11,7 +11,7 @@
                     matInput
                     placeholder="firstname.lastname"
                     required>
-                    <mat-error *ngIf="isValidField('username')">
+                    <mat-error class="margin-error" *ngIf="isValidField('username')">
                         {{getErrorMessage("username")}}
                     </mat-error>
                 </mat-form-field>
@@ -28,7 +28,7 @@
                         <mat-icon *ngIf="hide">visibility</mat-icon>
                         <mat-icon *ngIf="!hide">visibility_off</mat-icon>
                     </button>
-                    <mat-error *ngIf="isValidField('password')">
+                    <mat-error class="margin-error" *ngIf="isValidField('password')">
                         {{getErrorMessage("password")}}
                     </mat-error>
                 </mat-form-field>  

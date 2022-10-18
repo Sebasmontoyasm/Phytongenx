@@ -12,6 +12,8 @@ import { UsersPageComponent } from './components/users/users/usersPage.component
 import { CheckSinginGuard } from './guards/singin/check-singin.guard';
 import { NotFoundComponent } from './components/customs/not-found/not-found.component';
 import { CheckRolGuard } from './guards/rol/check-rol.guard';
+import { UserslogsPageComponent } from './components/userslogs-page/userslogs-page.component';
+import { RestorePageComponent } from './components/restore-page/restore-page.component';
 
 const routes: Routes = [
   { path:'', redirectTo:'/homepage', pathMatch:'full'},
@@ -24,6 +26,8 @@ const routes: Routes = [
   { path:'qb/performance',canActivate:[CheckSinginGuard, CheckRolGuard], component: QbPerformancePageComponent},
   { path:'qb/detail/:id?',canActivate:[CheckSinginGuard, CheckRolGuard], component: QbDetailPageComponent},
   { path:'users',canActivate:[CheckSinginGuard, CheckRolGuard], component: UsersPageComponent},
+  { path:'userslogs',canActivate:[CheckSinginGuard, CheckRolGuard], component: UserslogsPageComponent},
+  { path:'restore',canActivate:[CheckSinginGuard, CheckRolGuard], component: RestorePageComponent},
   { path: '**', component: NotFoundComponent },
 
 ];

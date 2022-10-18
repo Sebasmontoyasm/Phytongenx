@@ -99,8 +99,8 @@ DELIMITER //
 DROP PROCEDURE IF EXISTS cmsupmanualprocedure//
 CREATE PROCEDURE cmsupmanualprocedure()
 BEGIN
-    SELECT ID,PO_Number FROM data
-	WHERE Date_CSM_Processed="" AND PO_Number!="";
+    SELECT ID,PO_Number,Date_CSM_Processed FROM data
+	WHERE Date_CSM_Processed="" AND (PO_Number IS NOT NULL OR PO_Number=!'');
 END;//
 DELIMITER ;
 
@@ -133,8 +133,24 @@ DELIMITER //
 DROP PROCEDURE IF EXISTS qbmanually//
 CREATE PROCEDURE qbmanually()
 BEGIN
-    SELECT ID,PO_Number,Invoice_Number,Date_CSM_Processed FROM data
-    WHERE Invoice_Number="" AND Date_CSM_Processed!="";
+    SELECT a.ID,a.PO_Number,a.Invoice_Number,a.Date_invoice_recieved,a.Date_Quickbooks_Processed, a.NamePDF
+    FROM ( 
+        SELECT ID,PO_Number,Invoice_Number,Date_invoice_recieved, Date_Quickbooks_Processed, NamePDF FROM data
+        WHERE (Invoice_Number IS NULL AND Date_invoice_recieved<>'')
+              OR Date_invoice_recieved='' 
+              OR Date_Quickbooks_Processed='' 
+              OR NamePDF='' 
+              OR Date_invoice_recieved IS NULL 
+              OR Date_Quickbooks_Processed IS NULL 
+              OR NamePDF IS NULL
+    ) a
+        LEFT JOIN (
+            SELECT ID, COUNT(Invoice_Number) AS Repeticiones FROM DATA 
+            WHERE Invoice_Number!=0 OR Invoice_Number IS NOT NULL 
+            GROUP BY Invoice_Number
+            HAVING Repeticiones > 1
+        ) b ON (a.ID = b.ID)
+     GROUP BY ID;
 END//
 DELIMITER ;
 
@@ -149,10 +165,10 @@ DELIMITER //
 DROP PROCEDURE IF EXISTS qbduplicated//
 CREATE PROCEDURE qbduplicated()
 BEGIN
-    SELECT ID,PO_Number,Invoice_Number,Date_CSM_Processed, COUNT(Invoice_Number) FROM data
-    WHERE Invoice_Number="" AND Date_CSM_Processed!=""
-    GROUP BY Invoice_Number;
-
+    SELECT ID, COUNT(Invoice_Number) AS Repeticiones FROM DATA 
+        WHERE Invoice_Number!=0 OR Invoice_Number IS NOT NULL 
+        GROUP BY Invoice_Number
+        HAVING Repeticiones > 1;
 END//
 DELIMITER ;
 
@@ -197,7 +213,7 @@ DELIMITER //
 DROP PROCEDURE IF EXISTS masterdata//
 CREATE PROCEDURE masterdata()
 BEGIN 
-    SELECT a.ID,a.PO_Number,a.Date_CSM_Processed,a.PDF_Name,a.Invoice_Number,a.Date_invoice_recieved,a.Date_Quickbooks_Processed,a.NamePDF,b.DaysSince,c.DelayQb,d.InvoiceObj, e.PO_NumberObj, f.IDObject, f.comments
+    SELECT a.ID,a.PO_Number,a.Date_CSM_Processed,a.PDF_Name,CAST(a.Invoice_Number AS varchar(255)) AS Invoice_Number,a.Date_invoice_recieved,a.Date_Quickbooks_Processed,a.NamePDF,b.DaysSince,c.DelayQb,d.InvoiceObj, e.PO_NumberObj, f.IDObject, f.comment
 	FROM (
         SELECT ID,PO_Number,Date_CSM_Processed,PDF_Name,Invoice_Number,Date_invoice_recieved,Date_Quickbooks_Processed,NamePDF
         FROM data
@@ -211,7 +227,7 @@ BEGIN
         FROM data
         WHERE (Date_Quickbooks_Processed!="" OR Date_invoice_recieved !="") AND (Date_Quickbooks_Processed!="" AND Date_invoice_recieved !="")
     ) c ON(a.ID = c.ID) LEFT JOIN (
-        SELECT CAST(InvoiceNumber AS INT) as InvoiceObj
+        SELECT CAST(InvoiceNumber AS UNSIGNED INTEGER) as InvoiceObj
 	    FROM Invoices
 	    GROUP BY InvoiceObj    
     ) d ON(a.Invoice_Number = d.InvoiceObj) LEFT JOIN (
@@ -220,9 +236,10 @@ BEGIN
 	    WHERE l.PONumber = CONCAT("PO # ",da.PO_Number)
         GROUP BY PO_Number
     ) e ON(a.PO_NUMBER = e.PO_NumberObj) LEFT JOIN (
-        SELECT daf.ID as IDObject, uslog.comments as comments
-	    FROM data daf, userlogs uslog
-	    WHERE daf.ID = uslog.IDDATA and uslog.COMMENTS !=""
+        SELECT daf.ID as IDObject, uslog.comment as comment
+	    FROM data daf, userlog uslog
+	    WHERE daf.ID = uslog.IDRESTORE and uslog.COMMENT !=""
+        ORDER BY uslog.ID DESC LIMIT 1
     ) f ON(a.ID = f.IDObject) GROUP BY ID;    
 END//
 DELIMITER ;

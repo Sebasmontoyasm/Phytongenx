@@ -1,46 +1,39 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable,throwError } from 'rxjs';
-import { HttpErrorResponse } from '@angular/common/http';
+import { UserLog } from 'src/app/interfaces/user/userlog';
+import { catchError } from 'rxjs/operators';
+import { environment } from 'src/environments/environment';
 @Injectable({
   providedIn: 'root'
 })
 
 export class UserlogService {
-  
-  url='http://localhost:3000/api/userlogs/';
 
   constructor(private http: HttpClient) { }
 
-  reportUser(userlog: UserLog): Observable<any>  {
-    console.log("ERROR: ",this.http.post<UserLog>(this.url+"post",userlog))
-    return this.http.post<any>(this.url+"post",userlog);
-  }
+  getAll(): Observable<UserLog[]>{
+    return this.http.get<UserLog[]>(`${environment.API_URL}/userlogs`).
+    pipe(
+      catchError(this.handlerError));
+   }
 
-  private handleError(error: HttpErrorResponse) {
-    if (error.status === 0) {
-      // A client-side or network error occurred. Handle it accordingly.
-      console.error('An error occurred:', error.error);
-    } else {
-      // The backend returned an unsuccessful response code.
-      // The response body may contain clues as to what went wrong.
-      console.error(
-        `Backend returned code ${error.status}, body was: `, error.error);
-    }
-    // Return an observable with a user-facing error message.
-    return throwError(() => new Error('Something bad happened; please try again later.'));
-  }
+  new(log: UserLog) {
+    return this.http.post<UserLog>(`${environment.API_URL}/userlogs`,log).
+    pipe(
+      catchError(this.handlerError));
+   }  
+  
 
+  handlerError(error: any): Observable<never>{
+      let errorMessage = 'Error unknown';
+      if(error){
+        errorMessage = 'Error'+error.message;
+      }
+
+      window.alert(errorMessage);
+      return throwError(errorMessage);
+  }
 }
 
-export interface UserLog{
-  user?:number;
-  rol?: string;
-  action?: string;
-  dateaction: string;
-  iddata: number;
-  idpo: number;
-  idinvoce: number;
-  comments: string;
-}
 

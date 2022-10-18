@@ -1,15 +1,17 @@
 import { Component, OnInit, Inject, OnDestroy } from '@angular/core';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { UserlogService } from 'src/app/services//userlog/userlog.service';
+import { UserlogService } from 'src/app/services/userlog/userlog.service';
 import { UserLog } from 'src/app/interfaces/user/userlog';
 import { CmsService } from 'src/app/services/cms/cms.service';
-import { CmsCreate } from 'src/app/interfaces/cms/cms';
-import { User } from 'src/app/interfaces/user/user';
 import { FormBuilder, Validators } from '@angular/forms';
 import { Observable, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { HttpEventType, HttpResponse } from '@angular/common/http';
-
+import { DatePipe } from '@angular/common';
+import { Data } from '@angular/router';
+import { MasterDataService } from 'src/app/services/masterdata/masterdata.service';
+import { RestoreService } from 'src/app/services/restore/restore.service';
+import { RpaService } from 'src/app/services/rpa/rpa.service';
 
 @Component({
   selector: 'app-cmscreate-page',
@@ -29,18 +31,20 @@ export class CmscreatePageComponent implements OnInit, OnDestroy {
   private destroy = new Subject<any>();
 
   validatePDF = /\S+\.pdf/; 
-  fileName: string = '';
-
+  
   cmsCreateForm: FormBuilder | any  = this.fb.group({
-    ponumber: ['',[Validators.required,Validators.pattern(/\S+/)]],
-    file: ['',[Validators.required]],
-    PDFName: ['',Validators.pattern(this.validatePDF)],
+    PO_Number: ['',[Validators.required,Validators.pattern(/\S+/)]],
+    file: ['',[Validators.required,Validators.pattern(this.validatePDF)]],
+    PDF_Name: ['']
   });
 
   constructor(@Inject(MAT_DIALOG_DATA)
   public dialogRef: MatDialogRef<CmscreatePageComponent>,
+  private mdService:MasterDataService,
   private cmsService:CmsService,
   private userlogService:UserlogService,
+  private restoreService:RestoreService,
+  private rpaService: RpaService, 
   private fb:FormBuilder,
   private cmsManually: MatDialog) { }
 
@@ -56,45 +60,82 @@ export class CmscreatePageComponent implements OnInit, OnDestroy {
     if(this.cmsCreateForm.invalid){
       return;
     }
-    
-    const formValue: CmsCreate = this.cmsCreateForm.value;
-    formValue.Date_CSM_Processed = this.today;
+
+    let convertdate = new DatePipe('en-US').transform(this.today,'MM/dd/yyyy HH:mm:ss');
+    const formValue = this.cmsCreateForm.value;
+    formValue.Date_CSM_Processed= convertdate;
     let splitstr:string[] = formValue.PDF_Name.split(".");
+
     formValue.PDF_Name = splitstr[0];
-    this.cmsService.new(formValue).pipe(
-      takeUntil(this.destroy)
+    formValue.Date_CSM_Processed = convertdate;
+    formValue.Date_Quickbooks_Processed = 'Waiting for Pedro RPA.'; 
+
+    this.mdService.new(formValue).pipe(
+      takeUntil(this.destroy),
     ).subscribe(res => {
+
+      let data:Data | any;
+
       if(res){
-        window.location.reload();
-        this.closenewCms();
+        this.mdService.lastData().pipe(
+          takeUntil(this.destroy)
+        ).subscribe(res => {
+          if(res){
+            data = res;
+            this.createLog(data);
+            this.saverestore(data);
+            this.rpaService.report().pipe(
+              takeUntil(this.destroy),
+            ).subscribe(res=>{
+                console.log("Reported RPA.");
+              },
+              err => console.log("Error: "+err),
+            );
+            this.closenewCms();
+            window.location.reload();
+          }
+
+        });
       }
     });
   }
-  changeReportUser(user: User) {
+  
+  createLog(data: Data) {
     const localitem: string | any = localStorage.getItem('user');
-    const userToken = JSON.parse(localitem);
-    //FALTA AQUI
-    window.location.reload();
+    const user = JSON.parse(localitem);
+
+    let logdate = new Date();
+    let convertdate = new DatePipe('en-US').transform(logdate,'MM/dd/yyyy HH:mm:ss');
+    
+    let userlog: UserLog = {
+      idrestore : data.ID,
+      username : user.username,
+      rol : user.rol,
+      action: 'CMS - Manually created purchase order.',
+      date_action: convertdate
+    };
+
+    this.userlogService.new(userlog).subscribe(
+      res=>{
+        console.log("Log created.");
+      },
+      err => console.log("Error: "+err),
+    );
   }
 
-  /**
-   * recolecta el PDF cargado para mandarlo al backend
-   * @param event PDF file.
-   */
-   chooseFile(event: Event){
-    const filterValue = (event.target as HTMLInputElement).value;
-    console.log("ChooseFile: ",filterValue);
-    //this.dataSource.filter = filterValue.trim().toLowerCase();
+  saverestore(data: Data){
+    this.restoreService.save(data).pipe(
+      takeUntil(this.destroy),
+    ).subscribe(res=>{
+        console.log("Save in restore.");
+      },
+      err => console.log("Error: "+err),
+    );
   }
 
   onFileSelected(event:any):void{
     this.selectedFiles = event.target.files;
-    this.fileName = this.selectedFiles[0].name;
-    this.cmsCreateForm.value.PDF_Name = this.fileName;
-
-    this.isValidField('PDFName');
-    this.getErrorMessage('PDFName');
-
+    this.cmsCreateForm.value.PDF_Name = this.selectedFiles[0].name;
   }
 
   onUploadFile(){
@@ -133,8 +174,10 @@ export class CmscreatePageComponent implements OnInit, OnDestroy {
       let message:string = "";
       if(this.cmsCreateForm.get(field).hasError('required')){ 
         message = 'You must enter a value.';
+      }else if(this.cmsCreateForm.get(field).hasError('pattern') && field=='file'){
+        message = 'Not a valid file format.';  
       }else if(this.cmsCreateForm.get(field).hasError('pattern')){
-        message = 'Not a valid PO Number.';
+        message = 'Not a valid purchase number.';
       }
       return message;    
     }

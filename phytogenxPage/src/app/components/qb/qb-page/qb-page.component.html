@@ -2,123 +2,137 @@
  <!DOCTYPE html>
  <html lang="en">
     <body>
-        <div class="masthead bg-primary">                    
-                    <button type="button" class="icon" mat-icon-button>
-                        <i class="marg-3 material-icons">add_box</i>
-                    </button>  
-                    <input type="text" class="inputfilter" matInput placeholder="Filter Table" search (keyup)="applyFilter($event)" #input/>
-                <div class="bg-primary">
-                    <table class="table-primary table table-striped" mat-table matSort [dataSource]="dataSource">
-                        <ng-container matColumnDef="ID">
-                            <th *matHeaderCellDef> # </th>
-                            
-                            <td class="center" *matCellDef="let col">
-                                {{col.ID}}
+        <div class="masthead bg-primary">          
+            <div class="search-div">         
+            <button (click)=onReturn() class="icon">
+                <mat-icon >arrow_back</mat-icon>
+            </button> 
+            <input class="inputfilter" matInput placeholder="Filter Table" search (keyup)="applyFilter($event)" #input/>
+            </div> 
+            <div class="bg-primary">
+                <table class="table-primary table table-striped" mat-table matSort [dataSource]="dataSource">
+                    <ng-container matColumnDef="ID">
+                        <th *matHeaderCellDef> # </th>
+                        
+                        <td class="center" *matCellDef="let col">
+                            <p class="align-center">{{col.ID}}</p>
+                        </td>
+                    </ng-container>
+                    
+                    <ng-container  matColumnDef="PO_Number">
+                        <th *matHeaderCellDef> PO Number </th>
+                        <td class="center" *matCellDef="let col">
+                            <p class="align-center">{{col.PO_Number}}</p>
+                        </td>
+                    </ng-container>
+
+                    <ng-container  matColumnDef="Invoice">
+                        <th *matHeaderCellDef> Invoice </th>
+                        <td class="center" *matCellDef="let col">
+                            <p class="align-center"> {{col.Invoice_Number}} </p>
+                        </td>
+                    </ng-container>
+
+                    <form [formGroup]="qbUpdateForm">
+                        <ng-container matColumnDef="Reason">
+                            <th *matHeaderCellDef> 
+                                Reason 
+                                <mat-error *ngIf="isValidField('reason')">
+                                    {{getErrorMessage("reason")}}
+                                </mat-error>
+                            </th>
+                            <td *matCellDef="let col">
+                                <mat-form-field class="full-width-input">
+                                    <mat-label>Select reason</mat-label>
+                                    <mat-select formControlName="reason">   
+                                        <mat-option value="Opcion 1">1</mat-option>
+                                        <mat-option value="Opcion 2">2</mat-option>
+                                        <mat-option value="Other">Other</mat-option>
+                                    </mat-select>
+                                </mat-form-field>
                             </td>
                         </ng-container>
-                        
-                        <ng-container  matColumnDef="PO_Number">
-                            <th *matHeaderCellDef> PO Number </th>
-                            <td class="center" *matCellDef="let col"> {{col.PO_Number}} </td>
+
+                        <ng-container matColumnDef="Comment">
+                            <th *matHeaderCellDef> 
+                                Comment
+                                <mat-error *ngIf="isValidField('comment')">
+                                    {{getErrorMessage("comment")}}
+                                </mat-error>
+                            </th>
+                            <td *matCellDef="let col">
+                                <mat-form-field class="full-width-input">
+                                    <mat-label>comment</mat-label>
+                                    <textarea matInput formControlName="comment" rows="1" cols="40">Comment</textarea>
+                                </mat-form-field>
+                            </td>
                         </ng-container>
 
-                        <ng-container  matColumnDef="Invoice">
-                            <th *matHeaderCellDef> Invoice </th>
-                            <td class="center" *matCellDef="let col"> {{col.Invoice_Number}} </td>
+                        <ng-container matColumnDef="NamePDF">
+                            <th class="marg-th" *matHeaderCellDef>
+                                Final PDF name
+                                <mat-error *ngIf="isValidField('file')">
+                                    {{getErrorMessage("file")}}
+                                </mat-error>
+                            </th>
+                            <td *matCellDef="let col">
+                                <div class="align-center" ng-controller="AppCtrl" layout-margin layout-padding>
+                                    <choose-file layout="row" flex="50">
+                                        <input formControlName="file" type="file" (change)="onFileSelected($event)">
+                                    </choose-file>      
+                                </div>
+                                <md-input-container flex class="md-block" hidden>
+                                    <mat-form-field>
+                                        <input matInput type="text" formControlName="NamePDF" value={{fileName}} ng-model="fileName">
+                                    </mat-form-field>
+                                </md-input-container>
+                            </td>  
                         </ng-container>
 
-                        <form [formGroup]="qbUpdateForm">
-                            <ng-container matColumnDef="Reason">
-                                <th *matHeaderCellDef> 
-                                    Reason 
-                                    <mat-error *ngIf="isValidField('reason')">
-                                        {{getErrorMessage("reason")}}
-                                    </mat-error>
-                                </th>
-                                <td class="center" *matCellDef="let col">
-                                    <mat-form-field class="full-width-input">
-                                        <mat-label>Select reason</mat-label>
-                                        <mat-select formControlName="reason">   
-                                            <mat-option value="Opcion 1">1</mat-option>
-                                            <mat-option value="Opcion 2">2</mat-option>
-                                            <mat-option value="Other">Other</mat-option>
-                                        </mat-select>
-                                    </mat-form-field>
-                                </td>
-                            </ng-container>
+                    <ng-container matColumnDef="Date_invoice_recieved">
+                            <th *matHeaderCellDef> 
+                                Date invoce recived
+                                <mat-error *ngIf="isValidField('invoceDate')">
+                                    {{getErrorMessage("invoceDate")}}
+                                </mat-error>
+                            </th>
+                            <td class="center" required *matCellDef="let col">  
+                                <mat-form-field class="full-width-input">
+                                    <mat-label>Date</mat-label>
+                                    <input matInput formControlName="invoceDate" type="datetime-local" max="{{today}}">   
+                                </mat-form-field>
+                            </td>
+                        </ng-container>
 
-                            <ng-container matColumnDef="Comment">
-                                <th *matHeaderCellDef> 
-                                    Comment
-                                    <mat-error *ngIf="isValidField('comment')">
-                                        {{getErrorMessage("comment")}}
-                                    </mat-error>
-                                </th>
-                                <td class="center" *matCellDef="let col">
-                                    <mat-form-field class="full-width-input">
-                                        <mat-label>comment</mat-label>
-                                        <textarea matInput formControlName="comment" rows="1" cols="40">Comment</textarea>
-                                    </mat-form-field>
-                                </td>
-                            </ng-container>
+                        <ng-container matColumnDef="Actions">
+                            <th class="marg-th" *matHeaderCellDef> Actions </th>
+                            <td class="center" *matCellDef="let col">
+                                <button 
+                                class="submit-button"
+                                type="submit"
+                                (click)="onUpdate(col.ID)"
+                                [disabled]="qbUpdateForm.invalid">
+                                    <mat-icon class="align-item">cloud_upload</mat-icon>
+                                </button>
+                                <i *ngIf="rol === 'administrator'" class="align-item material-icons" (click)="openDialog(col.ID,'0ms', '0ms')">delete</i>
+                            </td>
+                        </ng-container>
+                    </form>
 
-                            <ng-container  matColumnDef="NamePDF">
-                                <th *matHeaderCellDef> Final PDF name
-                                    <mat-error *ngIf="isValidField('NamePDF')">
-                                        {{getErrorMessage("NamePDF")}}
-                                    </mat-error>
-                                 </th>
-                                <td class="center" *matCellDef="let col">
-                                    <mat-form-field class="full-width-input">
-                                        <mat-label>PDF</mat-label>
-                                        <input matInput type="text" formControlName="NamePDF">
-                                    </mat-form-field>    
-                                </td>
-                            </ng-container>
+                    <tr mat-header-row *matHeaderRowDef="displayedColumn"></tr>
+                    <tr mat-row *matRowDef="let col; columns: displayedColumn"></tr>
 
-                           <ng-container matColumnDef="Date_invoice_recieved">
-                                <th *matHeaderCellDef> 
-                                    Date invoce recived
-                                    <mat-error *ngIf="isValidField('invoceDate')">
-                                        {{getErrorMessage("invoceDate")}}
-                                    </mat-error>
-                                </th>
-                                <td class="center" required *matCellDef="let col">  
-                                    <mat-form-field class="full-width-input">
-                                        <mat-label>Date</mat-label>
-                                        <input matInput formControlName="invoceDate" type="datetime-local" max="{{today}}">   
-                                    </mat-form-field>
-                                </td>
-                            </ng-container>
-
-                            <ng-container matColumnDef="Actions">
-                                <th class="marg-th" *matHeaderCellDef> Actions </th>
-                                <td class="center" *matCellDef="let col">
-                                    <button 
-                                    class="submit-button"
-                                    type="submit"
-                                    (click)="onUpdate(col.ID)"
-                                    [disabled]="qbUpdateForm.invalid">
-                                        <mat-icon>cloud_upload</mat-icon>
-                                    </button>
-                                    <i class="marg-3 material-icons" (click)="openDialog(col.ID,'0ms', '0ms')">delete</i>
-                                </td>
-                            </ng-container>
-                        </form>
-
-                        <tr mat-header-row *matHeaderRowDef="displayedColumn"></tr>
-                        <tr mat-row *matRowDef="let col; columns: displayedColumn"></tr>
-
-                        <!-- SHOWS WHEN DATA DOES NOT EXIST -->
-                        <tr *matNoDataRow>
-                        <td class="mat-cell" colspan = "4" > The filter does not match any
-                        item in the data for this text {{input.value}} </td>
-                        </tr>
-                    </table>
-                    <mat-paginator class="bg-primary" [pageSizeOptions]="[10,20,30,40,50]" aria-labels="select page of data">
-                    </mat-paginator>
-                </div>
-          
+                    <!-- SHOWS WHEN DATA DOES NOT EXIST -->
+                    <tr *matNoDataRow>
+                        <td class="mat-cell" colspan = "10">
+                            <strong>You have no pending quickbooks <p *ngIf="input.value"> with this text: {{input.value}}</p></strong> 
+                        </td>
+                    </tr>
+                </table>
+                <mat-paginator class="bg-primary" [pageSizeOptions]="[10,20,30,40,50]" aria-labels="select page of data">
+                </mat-paginator>
+            </div>
+        
         </div>
     </body>
  </html>

@@ -5,7 +5,7 @@
         <div class="masthead bg-primary">   
                 <div class="search-div">
                     <div *ngIf="message" class="alert alert-secondary" role="alert">{{ message }}</div>
-                    <div class="row">
+                    <div class="row" hidden>
                         <div *ngIf="currentFile" class="progress my-3">
                             <div
                                 class="progress-bar progress-bar-info progress-bar-striped"
@@ -18,7 +18,7 @@
                             </div>
                         </div>
                     </div>
-                      <div class="card mt-3">
+                      <div class="card mt-3" hidden>
                         <div class="card-header">List of Files</div>
                         <ul
                           class="list-group list-group-flush"
@@ -31,10 +31,10 @@
                       </div>
                     
                     <button type="button" class="icon" mat-icon-button>
-                        <i class="marg-3 material-icons" (click)="openAddDialog('0ms', '0ms')">add_box</i>
+                        <mat-icon (click)="openAddDialog('0ms', '0ms')">add_box</mat-icon>
                     </button>  
                    
-                    <button type="button" class="icon" mat-icon-button>
+                    <button type="button" class="icon" mat-icon-button hidden>
                         <mat-icon>cloud_upload</mat-icon>
                     </button>
                     <input type="text" class="inputfilter" matInput placeholder="Filter Table" search (keyup)="applyFilter($event)" #input/>
@@ -42,16 +42,16 @@
                 <div class="bg-primary">
                     <table class="table-primary table table-striped" mat-table matSort [dataSource]="dataSource">
                         <ng-container matColumnDef="ID">
-                            <th *matHeaderCellDef> # </th>
-                            
+                            <th *matHeaderCellDef> # </th>  
                             <td class="center" *matCellDef="let col">
-                                {{col.ID}}
+                                <p class="align-center"> {{col.ID}} </p>
                             </td>
                         </ng-container>
-                        
                         <ng-container  matColumnDef="PO_NUMBER">
                             <th *matHeaderCellDef> PO Number </th>
-                            <td class="center" *matCellDef="let col"> {{col.PO_Number}} </td>
+                            <td class="center" *matCellDef="let col">
+                                <p class="align-center">{{col.PO_Number}}</p> 
+                            </td>
                         </ng-container>
                         <form [formGroup]="cmsUpdateForm">
                             <ng-container matColumnDef="Reason">
@@ -65,9 +65,9 @@
                                     <mat-form-field class="full-width-input">
                                         <mat-label>Select reason</mat-label>
                                         <mat-select formControlName="reason">   
-                                            <mat-option value="Opcion 1">1</mat-option>
-                                            <mat-option value="Opcion 2">2</mat-option>
-                                            <mat-option value="Other">Other</mat-option>
+                                            <mat-option (click)="otherOption('disable')" value="Opcion 1">1</mat-option>
+                                            <mat-option (click)="otherOption('disable')" value="Opcion 2">2</mat-option>
+                                            <mat-option (click)="otherOption('enable')" value="Other">Other</mat-option>
                                         </mat-select>
                                     </mat-form-field>
                                 </td>
@@ -83,7 +83,7 @@
                                 <td class="center" *matCellDef="let col">
                                     <mat-form-field class="full-width-input">
                                         <mat-label>comment</mat-label>
-                                        <textarea matInput formControlName="comment" rows="1" cols="40">Comment</textarea>
+                                        <textarea [(ngModel)]="comment" matInput formControlName="comment" rows="1" cols="40">Comment</textarea>
                                     </mat-form-field>
                                 </td>
                             </ng-container>
@@ -111,7 +111,7 @@
                                     </mat-error>
                                 </th>
                                 <td class="center" *matCellDef="let col">
-                                    <div ng-controller="AppCtrl" layout-margin layout-padding>
+                                    <div class="align-center" ng-controller="AppCtrl" layout-margin layout-padding>
                                         <choose-file layout="row" flex="50">
                                             <input id="fileInput" formControlName="file" type="file" class="ng-hide" name="File" (change)="onFileSelected($event)">
                                         </choose-file>      
@@ -132,9 +132,9 @@
                                     type="submit"
                                     (click)="onUpdate(col.ID)"
                                     [disabled]="cmsUpdateForm.invalid">
-                                        <mat-icon>cloud_upload</mat-icon>
+                                        <mat-icon class="align-item">cloud_upload</mat-icon>
                                     </button>
-                                    <i class="marg-3 material-icons" (click)="openDialog(col.ID,'0ms', '0ms')">delete</i>
+                                    <i *ngIf="rol === 'administrator'" class="align-item material-icons" (click)="openDeleteDialog(col.ID,'0ms', '0ms')">delete</i>
                                 </td>
                             </ng-container>
                         </form>
@@ -144,8 +144,9 @@
 
                         <!-- SHOWS WHEN DATA DOES NOT EXIST -->
                         <tr *matNoDataRow>
-                        <td class="mat-cell" colspan = "4" > The filter does not match any
-                        item in the data for this text {{input.value}} </td>
+                            <td class="mat-cell" colspan = "10" >      
+                                <strong>You have no pending purchase orders <p *ngIf="input.value"> with this text: {{input.value}}</p></strong> 
+                            </td>
                         </tr>
                     </table>
                     <mat-paginator class="bg-primary" [pageSizeOptions]="[10,20,30,40,50]" aria-labels="select page of data">

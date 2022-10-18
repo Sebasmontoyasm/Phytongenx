@@ -3,7 +3,9 @@ import { HttpClient, HttpRequest, HttpEvent} from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { catchError} from 'rxjs/operators';
-import { Cms, CmsUpdate,CmsCreate } from 'src/app/interfaces/cms/cms';
+import { Cms, CmsUpdate} from 'src/app/interfaces/cms/cms';
+import { CmsPerformance } from 'src/app/interfaces/cms/cms-performance';
+import { LabResult } from 'src/app/interfaces/cms/cms-labresult';
 
 
 @Injectable({
@@ -14,26 +16,35 @@ export class CmsService {
   url='http://localhost:3000/api/cms/';
 
   constructor(private http: HttpClient){ }
+
   /**
    * 
    * @returns 
    */  
-  manually(){
-    return this.http.get(this.url+"manually");
+  manually(): Observable<Cms[]>{
+      return this.http.get<Cms[]>(`${environment.API_URL}/cms`).
+      pipe(
+        catchError(this.handlerError));
   }
+
   /**
    * 
    * @returns 
    */
   performace(){
-    return this.http.get(this.url+"performance"); 
+    return this.http.get<CmsPerformance[]>(`${environment.API_URL}/cms/performance`).
+    pipe(
+      catchError(this.handlerError)); 
   }
 
   detail(id:string){
-    return this.http.get(this.url+"detail/"+id);
+    return this.http.get<LabResult[]>(`${environment.API_URL}/cms/${id}`).
+    pipe(
+      catchError(this.handlerError));
   }
 
   upload(file: File): Observable<HttpEvent<any>> {
+    //Falta
     const formData: FormData = new FormData();
 
     formData.append('file', file);
@@ -49,11 +60,16 @@ export class CmsService {
 
     return this.http.request(req);
   }
+
   update(id:number, CmsUpdate:CmsUpdate): Observable<any>{
-    return this.http.patch<any>(`${environment.API_URL}/masterdata/cms/${id}`,CmsUpdate)
+    return this.http.patch<any>(`${environment.API_URL}/cms/${id}`,CmsUpdate)
     .pipe(
-      catchError(this.handlerError)
+      catchError(this.handlerError),
     );
+  }
+
+  getFiles(): Observable<any> {
+    return this.http.get(`${this.url}files`);
   }
 
   private handlerError(err:any): Observable<never> {
@@ -61,19 +77,9 @@ export class CmsService {
     if(err){
       errorMessage= `Error: code ${err.message}`
     }
-    window.alert(errorMessage)  
+    window.alert(errorMessage);  
     return throwError(errorMessage);
   }
 
-  getFiles(): Observable<any> {
-    return this.http.get(`${this.url}files`);
-  }
-
-  new(cmsCreate: CmsCreate): Observable<any>{
-    return this.http.post<any>(`${environment.API_URL}/masterdata/cms`,cmsCreate).
-    pipe(
-      catchError(this.handlerError));
-   }
-  
 }
 

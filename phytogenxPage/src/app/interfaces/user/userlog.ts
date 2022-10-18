@@ -1,10 +1,11 @@
+export type Roles = 'administrator'|'cms'|'qb'|'guest';
+
 export interface UserLog{
-    user:number;
-    rol: string;
+    id?:number;
+    idrestore:number;
+    username: string;
+    rol: Roles;
+    comment?: string;
     action: string;
-    dateaction: string;
-    iddata: number;
-    idpo: number;
-    idinvoce: number;
-    comments: string;
+    date_action:string | null;
  }

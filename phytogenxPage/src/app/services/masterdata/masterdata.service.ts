@@ -1,6 +1,9 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, throwError } from 'rxjs';
+import { Data, DataCreate } from 'src/app/interfaces/data/data';
+import { environment } from 'src/environments/environment';
+import { catchError } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -9,21 +12,50 @@ export class MasterDataService {
 
   url='http://localhost:3000/api/data/';
 
-  
-
   constructor(private http: HttpClient) { }
 
   getMasterData(){
-    return this.http.get(this.url);
+    return this.http.get<Data>(`${environment.API_URL}/masterdata`).
+    pipe(
+      catchError(this.handlerError)
+    );
   }
 
-  deleteDataID(id: number): Observable<any>  {
-    return this.http.get(this.url+"delete/"+id);
-  }
+  getById(id:number): Observable<Data>{
+    return this.http.get<Data>(`${environment.API_URL}/masterdata/${id}`).
+    pipe(
+      catchError(this.handlerError)
+    );
+   } 
 
-  dataDeleteBackup(id: number){
-    return this.http.get(this.url+"data_delete/"+id);
+  lastData(): Observable<Data> {
+    return this.http.get<Data>(`${environment.API_URL}/masterdata/last`).
+    pipe(
+      catchError(this.handlerError)
+    );
+  }  
+
+  new(dataCreate: DataCreate): Observable<any>{
+    return this.http.post<DataCreate>(`${environment.API_URL}/masterdata`,dataCreate).
+    pipe(
+      catchError(this.handlerError));
   }
-  
+       
+  deleteById(id: number): Observable<any> {
+    return this.http.delete<any>(`${environment.API_URL}/masterdata/${id}`).
+    pipe(
+      catchError(this.handlerError),
+    );
+  } 
+
+  handlerError(error: any): Observable<never>{
+    let errorMessage = 'Error unknown';
+    if(error){
+      errorMessage = 'Error'+error.message;
+    }
+
+    window.alert(errorMessage);
+    return throwError(errorMessage);
+  }
 }
 

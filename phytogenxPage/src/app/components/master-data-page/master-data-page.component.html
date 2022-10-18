@@ -1,23 +1,23 @@
 <!-- Navigation-->
  <!DOCTYPE html>
- <html>
+ <html lang="en">
     <body>
         <div class="masthead bg-primary">
             <div class="search-div">
-                    <button class="icon" mat-icon-button [matMenuTriggerFor]="menu">
-                        <mat-icon >assessment</mat-icon>
-                        <mat-menu #menu="matMenu">
-                            <button *ngIf="rol === 'cms' || rol === 'administrator'" mat-menu-item>
-                                <mat-icon>label_important</mat-icon>
-                                <a href="./cms/performance"><span>CMS Performance</span></a>
-                            </button>
-                            <button *ngIf="rol === 'qb' || rol === 'administrator'" mat-menu-item>
-                                <mat-icon>label_important</mat-icon>
-                                <a href="./qb/performance"><span>QB Performance</span></a>
-                            </button>
-                        </mat-menu>
-                    </button>          
-                    <input class="inputfilter" matInput placeholder="Filter Table" search (keyup)="applyFilter($event)" #input/>
+                <button class="icon" mat-icon-button [matMenuTriggerFor]="menu">
+                    <mat-icon >assessment</mat-icon>
+                    <mat-menu #menu="matMenu">
+                        <button *ngIf="rol === 'cms' || rol === 'administrator'" mat-menu-item>
+                            <mat-icon>label_important</mat-icon>
+                            <a href="./cms/performance"><span>CMS Performance</span></a>
+                        </button>
+                        <button *ngIf="rol === 'qb' || rol === 'administrator'" mat-menu-item>
+                            <mat-icon>label_important</mat-icon>
+                            <a href="./qb/performance"><span>QB Performance</span></a>
+                        </button>
+                    </mat-menu>
+                </button>          
+                <input class="inputfilter" matInput placeholder="Filter Table" search (keyup)="applyFilter($event)" #input/>
             </div>  
             <div>
                 <table class="table-primary table table-striped" mat-table matSort [dataSource]="dataSource">
@@ -26,9 +26,8 @@
                         <td *matCellDef="let row"> 
                             {{row.ID}}
                             <button *ngIf="row.IDObject===row.ID" class="icon" >
-                                <mat-icon mat-stroked-button (click)="openSnackBar(row.comments)">announcement</mat-icon>      
+                                <mat-icon mat-stroked-button (click)="openSnackBar(row.comment)">announcement</mat-icon>      
                             </button>   
-                           
                         </td>
                     </ng-container>
 
@@ -94,8 +93,8 @@
                     
                    <!-- SHOWS WHEN DATA DOES NOT EXIST -->
                     <tr *matNoDataRow>
-                        <td class="mat-cell " colspan = "4" > 
-                            The filter does not match any item in the data for this text {{input.value}} 
+                        <td class="mat-cell " colspan = "10" > 
+                            <strong>The filter does not match any item in the data for this text: {{input.value}}</strong>
                         </td>
                     </tr>
                 </table>

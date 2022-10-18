@@ -20,6 +20,7 @@ headers.append('Access-Control-Allow-Methods','GET,HEAD,OPTIONS,POST,PUT');
 })
 export class AuthService {
   private loggedIn = new BehaviorSubject<boolean>(false);
+  private username = new BehaviorSubject<string>('');
   private rol = new BehaviorSubject<string>('guest');
   private userToken = new BehaviorSubject<string>('');
   
@@ -31,6 +32,9 @@ export class AuthService {
     return this.loggedIn.asObservable();
   }
 
+  get isUsername():Observable<string>{
+    return this.username.asObservable();
+  }
   get isRol():Observable<string>{
     return this.rol.asObservable();
   }
@@ -46,10 +50,9 @@ export class AuthService {
       map((userReponse:UserResponse) => {
         this.saveLocalStorange(userReponse);
         this.loggedIn.next(true);
+        this.username.next(userReponse.token);
         this.rol.next(userReponse.rol);
         this.userToken.next(userReponse.token);
-        console.log("token \n",userReponse.token);
-        console.log("rol: \n",userReponse.rol);
         return userReponse;
       }),
       catchError((err) => this.handlerError(err))
@@ -59,6 +62,7 @@ export class AuthService {
   loginout(): void {
     localStorage.removeItem('user');
     this.loggedIn.next(false);
+    this.username.next('');
     this.rol.next('guest');
     this.userToken.next('');
     this.router.navigate(['/homepage']);

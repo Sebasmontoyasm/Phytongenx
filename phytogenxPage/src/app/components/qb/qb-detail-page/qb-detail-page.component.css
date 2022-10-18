@@ -12,6 +12,12 @@ table{
     height: 50px;
 }
 
+.mat-cell{
+    font-size: medium;
+    margin: 4px;
+    width: 100%;
+    text-align: center;
+}
 .search-div{
     width: 100%;
     margin: 0%;    

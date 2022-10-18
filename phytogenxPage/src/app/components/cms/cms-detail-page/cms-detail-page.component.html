@@ -44,9 +44,9 @@
 
                   <!-- SHOWS WHEN DATA DOES NOT EXIST -->
                    <tr *matNoDataRow>
-                       <td class="center mat-cell " colspan = "10" > 
-                            There are no datails for this PO; it was not processed by PEDRO. {{input.value}} 
-                       </td>
+                        <td class="mat-cell" colspan = "10" >
+                            <strong> The filter does not match any detail in the purchase order for this text: {{input.value}}</strong> 
+                        </td>
                    </tr>
                </table>
                <mat-paginator class="bg-primary fs-6" [pageSizeOptions]="[10,20,30,40,50]" aria-labels="select page of data"></mat-paginator>    

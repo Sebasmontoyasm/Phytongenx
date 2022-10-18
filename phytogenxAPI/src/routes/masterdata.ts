@@ -5,9 +5,10 @@ import { Router } from 'express';
 
 const router = Router();
 
-router.patch('/cms/:id',[checkJwt,checkRole(['cms'])], MDController.updatecms);
-router.post('/cms',[checkJwt,checkRole(['cms'])], MDController.newcms);
-
-router.patch('/qb/:id',[checkJwt,checkRole(['qb'])], MDController.updatecms);
+router.get("",[checkJwt],MDController.getAll);
+router.get("/last",[checkJwt,checkRole(['cms','administrator'])],MDController.getLastId);
+router.get("/:id",[checkJwt],MDController.getById);
+router.post("",[checkJwt], MDController.new);
+router.delete("/:id",[checkJwt,checkRole(['administrator'])], MDController.delete);
 
 export default router;

@@ -54,8 +54,8 @@ CMS_Data
 ===========================
 
 DELIMITER //
-DROP PROCEDURE IF EXISTS cms_data//
-CREATE PROCEDURE cms_data(IN PONUM VARCHAR(255))
+DROP PROCEDURE IF EXISTS labresult_detail//
+CREATE PROCEDURE labresult_detail(IN PONUM VARCHAR(255))
 BEGIN
     SELECT ID, Date, PDFName, PONumber, SubloteCode, Test, State
 	FROM LabResults
@@ -64,7 +64,7 @@ BEGIN
 END//
 DELIMITER ;
 
-call cms_data('22167F');
+call labresult_detail('22167F');
 
 /**
 * Estado final de la factura con intentos de RPA 

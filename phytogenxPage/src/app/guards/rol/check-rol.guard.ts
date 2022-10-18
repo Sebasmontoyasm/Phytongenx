@@ -31,6 +31,16 @@ export class CheckRolGuard implements CanActivate {
       return true;
     }
 
+    regexp = /userlogs\S?/;
+    if(state.url.match(regexp) && (user.rol == 'administrator')){
+      return true;
+    }
+
+    regexp = /restore\S?/;
+    if(state.url.match(regexp) && (user.rol == 'administrator')){
+      return true;
+    }
+
     regexp = /masterdata\S?/;
     if(state.url.match(regexp) && (user.rol != 'guest')){
       return true;

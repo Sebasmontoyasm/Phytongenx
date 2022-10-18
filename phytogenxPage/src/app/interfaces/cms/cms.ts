@@ -10,11 +10,6 @@ export interface CmsUpdate{
     PDF_Name: string;
 }
 
-export interface CmsCreate{
-    ponumber:string;
-    Date_CSM_Processed: Date;
-    PDF_Name: string;
-}
 
 
 

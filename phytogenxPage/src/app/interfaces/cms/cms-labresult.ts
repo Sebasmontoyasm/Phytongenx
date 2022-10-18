@@ -1,4 +1,4 @@
-export interface CmsDetail {
+export interface LabResult {
     ID:number;
     Date: Date;
     PDFName: string;

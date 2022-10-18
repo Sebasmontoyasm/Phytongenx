@@ -1,7 +1,11 @@
 import "reflect-metadata"
 import { DataSource } from "typeorm"
 import { Data } from "./entity/masterdata"
+import { Restore } from "./entity/Restore"
 import { User } from "./entity/User"
+import { Userlog } from "./entity/Userlog"
+import { LabResults } from "./entity/LabResults"
+import { observablepedro } from "./entity/observablepedro"
 
 export const AppDataSource = new DataSource({
     type: "mariadb",
@@ -12,7 +16,7 @@ export const AppDataSource = new DataSource({
     database: "pgenx-cmsqb",
     synchronize: true,
     logging: false,
-    entities: [User,Data],
+    entities: [User,Data,Userlog,Restore,LabResults,observablepedro],
     migrations: [],
     subscribers: [],
 })

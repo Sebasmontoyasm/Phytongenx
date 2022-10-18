@@ -17,6 +17,13 @@ table{
     margin: 0%;    
 }
 
+.mat-cell{
+    font-size: medium;
+    margin: 4px;
+    width: 100%;
+    text-align: center;
+}
+
 .icon{
     margin: 5px;   
     align-items: center; 

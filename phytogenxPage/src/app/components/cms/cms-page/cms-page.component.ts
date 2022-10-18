@@ -10,10 +10,15 @@ import { HttpEventType, HttpResponse } from '@angular/common/http';
 import { Observable, Subject } from 'rxjs';
 import { Cms, CmsUpdate } from 'src/app/interfaces/cms/cms';
 import { UserLog } from 'src/app/interfaces/user/userlog';
+import { Roles } from 'src/app/interfaces/user/user';
 import { FormBuilder, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
 import { takeUntil } from 'rxjs/operators';
 import { DatePipe } from '@angular/common';
+import { UserlogService } from 'src/app/services/userlog/userlog.service';
+import { Data } from 'src/app/interfaces/data/data';
+import { MasterDataService } from 'src/app/services/masterdata/masterdata.service';
+import { RestoreService } from 'src/app/services/restore/restore.service';
+import { RpaService } from 'src/app/services/rpa/rpa.service';
 
 @Component({
   selector: 'app-cms-page',
@@ -25,6 +30,8 @@ import { DatePipe } from '@angular/common';
  * de CMS que se hicieron manual o tienen un error.
  */
 export class CmsPageComponent implements OnInit, OnDestroy {
+
+  rol: Roles = 'guest';
 
   title = 'data-table';
   displayedColumn: string[] =['ID','PO_NUMBER','Reason','Comment','Date_CSM_Processed','Upload_PDF','Actions'];
@@ -40,28 +47,15 @@ export class CmsPageComponent implements OnInit, OnDestroy {
   fileInfos?: Observable<any>;
 
   fileName: string = '';
-  today = this.datePipe.transform(new Date(), 'yyyy-MM-ddTHH:mm')
-  date: string | null = '';
-
-  reason: string = "";
-  idupdate = 0;
-
-  usrlog: UserLog = {
-    user: 1,
-    rol: "Tester",
-    action: "",
-    dateaction: "",
-    iddata: 0,
-    idpo: 0,
-    idinvoce: 0,
-    comments: "",    
-  };
+  today = this.datePipe.transform(new Date(), 'yyyy-MM-ddTHH:mm');
+  comment: string = '';
   
   private destroy = new Subject<any>();
-  validatePDF = /\S+\.pdf/; 
+
+  validatePDF = /\S+\.pdf/;
   cmsUpdateForm: FormBuilder | any  = this.fb.group({
     reason: ['',[Validators.required]],
-    comment: ['',[Validators.required,Validators.pattern(/\S+/)]],
+    comment: [{value:'',disabled:true},[Validators.required,Validators.pattern(/\S+/)]],
     cmsDate: [this.today,[Validators.required]],
     PDF_Name: [''],
     file: ['',[Validators.required,Validators.pattern(this.validatePDF)]]
@@ -72,12 +66,19 @@ export class CmsPageComponent implements OnInit, OnDestroy {
     private cmsService:CmsService,
     private dialog: MatDialog,
     private fb:FormBuilder,
-    private router: Router,
-    private datePipe: DatePipe
+    private datePipe: DatePipe,
+    private userlogService: UserlogService,
+    private mdService: MasterDataService,
+    private restoreService: RestoreService,
+    private rpaService: RpaService
     ) { 
     }
 
   ngOnInit(): void {
+    const localitem: string | any = localStorage.getItem('user');
+    const user = JSON.parse(localitem);
+    this.rol = user.rol;
+
     this.getCms();
   }
 
@@ -85,7 +86,7 @@ export class CmsPageComponent implements OnInit, OnDestroy {
     this.destroy.next({});
     this.destroy.complete();
   }
-
+  
   getCms()
   {
     this.cmsService.manually().subscribe(
@@ -95,7 +96,7 @@ export class CmsPageComponent implements OnInit, OnDestroy {
         this.dataSource.paginator = this.paginator;
         this.dataSource.sort = this.sort;
       },
-      err => console.log("Error CMS Update: "+err)
+      err => console.log("Error CMS update: "+err)
     );
   }
 
@@ -104,19 +105,40 @@ export class CmsPageComponent implements OnInit, OnDestroy {
       return;
     }
 
-    if(this.checkPDF(this.cmsUpdateForm.value.PDF_Name)){
-      const formValue: CmsUpdate | any = this.cmsUpdateForm.value;
-      this.cmsService.update(id,formValue).pipe(
-        takeUntil(this.destroy),
-      ).subscribe(res => {
-        if(res){
-          window.alert('Update');
-        }
-  
-      });
-    }else{
-      window.alert('The format of the PDF is incorrect.');
-    }
+    let oldData: Data;
+    this.mdService.getById(id).pipe(
+      takeUntil(this.destroy),
+    ).subscribe(res => {
+      if(res){
+        oldData = res;
+      }
+    });
+
+    const formValue: CmsUpdate | any = this.cmsUpdateForm.value;
+    let convertDate = new DatePipe('en-US').transform(formValue.cmsDate,'MM/dd/yyyy HH:mm');
+    let convertPDF_Name: string[] = formValue.PDF_Name.split('.');
+
+    formValue.cmsDate = convertDate;
+    formValue.PDF_Name = convertPDF_Name[0];
+
+    this.cmsService.update(id,formValue).pipe(
+      takeUntil(this.destroy),
+    ).subscribe(res => {
+      if(res){
+        this.createLog(id);
+        this.saverestore(oldData);
+
+        this.rpaService.report().pipe(
+          takeUntil(this.destroy),
+        ).subscribe(res=>{
+            if(res){
+              console.log("Reported RPA.");
+            }
+          },
+          err => console.log("Error: "+err),
+        );
+      }
+    }); 
   }
   
   /**
@@ -130,11 +152,11 @@ export class CmsPageComponent implements OnInit, OnDestroy {
 
   onFileSelected(event:any):void{
     this.selectedFiles = event.target.files;
-    this.fileName = this.selectedFiles[0].name;
-    this.cmsUpdateForm.value.PDF_Name = this.fileName;
+    this.cmsUpdateForm.value.PDF_Name = this.selectedFiles[0].name;
   }
 
   onUploadFile(){
+      //PENDIENTE
       this.progress = 0;
       if (this.selectedFiles) {
         const file: File | null = this.selectedFiles.item(0);
@@ -173,36 +195,33 @@ export class CmsPageComponent implements OnInit, OnDestroy {
    * @param exitAnimationDuration cerrado de animacion
    * @parama data recolecta el id y el log con los comentarios para guardar
    */
-   openDialog(id:number, enterAnimationDuration: string, exitAnimationDuration: string): void {
+   openDeleteDialog(id:number, enterAnimationDuration: string, exitAnimationDuration: string): void {
     this.dialog.open(DialogdeletePageComponent, {
     width: '250px',
     enterAnimationDuration,
     exitAnimationDuration,
-    data:{ id: id, userlog: this.usrlog,title:'cms'}
+    data:{ id: id,title:'CMS'}
   });
+  }
+
+  otherOption(option:string){
+    if(option=='enable'){
+      this.cmsUpdateForm.get('comment').status = "ENABLED";
+    }else if(option=='disable'){
+      this.cmsUpdateForm.get('comment').status = "DISABLED";
+      this.cmsUpdateForm.value.comment='';
+      this.comment='';
+    }
   }
 
   isValidField(field: string):boolean{
     return this.cmsUpdateForm.get(field).touched || this.cmsUpdateForm.get(field).dirty && !this.cmsUpdateForm.get(field).valid;
   }
 
-  checkPDF(PDF_Name: string) {
-    let pdf:string[] = PDF_Name.split("."); 
-    
-    if(pdf[1] == undefined){
-      return false;
-    }else if(pdf[1].toUpperCase() === 'PDF'){
-      this.cmsUpdateForm.value.PDF_Name = pdf[0];
-      return true;
-    }
-
-    return false;
-  }
-
   getErrorMessage(field: string): string{
     let message:string = "";
-    if(this.cmsUpdateForm.get(field).hasError('required') && field === 'file'){
-      message = 'Select file.';  
+    if(this.cmsUpdateForm.get(field).hasError('pattern') && field === 'file'){
+      message = 'Not a valid file format.';  
     }
     else if(this.cmsUpdateForm.get(field).hasError('required')){ 
       message = 'You must enter a value.';
@@ -228,11 +247,45 @@ export class CmsPageComponent implements OnInit, OnDestroy {
     this.dialog.open(CmscreatePageComponent, {
       position: {top: '130px'},
       width: '40%',
-      height: '80%',
+      height: '54%',
       enterAnimationDuration,
       exitAnimationDuration
     });
   }
 
+  saverestore(oldData: Data){
+    this.restoreService.save(oldData).pipe(
+      takeUntil(this.destroy),
+    ).subscribe(res => {
+      if(res){
+        window.location.reload();
+      }
+    });
+  }
+
+  createLog(id: number) {
+    const localitem: string | any = localStorage.getItem('user');
+    const user = JSON.parse(localitem);
+
+    const formvalue: CmsUpdate = this.cmsUpdateForm.value;
+    let logdate = new Date();
+    let convertdate = new DatePipe('en-US').transform(logdate,'MM/dd/yyyy HH:mm:ss');
+
+    let userlog: UserLog = {
+      idrestore : id,
+      username : user.username,
+      rol : user.rol,
+      action: 'CMS - Updated information.',
+      comment: formvalue.reason+' '+formvalue.comment,
+      date_action: convertdate
+    };
+
+    this.userlogService.new(userlog).subscribe(
+      res=>{
+        console.log("Response: \n",res);
+      },
+      err => console.log("Error: "+err)
+    );
+  }
 }
 

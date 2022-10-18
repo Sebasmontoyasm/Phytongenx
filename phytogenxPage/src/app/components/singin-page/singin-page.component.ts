@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, Pipe, PipeTransform } from '@angular/core';
 import { AuthService } from 'src/app/services/auth/auth.service';
 import { FormBuilder, Validators} from '@angular/forms';
 import { Router } from '@angular/router';
@@ -6,6 +6,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { User } from '../../interfaces/user/user';
 import { takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs';
+import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'app-singin-page',
@@ -16,9 +17,12 @@ export class SinginPageComponent implements OnInit, OnDestroy {
   hide = false;
   private isValidusername = /\S+\.\S+/;
   private destroy = new Subject<any>();
+
+
   singInForm: FormBuilder | any  = this.fb.group({
     username: ['',[Validators.required,Validators.pattern(this.isValidusername)]],
-    password: ['',[Validators.required, Validators.minLength(6)]]
+    password: ['',[Validators.required, Validators.minLength(6)]],
+    UpdateAt: []
   });
 
   constructor(private authService: AuthService,
@@ -28,6 +32,7 @@ export class SinginPageComponent implements OnInit, OnDestroy {
               ) { }
 
   ngOnInit(): void {
+    
   }
 
   ngOnDestroy(): void {
@@ -58,6 +63,13 @@ export class SinginPageComponent implements OnInit, OnDestroy {
     }
     
     const formValue: User | any = this.singInForm.value;
+
+    let format: string = 'MM/dd/yyyy HH:mm:ss';
+    let date: Date = new Date();
+    let datepipe = new DatePipe('en-US').transform(date, format);
+  
+    formValue.UpdateAt = datepipe;
+
     this.authService.login(formValue).pipe(
       takeUntil(this.destroy)
     ).subscribe(res => {
