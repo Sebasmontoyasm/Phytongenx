@@ -27,7 +27,6 @@ export class SinginPageComponent implements OnInit, OnDestroy {
 
   constructor(private authService: AuthService,
               private fb:FormBuilder,
-              private router: Router,
               private singin: MatDialog,
               ) { }
 
@@ -74,7 +73,6 @@ export class SinginPageComponent implements OnInit, OnDestroy {
       takeUntil(this.destroy)
     ).subscribe(res => {
       if(res){
-        this.router.navigate(['']);
         this.closeSingIn();
       }
 

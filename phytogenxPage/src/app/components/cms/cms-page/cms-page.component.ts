@@ -122,7 +122,7 @@ export class CmsPageComponent implements OnInit, OnDestroy {
     formValue.PDF_Name = convertPDF_Name[0];
 
     this.cmsService.update(id,formValue).pipe(
-      takeUntil(this.destroy),
+      takeUntil(this.destroy)
     ).subscribe(res => {
       if(res){
         this.createLog(id);
@@ -132,10 +132,10 @@ export class CmsPageComponent implements OnInit, OnDestroy {
           takeUntil(this.destroy),
         ).subscribe(res=>{
             if(res){
-              console.log("Reported RPA.");
+              console.log("Somenthing wrong.");
             }
           },
-          err => console.log("Error: "+err),
+          err => console.log("Error with RPA report: "+err),
         );
       }
     }); 
@@ -246,7 +246,7 @@ export class CmsPageComponent implements OnInit, OnDestroy {
   openAddDialog(enterAnimationDuration: string, exitAnimationDuration: string): void {
     this.dialog.open(CmscreatePageComponent, {
       position: {top: '130px'},
-      width: '40%',
+      width: '30%',
       height: '54%',
       enterAnimationDuration,
       exitAnimationDuration
@@ -270,13 +270,19 @@ export class CmsPageComponent implements OnInit, OnDestroy {
     const formvalue: CmsUpdate = this.cmsUpdateForm.value;
     let logdate = new Date();
     let convertdate = new DatePipe('en-US').transform(logdate,'MM/dd/yyyy HH:mm:ss');
+    
+    if(formvalue.comment == undefined){
+      this.comment = formvalue.reason;   
+    }else{
+      this.comment =formvalue.reason+' '+formvalue.comment; 
+    }
 
     let userlog: UserLog = {
       idrestore : id,
       username : user.username,
       rol : user.rol,
       action: 'CMS - Updated information.',
-      comment: formvalue.reason+' '+formvalue.comment,
+      comment: this.comment,
       date_action: convertdate
     };
 

@@ -1,15 +1,23 @@
 table{
-    width: 100;
+    width: 98%;
+    margin-left: 1%;
 }
+
 .search-div{
-    margin: 1px;
+    padding-left: 15px;
     padding-top: 10px;
     padding-bottom: 5px;
+    width: 100%;
+    margin: 0%;    
 }
-.mat-form-field{
-    font-size: 14px;
-    width: 20px;
-    height: 50px;
+
+.icon{
+    margin: 3px;  
+    border:0ch;
+    padding: 0px;
+    padding-right: 5px; 
+    align-items: center; 
+    background: none;
 }
 
 .mat-cell{
@@ -18,23 +26,10 @@ table{
     width: 100%;
     text-align: center;
 }
-.search-div{
-    width: 100%;
-    margin: 0%;    
-}
-
-.icon{
-    margin: 5px;   
-    align-items: center; 
-    background: none;
-    border:0ch;
-    padding-right: 0.5px; 
-}
 
 .inputfilter{
     background-color: #def;
     border-radius: 5px;
-    margin: 0;   
     background-position: 10px 12px;
     background-repeat: no-repeat;
     width: 10%;
@@ -44,28 +39,16 @@ table{
     margin-bottom: 0px;
     background-color: #def;
     margin: 5px;
+    margin-left: 0px;
 }
 
 input::placeholder {
     color: black;
     font-size: 1.2em;
-    font-style: italic;
   }
 
-#inputfilter{
-    background-position: 10px 12px;
-    background-repeat: no-repeat;
-    width: 15%;
-    font-size: 16px;
-    padding: 12px 20px 12px 40px;
-    border: 1px solid black;
-    margin-bottom: 12px;
-    background-color: #def;
-    margin-bottom: 5%;
+.width-100{
+    width: 50%;
+    margin: 0px;
+    padding: 0px;
 }
-
-
-.center{
-    text-align: center;
-}
-

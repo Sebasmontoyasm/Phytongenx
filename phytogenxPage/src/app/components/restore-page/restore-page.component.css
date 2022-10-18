@@ -1,0 +1,53 @@
+table{
+    width: 98%;
+    margin-left: 1%;
+}
+
+.search-div{
+    padding-left: 5px;
+    padding-top: 10px;
+    padding-bottom: 5px;
+    width: 100%;
+    margin: 0%;    
+}
+
+.icon{
+    margin: 3px;   
+    align-items: center; 
+    background: none;
+    border:0ch;
+    padding: 0px;
+}
+
+.mat-cell{
+    font-size: medium;
+    margin: 4px;
+    width: 100%;
+    text-align: center;
+}
+
+.inputfilter{
+    background-color: #def;
+    border-radius: 5px;
+    background-position: 10px 12px;
+    background-repeat: no-repeat;
+    width: 10%;
+    font-size: 14px;
+    padding: 5px 10px 5px 14px;
+    border: 1px solid black;
+    margin-bottom: 0px;
+    background-color: #def;
+    margin: 5px;
+    margin-left: 0px;
+}
+
+input::placeholder {
+    color: black;
+    font-size: 1.2em;
+  }
+
+.width-100{
+    width: 50%;
+    margin: 0px;
+    padding: 0px;
+}

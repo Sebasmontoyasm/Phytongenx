@@ -1,7 +1,7 @@
 export interface QbDetail {
-    id: number;
-    date: Date;
-    PONumber: string;
-    InvoceNumber: string;
-    State: string;
+    ID: number,
+    Date: string,
+    PONumber: string,
+    InvoiceNumber: string,
+    State: string
 }

@@ -37,7 +37,7 @@
                   <!-- SHOWS WHEN DATA DOES NOT EXIST -->
                    <tr *matNoDataRow>
                        <td class="center mat-cell " colspan = "10" > 
-                            <strong>Here are no details for this Invoice: {{input.value}}, It was not processed by PEDRO.</strong>
+                            <strong>It was not processed by PEDRO <p *ngIf="input.value">: {{input.value}}</p></strong>
                        </td>
                    </tr>
                </table>

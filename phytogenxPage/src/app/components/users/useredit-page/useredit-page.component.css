@@ -5,7 +5,7 @@
     border-color: blueviolet;
 }
 .mat-error{
-    font-size: small;    
+    font-size: medium;    
 }
 .mat-card-title{
     color: black;
@@ -15,6 +15,12 @@
     width: 100%;
     margin: 2%;
     padding: 2%;
+    padding-bottom: 7%;
+    font-size: medium;
+}
+
+.margin-error{
+    margin-top: 20px;
     font-size: medium;
 }
 

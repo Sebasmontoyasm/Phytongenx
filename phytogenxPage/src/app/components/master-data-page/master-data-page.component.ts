@@ -26,9 +26,6 @@ export class MasterDataPageComponent implements OnInit, OnDestroy {
   @ViewChild(MatMenuTrigger) trigger!: MatMenuTrigger;
 
   posts:any;
-  delayProcess:any;
-  invsNumber:any;
-  arrayList:Array<number> = [];
 
   constructor(private masterDataService:MasterDataService,
               private _snackBar: MatSnackBar) { }
@@ -79,7 +76,9 @@ export class MasterDataPageComponent implements OnInit, OnDestroy {
         this.dataSource.paginator = this.paginator;
         this.dataSource.sort = this.sort;
       },
-      err => console.log("Error: "+err)
+      err => {
+        console.log("Something wrong, it can't get Data \n "+err);
+      }
     );
   }
 

@@ -2,8 +2,75 @@
 <!DOCTYPE html>
 <html lang="en">
    <body>
-        <div class="masthead bg-primary">
-            <p>restore works!</p>
-        </div>
+       <div class="masthead bg-primary">
+           <div class="search-div">
+               <button class="icon" mat-icon-button>
+                   <mat-icon (click)="Logs()">assignment</mat-icon>
+               </button>          
+               <input class="inputfilter" matInput placeholder="Filter Table" search (keyup)="applyFilter($event)" #input/>
+           </div>  
+           <div>
+               <table class="table-primary table table-striped" mat-table matSort [dataSource]="dataSource">
+                   <ng-container matColumnDef="id">
+                       <th *matHeaderCellDef mat-sort-header> # </th>
+                       <td *matCellDef="let row"> {{row.id}}</td>
+                   </ng-container>
+                   <ng-container matColumnDef="MDID">
+                    <th *matHeaderCellDef mat-sort-header>Data ID </th>
+                    <td *matCellDef="let row"> {{row.MDID}}</td>
+                </ng-container>
+
+                   <ng-container matColumnDef="PO_Number">
+                       <th *matHeaderCellDef mat-sort-header> PO Number </th>
+                       <td *matCellDef="let row">{{row.PO_Number}}</td>
+                   </ng-container>
+                   <ng-container matColumnDef="Date_CSM_Processed">
+                       <th *matHeaderCellDef mat-sort-header> Date CSM Processed </th>
+                       <td *matCellDef="let row">{{row.Date_CSM_Processed}} </td>
+                   </ng-container>
+                   <ng-container matColumnDef="PDF_Name">
+                       <th *matHeaderCellDef mat-sort-header> Lab Results PDF </th>
+                       <td *matCellDef="let row">{{row.PDF_Name}} </td>
+                   </ng-container>
+                   <ng-container matColumnDef="NamePDF">
+                       <th *matHeaderCellDef mat-sort-header> Final PDF Name </th>
+                       <td *matCellDef="let row">{{row.NamePDF}} </td>
+                   </ng-container>
+                   <ng-container matColumnDef="Invoice_Number">
+                        <th *matHeaderCellDef mat-sort-header> Invoice </th>
+                        <td *matCellDef="let row">{{row.Invoice_Number}}</td>
+                   </ng-container>
+                   <ng-container matColumnDef="action">
+                        <th *matHeaderCellDef mat-sort-header> Action </th>
+                        <td *matCellDef="let row">{{row.action}} </td>
+                    </ng-container>
+                   <ng-container matColumnDef="Date_invoice_recieved">
+                       <th *matHeaderCellDef mat-sort-header> Date Invoice </th>
+                       <td *matCellDef="let row">{{row.Date_invoice_recieved}} </td>
+                   </ng-container>
+                   
+                   <ng-container matColumnDef="Date_Quickbooks_Processed">
+                        <th *matHeaderCellDef mat-sort-header> Date QB Processed </th>
+                        <td *matCellDef="let row">{{row.Date_Quickbooks_Processed}} </td>
+                    </ng-container>
+                <ng-container matColumnDef="date_action">
+                    <th *matHeaderCellDef mat-sort-header> Date Action </th>
+                    <td *matCellDef="let row">{{row.date_action}} </td>
+                </ng-container>
+
+                   <tr mat-header-row *matHeaderRowDef="displayedColumn"></tr>
+                   <tr mat-row *matRowDef="let row; columns: displayedColumn"></tr>
+                   
+                  <!-- SHOWS WHEN DATA DOES NOT EXIST -->
+                   <tr *matNoDataRow>
+                       <td class="mat-cell " colspan = "10" > 
+                           <strong>The filter does not match any item in the restore data for this text: {{input.value}}</strong>
+                       </td>
+                   </tr>
+               </table>
+               <mat-paginator class="bg-primary fs-6" [pageSizeOptions]="[10,20,30,40,50]" aria-labels="select page of data"></mat-paginator>    
+               
+           </div>            
+       </div>
    </body>
 </html>

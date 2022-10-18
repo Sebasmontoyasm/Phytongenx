@@ -2,8 +2,10 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpEvent, HttpRequest } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
 import { QbUpdate } from 'src/app/interfaces/qb/qb';
+import { QbDetail } from 'src/app/interfaces/qb/qb-detail';
 import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
+import { QbPerformance } from 'src/app/interfaces/qb/qb-performance';
 
 @Injectable({
   providedIn: 'root'
@@ -15,11 +17,14 @@ export class QbService {
   constructor(private http: HttpClient){ }
     
   performace(){
-    return this.http.get(this.url+"performance"); 
+    return this.http.get<QbPerformance>(`${environment.API_URL}/qb/performance`); 
   }
   
-  detail(id: string){
-    return this.http.get(this.url+"detail/"+id); 
+  detail(invoice: string){
+    return this.http.get<QbDetail>(`${environment.API_URL}/qb/${invoice}`)
+    .pipe(
+      catchError(this.handlerError)
+    );
   }
 
   get(){

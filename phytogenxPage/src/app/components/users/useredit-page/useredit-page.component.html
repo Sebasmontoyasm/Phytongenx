@@ -10,7 +10,7 @@
                     formControlName="name" 
                     matInput
                     required>
-                    <mat-error *ngIf="isValidField('name')">
+                    <mat-error class="margin-error" *ngIf="isValidField('name')">
                         {{getErrorMessage("name")}}
                     </mat-error>
                 </mat-form-field>
@@ -21,11 +21,10 @@
                         <mat-option value="qb">qb</mat-option>
                         <mat-option value="cms">cms</mat-option>
                         <mat-option value="administrator">administrator</mat-option>
-                        <mat-error *ngIf="isValidField('rol')">
-                            {{getErrorMessage("rol")}}
-                        </mat-error>
                     </mat-select>
-                    
+                    <mat-error class="margin-error" *ngIf="isValidField('rol')">
+                        {{getErrorMessage("rol")}}
+                    </mat-error>
                 </mat-form-field> 
                 <mat-form-field class="full-width-input"> 
                     <mat-label>Password</mat-label>
@@ -39,7 +38,7 @@
                         <mat-icon *ngIf="hide">visibility</mat-icon>
                         <mat-icon *ngIf="!hide">visibility_off</mat-icon>
                     </button>
-                    <mat-error *ngIf="isValidField('password')">
+                    <mat-error  *ngIf="isValidField('password')">
                         {{getErrorMessage("password")}}
                     </mat-error> 
                 </mat-form-field>

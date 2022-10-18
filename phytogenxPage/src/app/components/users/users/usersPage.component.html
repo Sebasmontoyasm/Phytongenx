@@ -4,7 +4,9 @@
    <body>
        <div class="masthead bg-primary">
            <div class="search-div">
-                <i class="marg-3 material-icons" (click)="openAddDialog('0ms', '0ms')">add_box</i>
+                <button type="button" class="icon" mat-icon-button>
+                    <mat-icon (click)="openAddDialog('0ms', '0ms')">person_add</mat-icon>
+                </button>
                 <input class="inputfilter" matInput placeholder="Filter Table" search (keyup)="applyFilter($event)" #input/>
            </div>  
            <div>
@@ -46,11 +48,11 @@
                    </ng-container>
 
                    <ng-container matColumnDef="Actions">
-                    <th class="marg-th" *matHeaderCellDef> Actions </th>
+                    <th *matHeaderCellDef> Actions </th>
                     <td class="center" *matCellDef="let row">
                         <div class ="table-button-row">
-                            <i class="marg-3 material-icons" (click)="openEditDialog(row,'0ms','0ms')">edit</i>
-                            <i class="marg-3 material-icons" (click)="openDeleteDialog(row.id,'0ms', '0ms')">delete</i>
+                            <button class="btn-action"><mat-icon (click)="openEditDialog(row,'0ms','0ms')">edit</mat-icon></button>
+                            <button class="btn-action"><mat-icon (click)="openDeleteDialog(row.id,'0ms', '0ms')">delete</mat-icon></button>
                         </div>
                     </td>
                 </ng-container>
@@ -60,8 +62,8 @@
                    
                   <!-- SHOWS WHEN DATA DOES NOT EXIST -->
                    <tr *matNoDataRow>
-                       <td class="mat-cell " colspan = "4" > 
-                           The filter does not match any item in the data for this text {{input.value}} 
+                       <td class="mat-cell " colspan = "10" > 
+                           <strong>The filter does not match any item in the users information widh this text: {{input.value}}</strong> 
                        </td>
                    </tr>
                </table>

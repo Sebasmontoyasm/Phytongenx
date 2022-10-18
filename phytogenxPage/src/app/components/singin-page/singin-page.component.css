@@ -13,8 +13,9 @@
 
 .full-width-input{
     width: 100%;
-    margin: 3%;
-    padding: 3%;
+    padding-top: 3%;
+    padding-right: 3%;
+    padding-bottom: 5%;
     font-size: medium;
 }
 

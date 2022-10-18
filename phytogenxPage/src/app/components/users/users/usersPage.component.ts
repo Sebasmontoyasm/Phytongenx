@@ -75,7 +75,7 @@ export class UsersPageComponent implements OnInit,OnDestroy {
     this.dialog.open(UserCreatePageComponent, {
       position: {top: '130px'},
       width: '30%',
-      height: '80%',
+      height: '72%',
       enterAnimationDuration,
       exitAnimationDuration
     });

@@ -14,6 +14,12 @@ import { DatePipe } from '@angular/common';
 import { Router } from '@angular/router';
 import { HttpEventType, HttpResponse } from '@angular/common/http';
 import { Roles } from 'src/app/interfaces/user/user';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { Data } from 'src/app/interfaces/data/data';
+import { MasterDataService } from 'src/app/services/masterdata/masterdata.service';
+import { RpaService } from 'src/app/services/rpa/rpa.service';
+import { RestoreService } from 'src/app/services/restore/restore.service';
+import { UserlogService } from 'src/app/services/userlog/userlog.service';
 
 @Component({
   selector: 'app-qb-page',
@@ -40,21 +46,28 @@ export class QbPageComponent implements OnInit, OnDestroy {
   
   fileName: string = '';
   today = this.datePipe.transform(new Date(), 'yyyy-MM-ddTHH:mm')
+  comment: string = '';
 
   validatePDF = /\S+\.pdf/; 
 
   qbUpdateForm: FormBuilder | any  = this.fb.group({
     reason: ['',[Validators.required]],
-    comment: ['',[Validators.required,Validators.pattern(/\S+/)]],
-    NamePDF: ['',Validators.pattern(this.validatePDF)],
-    file: ['',[Validators.required]],
-    invoceDate: [this.today,[Validators.required]]
+    comment: [{value:'',disabled:true},[Validators.required,Validators.pattern(/\S+/)]],
+    NamePDF: [''],
+    file: ['',[Validators.required,Validators.pattern(this.validatePDF)]],
+    Date_invoice_recieved: [this.today,[Validators.required]],
+    Invoice_Number: ['',[Validators.pattern('^[0-9]*$'),Validators.minLength(3)]]
   });
   constructor(private qbService:QbService,
               private dialog: MatDialog,
               private fb:FormBuilder,
               private router: Router,
-              private datePipe: DatePipe) { }
+              private datePipe: DatePipe,
+              private _snackBar: MatSnackBar,
+              private mdService: MasterDataService,
+              private rpaService: RpaService,
+              private restoreService: RestoreService,
+              private userlogService: UserlogService) { }
 
   ngOnInit(): void {
     const localitem: string | any = localStorage.getItem('user');
@@ -77,7 +90,6 @@ export class QbPageComponent implements OnInit, OnDestroy {
       res=>{
         this.posts=res;
         this.dataSource = new MatTableDataSource(this.posts);
-        console.log(this.dataSource);
         this.dataSource.paginator = this.paginator;
         this.dataSource.sort = this.sort;
       },
@@ -90,12 +102,56 @@ export class QbPageComponent implements OnInit, OnDestroy {
       return;
     }
     
+    let oldData: Data;
+    this.mdService.getById(id).pipe(
+      takeUntil(this.destroy),
+    ).subscribe(res => {
+      if(res){
+        oldData = res;
+      }
+    });
+
     const formValue: QbUpdate | any = this.qbUpdateForm.value;
+    let convertDate = new DatePipe('en-US').transform(formValue.Date_invoice_recieved,'MM/dd/yyyy HH:mm');
+    formValue.Date_invoice_recieved = convertDate;
+
     this.qbService.update(id,formValue).pipe(
       takeUntil(this.destroy)
     ).subscribe(res => {
-      if(!res){
-        window.alert('Error update');
+      if(res){
+        this.createLog(id);
+        this.saverestore(oldData);
+
+        this.rpaService.report().pipe(
+          takeUntil(this.destroy),
+        ).subscribe(res=>{
+            if(!res){
+              console.log("Somenthing wrong");
+            }
+          },
+          error => console.log("Error with RPA report: "+error),
+        );
+      }
+    }); 
+  }
+
+  otherOption(option:string){
+    if(option=='enable'){
+      this.qbUpdateForm.get('comment').status = "ENABLED";
+    }else if(option=='disable'){
+      this.qbUpdateForm.get('comment').status = "DISABLED";
+      this.qbUpdateForm.value.comment='';
+      this.comment='';
+    }
+  }
+
+
+  saverestore(oldData: Data){
+    this.restoreService.save(oldData).pipe(
+      takeUntil(this.destroy),
+    ).subscribe(res => {
+      if(res){
+        window.location.reload();
       }
     });
   }
@@ -112,10 +168,6 @@ export class QbPageComponent implements OnInit, OnDestroy {
   onFileSelected(event:any):void{
     this.selectedFiles = event.target.files;
     this.fileName = this.selectedFiles[0].name;
-    this.qbUpdateForm.value.NamePDF = this.fileName;
-
-    this.isValidField('NamePDF');
-    this.getErrorMessage('NamePDF');
   }
 
   onUploadFile(){
@@ -149,8 +201,38 @@ export class QbPageComponent implements OnInit, OnDestroy {
       }
       this.selectedFiles = undefined;
     }
-  }  
+  }
+    
+  createLog(id: number) {
+    const localitem: string | any = localStorage.getItem('user');
+    const user = JSON.parse(localitem);
 
+    const formvalue: QbUpdate | any = this.qbUpdateForm.value;
+    let logdate = new Date();
+    let convertdate = new DatePipe('en-US').transform(logdate,'MM/dd/yyyy HH:mm:ss');
+    
+    if(formvalue.comment == undefined){
+      this.comment = formvalue.reason;   
+    }else{
+      this.comment =formvalue.reason+' '+formvalue.comment; 
+    }
+
+    let userlog: UserLog = {
+      idrestore : id,
+      username : user.username,
+      rol : user.rol,
+      action: 'QB - Updated information.',
+      comment: this.comment,
+      date_action: convertdate
+    };
+
+    this.userlogService.new(userlog).subscribe(
+      res=>{
+        console.log("Log Created: \n",res);
+      },
+      error => console.log("Something wrong.: "+error)
+    );
+  }
   /**
    * Animacion para abrir una ventana emergente
    * Para confirmar eliminación de archivo.
@@ -177,13 +259,19 @@ export class QbPageComponent implements OnInit, OnDestroy {
 
   getErrorMessage(field: string): string{
     let message:string = "";
-    if(this.qbUpdateForm.get(field).hasError('required') && field === 'file'){
+
+    if(this.qbUpdateForm.get(field).hasError('pattern') && field === 'file'){
+      message = 'Not a valid file format.';  
+    }
+    else if(this.qbUpdateForm.get(field).hasError('required') && field === 'file'){
       message = 'Select file.';  
     }
     else if(this.qbUpdateForm.get(field).hasError('required')){ 
       message = 'You must enter a value.';
     }else if(this.qbUpdateForm.get(field).hasError('pattern')){
-      message = 'Not a valid comment.';
+      message = 'Not a valid value.';
+    }else if(this.qbUpdateForm.get(field).hasError('minlength')){
+      message = 'This field must be longer.';
     }
 
     return message;
@@ -192,5 +280,9 @@ export class QbPageComponent implements OnInit, OnDestroy {
   applyFilter(event: Event){
     const filterValue = (event.target as HTMLInputElement).value;
     this.dataSource.filter = filterValue.trim().toLowerCase();
+  }
+
+  openSnackBar(message: string) {
+    this._snackBar.open(message, "Done");
   }
 }

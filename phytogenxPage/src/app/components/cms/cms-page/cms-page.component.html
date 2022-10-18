@@ -104,7 +104,7 @@
                             </ng-container>
 
                             <ng-container matColumnDef="Upload_PDF">
-                                <th class="marg-th" *matHeaderCellDef>
+                                <th *matHeaderCellDef>
                                     Upload PDF
                                     <mat-error *ngIf="isValidField('file')">
                                         {{getErrorMessage("file")}}
@@ -128,13 +128,16 @@
                                 <th class="marg-th" *matHeaderCellDef> Actions </th>
                                 <td class="center" *matCellDef="let col">
                                     <button 
-                                    class="submit-button"
+                                    class="btn-action"
                                     type="submit"
                                     (click)="onUpdate(col.ID)"
-                                    [disabled]="cmsUpdateForm.invalid">
-                                        <mat-icon class="align-item">cloud_upload</mat-icon>
+                                    [disabled]="cmsUpdateForm.invalid"
+                                    mat-icon-button>
+                                        <mat-icon>cloud_upload</mat-icon>
                                     </button>
-                                    <i *ngIf="rol === 'administrator'" class="align-item material-icons" (click)="openDeleteDialog(col.ID,'0ms', '0ms')">delete</i>
+                                    <button class="btn-action" *ngIf="rol === 'administrator'" type="button" mat-icon-button>
+                                        <mat-icon (click)="openDeleteDialog(col.ID,'0ms', '0ms')">delete</mat-icon>
+                                    </button>
                                 </td>
                             </ng-container>
                         </form>

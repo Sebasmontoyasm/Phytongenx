@@ -4,10 +4,10 @@
     <body>
         <div class="masthead bg-primary">          
             <div class="search-div">         
-            <button (click)=onReturn() class="icon">
-                <mat-icon >arrow_back</mat-icon>
-            </button> 
-            <input class="inputfilter" matInput placeholder="Filter Table" search (keyup)="applyFilter($event)" #input/>
+                <button (click)=onReturn() class="icon">
+                    <mat-icon >arrow_back</mat-icon>
+                </button> 
+                <input class="inputfilter" matInput placeholder="Filter Table" search (keyup)="applyFilter($event)" #input/>
             </div> 
             <div class="bg-primary">
                 <table class="table-primary table table-striped" mat-table matSort [dataSource]="dataSource">
@@ -25,15 +25,32 @@
                             <p class="align-center">{{col.PO_Number}}</p>
                         </td>
                     </ng-container>
-
-                    <ng-container  matColumnDef="Invoice">
-                        <th *matHeaderCellDef> Invoice </th>
-                        <td class="center" *matCellDef="let col">
-                            <p class="align-center"> {{col.Invoice_Number}} </p>
-                        </td>
-                    </ng-container>
-
+                    
                     <form [formGroup]="qbUpdateForm">
+                        <ng-container  matColumnDef="Invoice">
+                            <th *matHeaderCellDef> Invoice 
+                                <mat-error *ngIf="isValidField('Invoice_Number')">
+                                    {{getErrorMessage("Invoice_Number")}}
+                                </mat-error> 
+                            </th>
+                            
+                            <td *matCellDef="let col">
+                                <p *ngIf="col.Invoice_Number" class="align-centerinv">
+                                    <button class="icon-warning">
+                                        <mat-icon class="align-warning" mat-stroked-button *ngIf="col.Date_Quickbooks_Processed"  
+                                                  (click)="openSnackBar(col.Date_Quickbooks_Processed)">
+                                                  notification_important
+                                        </mat-icon>
+                                    </button>
+                                    {{col.Invoice_Number}} </p>
+                                <tr *ngIf="!col.Invoice_Number">
+                                    <mat-form-field>
+                                        <mat-label>Invoice number</mat-label>
+                                        <input matInput type="text" formControlName="Invoice_Number">
+                                    </mat-form-field>    
+                                </tr>                        
+                            </td>
+                        </ng-container>
                         <ng-container matColumnDef="Reason">
                             <th *matHeaderCellDef> 
                                 Reason 
@@ -45,9 +62,9 @@
                                 <mat-form-field class="full-width-input">
                                     <mat-label>Select reason</mat-label>
                                     <mat-select formControlName="reason">   
-                                        <mat-option value="Opcion 1">1</mat-option>
-                                        <mat-option value="Opcion 2">2</mat-option>
-                                        <mat-option value="Other">Other</mat-option>
+                                        <mat-option (click)="otherOption('disable')" value="Opcion 1">1</mat-option>
+                                        <mat-option (click)="otherOption('disable')" value="Opcion 2">2</mat-option>
+                                        <mat-option (click)="otherOption('enable')" value="Other">Other</mat-option>
                                     </mat-select>
                                 </mat-form-field>
                             </td>
@@ -63,19 +80,19 @@
                             <td *matCellDef="let col">
                                 <mat-form-field class="full-width-input">
                                     <mat-label>comment</mat-label>
-                                    <textarea matInput formControlName="comment" rows="1" cols="40">Comment</textarea>
+                                    <textarea [(ngModel)]="comment" matInput formControlName="comment" rows="1" cols="40">Comment</textarea>
                                 </mat-form-field>
                             </td>
                         </ng-container>
 
                         <ng-container matColumnDef="NamePDF">
-                            <th class="marg-th" *matHeaderCellDef>
+                            <th *matHeaderCellDef>
                                 Final PDF name
                                 <mat-error *ngIf="isValidField('file')">
                                     {{getErrorMessage("file")}}
                                 </mat-error>
                             </th>
-                            <td *matCellDef="let col">
+                            <td class="center" *matCellDef="let col">
                                 <div class="align-center" ng-controller="AppCtrl" layout-margin layout-padding>
                                     <choose-file layout="row" flex="50">
                                         <input formControlName="file" type="file" (change)="onFileSelected($event)">
@@ -91,21 +108,24 @@
 
                     <ng-container matColumnDef="Date_invoice_recieved">
                             <th *matHeaderCellDef> 
-                                Date invoce recived
-                                <mat-error *ngIf="isValidField('invoceDate')">
-                                    {{getErrorMessage("invoceDate")}}
+                                Date invoice
+                                <mat-error *ngIf="isValidField('Date_invoice_recieved')">
+                                    {{getErrorMessage("Date_invoice_recieved")}}
                                 </mat-error>
                             </th>
                             <td class="center" required *matCellDef="let col">  
-                                <mat-form-field class="full-width-input">
-                                    <mat-label>Date</mat-label>
-                                    <input matInput formControlName="invoceDate" type="datetime-local" max="{{today}}">   
-                                </mat-form-field>
+                                <p  *ngIf="col.Date_invoice_recieved" class="align-centerinv"> {{col.Date_invoice_recieved}} </p>
+                                <tr *ngIf="!col.Date_invoice_recieved">
+                                    <mat-form-field class="full-width-input">
+                                        <mat-label>Date</mat-label>
+                                        <input matInput formControlName="Date_invoice_recieved" type="datetime-local" max="{{today}}">   
+                                    </mat-form-field>
+                                </tr>
                             </td>
                         </ng-container>
 
                         <ng-container matColumnDef="Actions">
-                            <th class="marg-th" *matHeaderCellDef> Actions </th>
+                            <th *matHeaderCellDef> Actions </th>
                             <td class="center" *matCellDef="let col">
                                 <button 
                                 class="submit-button"

@@ -1,8 +1,8 @@
 export interface QbPerformance {
-    ID: number;
-    LastDate: Date;
-    InvoiceNumber: number;
-    Tries: number;
-    LastPO: number;
+    ID: number,
+    LastDate: string,
+    InvoiceNumber: string,
+    Tries: string,
+    LastPO: string,
     State: string;
 }

@@ -8,8 +8,7 @@ export interface Qb {
 }
 
 export interface QbUpdate{
-    comment:string;
-    Invoice: string;
-    NamePDF: string;
-    Date_invoice: string;
+    Invoice_Number: number,
+    NamePDF: string,
+    Date_invoice_recieved: string
 }

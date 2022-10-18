@@ -43,8 +43,8 @@ export class HeaderComponent implements OnInit, OnDestroy{
   openSingIn(enterAnimationDuration: string, exitAnimationDuration: string): void {
     this.singin.open(SinginPageComponent, {
     position: {top: '130px'},
-    width: '40%',
-    height: '69%',
+    width: '30%',
+    height: '60%',
     enterAnimationDuration,
     exitAnimationDuration
   });
