@@ -1,0 +1,17 @@
+body {
+    background: #dedede;
+}
+.page-wrap {
+    min-height: 100vh;
+}
+
+.align-items-center{
+    height: 50%;
+}
+
+.btn-icon{
+    margin-top: 50px;
+    margin-bottom: 25px;
+    color: black;
+    transform: scale(5);
+}

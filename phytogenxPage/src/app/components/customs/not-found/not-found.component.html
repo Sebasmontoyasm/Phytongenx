@@ -2,8 +2,21 @@
 <!DOCTYPE html>
 <html lang="en">
    <body>
-       <div class="masthead bg-primary">   
-            <p>not-found works!</p>
-        </div>
+        <header class="masthead bg-primary text-center">
+            <div class="page-wrap d-flex flex-row align-items-center">
+                <div class="container">
+                    <div class="row justify-content-center">
+                        <div class="col-md-12 text-center">
+                            <span class="display-1 d-block">404</span>
+                            <div class="mb-4 lead">The page you are looking for was not found.</div>
+                            <button class="btn-icon" (click)="home()">
+                                <mat-icon>home</mat-icon>
+                            </button>  
+                            <div class="mb-4 lead">Back to home</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </header>
     </body>
 </html>
