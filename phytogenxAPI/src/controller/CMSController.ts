@@ -3,7 +3,7 @@ import { Data } from "../entity/masterdata";
 import { CmsPerformance } from "../interface/cms_performance";
 import { AppDataSource } from "../data-source";
 import { validate } from "class-validator";
-import { LabResults } from "../entity/LabResults";
+import { Labresults } from "../entity/Labresults";
 
 export class CMSController {
 
@@ -26,9 +26,9 @@ export class CMSController {
 
     static getById = async (request: Request, response: Response) => {
         const ponumber = request.params.ponumber;
-        const labresultRepository = AppDataSource.getRepository(LabResults);
+        const labresultRepository = AppDataSource.getRepository(Labresults);
         try{
-            const labresults: LabResults[] = await labresultRepository.query('call labresult_detail(?)',[ponumber])
+            const labresults: Labresults[] = await labresultRepository.query('call labresult_detail(?)',[ponumber])
             response.send(labresults[0]);
         }catch(e){
             response.status(404).json({ message: 'Not result'});
@@ -36,7 +36,7 @@ export class CMSController {
     };
 
     static performance = async (request: Request, response: Response) => {
-        const cmsPerformanceRepository = AppDataSource.getRepository(LabResults);
+        const cmsPerformanceRepository = AppDataSource.getRepository(Labresults);
         let cmsPerList: CmsPerformance[];
         try{
             cmsPerList = await cmsPerformanceRepository.query('call cms_performance()');
@@ -61,7 +61,6 @@ export class CMSController {
             cms = await cmsRepository.findOneOrFail({where:{ID:id}});
             cms.Date_CSM_Processed = cmsDate;
             cms.PDF_Name = PDF_Name;
-            cms.Date_Quickbooks_Processed = 'Waiting for Pedro RPA.';
         }catch(e){
             response.status(404).json({ message: 'Cms not found'});
         }
@@ -78,7 +77,7 @@ export class CMSController {
             return response.status(409).json({menssage: 'Unknown error, contact your administrator.'})
         }
 
-        return response.status(201).json({message: 'Manual process performed.'});
+        return response.status(201).json({message: 'Manually proccessed cms performed.'});
     };
 
 }
