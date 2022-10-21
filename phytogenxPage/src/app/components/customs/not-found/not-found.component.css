@@ -10,8 +10,8 @@ body {
 }
 
 .btn-icon{
-    margin-top: 50px;
-    margin-bottom: 25px;
+    margin-top: 200px;
+    margin-bottom: 20px;
     color: black;
-    transform: scale(5);
+    transform: scale(3);
 }
