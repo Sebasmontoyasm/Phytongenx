@@ -33,7 +33,7 @@ export class CmscreatePageComponent implements OnInit, OnDestroy {
   validatePDF = /\S+\.pdf/; 
   
   cmsCreateForm: FormBuilder | any  = this.fb.group({
-    PO_Number: ['',[Validators.required,Validators.pattern(/\S+/)]],
+    PO_Number: ['',[Validators.required,Validators.pattern(/\S+/),Validators.minLength(5)]],
     file: ['',[Validators.required,Validators.pattern(this.validatePDF)]],
     PDF_Name: ['']
   });
@@ -68,7 +68,7 @@ export class CmscreatePageComponent implements OnInit, OnDestroy {
 
     formValue.PDF_Name = splitstr[0];
     formValue.Date_CSM_Processed = convertdate;
-    formValue.Date_Quickbooks_Processed = 'Waiting for Pedro RPA.'; 
+    formValue.Date_invoice_recieved = 'Waiting for Invoice.'; 
 
     this.mdService.new(formValue).pipe(
       takeUntil(this.destroy),
@@ -178,7 +178,10 @@ export class CmscreatePageComponent implements OnInit, OnDestroy {
         message = 'Not a valid file format.';  
       }else if(this.cmsCreateForm.get(field).hasError('pattern')){
         message = 'Not a valid purchase number.';
+      }else if(this.cmsCreateForm.get(field).hasError('minlength')){
+        message = 'This field must be longer.';
       }
+
       return message;    
     }
 
