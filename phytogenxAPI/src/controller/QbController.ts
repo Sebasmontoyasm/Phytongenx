@@ -70,33 +70,40 @@ export class QbController {
         const id = Number(request.params.id);
         try{
             qb = await qbRepository.findOneOrFail({where:{ID:id}});
+
             if(Invoice_Number || Invoice_Number != 0){
-                qb.Invoice_Number = Invoice_Number;
+                let invoiceFound: Data;
+                invoiceFound = await qbRepository.findOne({where:{Invoice_Number:Invoice_Number}});
+                
+                if(!invoiceFound){
+                    qb.Invoice_Number = Invoice_Number;
+                }else{
+                    return response.status(302).json({message: 'Invoice Found.'})    
+                }              
             }
-             
+
+            const validationOpt = { validationError: { target: false, value: false } };
+            const errors = await validate(qb,validationOpt);
+        
+            if(errors.length > 0){
+                return response.status(400).json(errors);
+            }
+
             qb.NamePDF = NamePDF;
             qb.Date_invoice_recieved = Date_invoice_recieved;
-            qb.Date_Quickbooks_Processed = 'Manual Proccess.';
+            qb.Date_Quickbooks_Processed = 'Manually proccessed.';
 
+            try{
+                await qbRepository.save(qb);
+            }catch(e){
+                return response.status(409).json({menssage: 'Unknown error, contact your administrator.'})
+            }
+            
         }catch(e){
             response.status(404).json({ message: 'Qb not found'});
-        }
-
-        const validationOpt = { validationError: { target: false, value: false } };
-        const errors = await validate(qb,validationOpt);
-        
-        if(errors.length > 0){
-            return response.status(400).json(errors);
-        }
-
-        try{
-            await qbRepository.save(qb);
-        }catch(e){
-            return response.status(409).json({menssage: 'Unknown error, contact your administrator.'})
-        }
+        }    
 
         return response.status(201).json({message: 'Manual process qb performed.'});
-        
     };
 
     static delete = async (request: Request, response: Response) =>{
