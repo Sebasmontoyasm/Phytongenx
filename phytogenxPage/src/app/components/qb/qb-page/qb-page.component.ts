@@ -56,7 +56,7 @@ export class QbPageComponent implements OnInit, OnDestroy {
     NamePDF: [''],
     file: ['',[Validators.required,Validators.pattern(this.validatePDF)]],
     Date_invoice_recieved: [this.today,[Validators.required]],
-    Invoice_Number: ['',[Validators.pattern('^[0-9]*$'),Validators.minLength(3)]]
+    Invoice_Number: ['',[Validators.pattern('^[0-9]*$'),Validators.minLength(4)]]
   });
   constructor(private qbService:QbService,
               private dialog: MatDialog,
@@ -110,11 +110,12 @@ export class QbPageComponent implements OnInit, OnDestroy {
         oldData = res;
       }
     });
-
     const formValue: QbUpdate | any = this.qbUpdateForm.value;
-    let convertDate = new DatePipe('en-US').transform(formValue.Date_invoice_recieved,'MM/dd/yyyy HH:mm');
+    let convertDate = new DatePipe('en-US').transform(formValue.Date_invoice_recieved,'MM/dd/yyyy HH:mm:ss');
     formValue.Date_invoice_recieved = convertDate;
-
+    formValue.NamePDF = this.fileName;
+    
+    console.log("FORMULARIO DESPUES DE NORMALIZAR:\n",formValue);
     this.qbService.update(id,formValue).pipe(
       takeUntil(this.destroy)
     ).subscribe(res => {
@@ -151,7 +152,7 @@ export class QbPageComponent implements OnInit, OnDestroy {
       takeUntil(this.destroy),
     ).subscribe(res => {
       if(res){
-        window.location.reload();
+        //window.location.reload();
       }
     });
   }
