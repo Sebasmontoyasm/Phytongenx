@@ -4,7 +4,7 @@ import { Data } from "./entity/masterdata"
 import { Restore } from "./entity/Restore"
 import { User } from "./entity/User"
 import { Userlog } from "./entity/Userlog"
-import { LabResults } from "./entity/LabResults"
+import { Labresults } from "./entity/Labresults"
 import { observablepedro } from "./entity/observablepedro"
 import { Invoices } from "./entity/Invoices"
 
@@ -13,11 +13,11 @@ export const AppDataSource = new DataSource({
     host: "localhost",
     port: 3306,
     username: "SS",
-    password: "1234",
+    password: "123456",
     database: "pgenx-cmsqb",
     synchronize: true,
     logging: false,
-    entities: [User,Data,Userlog,Restore,LabResults,observablepedro,Invoices],
+    entities: [User,Data,Userlog,Restore,Labresults,observablepedro,Invoices],
     migrations: [],
     subscribers: [],
 })

@@ -98,12 +98,12 @@ export class QbController {
             }catch(e){
                 return response.status(409).json({menssage: 'Unknown error, contact your administrator.'})
             }
-            
+
         }catch(e){
             response.status(404).json({ message: 'Qb not found'});
         }    
 
-        return response.status(201).json({message: 'Manual process qb performed.'});
+        return response.status(201).json({message: 'Manually proccessed qb performed.'});
     };
 
     static delete = async (request: Request, response: Response) =>{
