@@ -4,6 +4,7 @@ import { Masterdata } from  "../interface/masterdata";
 import { AppDataSource } from "../data-source";
 import { validate } from "class-validator";
 
+
 export class MDController {
 
     static getAll = async (request: Request, response: Response) => {
@@ -49,21 +50,30 @@ export class MDController {
 
     static new = async (request: Request, response: Response) => {
         const mdRepository = AppDataSource.getRepository(Data);
-
         const validationOpt = { validationError: { target: false, value: false } };
         const errors = await validate(request.body,validationOpt);
-        
+          
+        const {PO_Number} = request.body;
+
         if(errors.length > 0){
             return response.status(400).json(errors);
-        }
+        } 
 
-        try{
-            await mdRepository.save(request.body);
-            response.status(201).json({ message: 'CMS process created'});
-        }catch(e){
-            console.log("Error: "+e);
-            response.status(404).json({ message: 'Not result'});
-        }
+        let PoFound: Data[];
+        PoFound = await mdRepository.createQueryBuilder()
+        .where("LOWER(PO_Number) = LOWER(:PO_Number)", { PO_Number }).getMany();
+
+        if(!PoFound[0]){
+            try{
+                await mdRepository.save(request.body);
+                response.status(201).json({ message: 'CMS process created'});
+            }catch(e){
+                response.status(404).json({ message: 'Not result'});
+            }
+          
+        }else{
+            response.status(302).json({ message: 'PO Number Found.'});    
+        } 
     };
 
     static delete = async (request: Request, response: Response) =>{
