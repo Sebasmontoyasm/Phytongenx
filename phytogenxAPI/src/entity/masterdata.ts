@@ -6,7 +6,7 @@ export class Data {
     @PrimaryGeneratedColumn('increment')
     ID: number;
 
-    @Column({type:"varchar",length: 100,nullable:true})
+    @Column({unique: true,type:"varchar",length: 100,nullable:true})
     PO_Number: string;
 
     @Column({type:"varchar",length: 150,nullable:true})
@@ -15,7 +15,7 @@ export class Data {
     @Column({type:"varchar",length: 300,nullable:true})
     PDF_Name: string;
 
-    @Column({type:"int", width:11,nullable:true})
+    @Column({unique: true,type:"int", width:11,nullable:true})
     Invoice_Number: number;
 
     @Column({type:"varchar",length: 150,nullable:true})

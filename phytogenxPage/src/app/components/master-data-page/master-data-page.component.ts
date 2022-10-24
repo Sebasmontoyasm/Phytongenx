@@ -79,7 +79,7 @@ export class MasterDataPageComponent implements OnInit, OnDestroy {
         this.dataSource.sort = this.sort;
       },
       error => {
-        this.alert.alertMessage(error[0],error[1])
+        this.alert.alertMessage(error[0],error[1]);
       }
     );
   }
