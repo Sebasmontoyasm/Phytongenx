@@ -1,13 +1,12 @@
 import { Component, OnInit, Inject, OnDestroy } from '@angular/core';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { UserlogService } from 'src/app/services//userlog/userlog.service';
 import { DatePipe } from '@angular/common';
-import { UserLog } from 'src/app/interfaces/user/userlog';
 import { UserService } from 'src/app/services/user/user.service';
 import { User, UserEdit } from 'src/app/interfaces/user/user';
 import { FormBuilder, Validators } from '@angular/forms';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
+import { AlertcodesService } from 'src/app/services/alerts/alertcodes.service';
 
 @Component({
   selector: 'app-useredit-page',
@@ -32,9 +31,9 @@ export class UsereditPageComponent implements OnInit, OnDestroy {
   constructor(@Inject(MAT_DIALOG_DATA) public data: {user: UserEdit},
    public dialogRef: MatDialogRef<UsereditPageComponent>,
    private userService:UserService,
-   private userlogService:UserlogService,
    private fb:FormBuilder,
-   private editUser: MatDialog
+   private editUser: MatDialog,
+   private alert:AlertcodesService
    ) {
    }
    
@@ -58,22 +57,12 @@ export class UsereditPageComponent implements OnInit, OnDestroy {
       if(res){
         window.location.reload();
         this.closeEditUser();
+        this.alert.alertMessage('201',res.message);
       }
-
+    },error => {
+        this.alert.alertMessage(String(error[0]),error[1]);
     });
-  }
 
-  changeReportUser(user: User) {
-    const localitem: string | any = localStorage.getItem('user');
-    const userToken = JSON.parse(localitem);
-
-
-    let ChangedFormat = this.pipe.transform(this.today, 'dd/MM/YYYY');
-    this.dateAction = ChangedFormat;
-    
-    //falta aqui
-
-    window.location.reload();
   }
 
   getErrorMessage(field: string): string{

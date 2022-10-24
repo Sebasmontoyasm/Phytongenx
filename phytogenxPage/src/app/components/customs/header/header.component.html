@@ -2,15 +2,14 @@
     <!-- Navigation-->   
     <nav class="navbar navbar-expand-lg bg-secondary text-uppercase fixed-top" id="mainNav">
         <div class="container">
-            <a class="navbar-brand" href="/homepage">Phytogenx</a>  
+            <a class="navbar-brand">Phytogenx</a>
             <div class="collapse navbar-collapse" id="navbarResponsive">
                 <ul class="navbar-nav ms-auto">
-                    <li *ngIf="isLogged && rol !== 'guest'" class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded" href="/masterdata">Master Data</a></li>
+                    <li *ngIf="isLogged" class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded" href="/masterdata">Master Data</a></li>
                     <li *ngIf="isLogged && rol === 'administrator'" class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded" href="/cms">CMS</a></li>
                     <li *ngIf="isLogged && rol === 'administrator'" class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded" href="/qb">QB</a></li>
                     <li *ngIf="isLogged && rol === 'cms'" class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded" href="/cms">CMS</a></li>
                     <li *ngIf="isLogged && rol === 'qb'" class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded" href="/qb">QB</a></li>
-
                     <li class="nav-item mx-0 mx-lg-1"> 
                         <button *ngIf="!isLogged" mat-icon-button>
                             <mat-icon  class="btn-icon" [ngStyle]="{'color':'white'}" *ngIf="!isLogged" (click)="closeSingIn()" (click)="openSingIn('1000ms', '1000ms')">account_circle</mat-icon>

@@ -4,7 +4,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { HomePageComponent } from './components/home-page/home-page.component';
 import { MasterDataPageComponent } from './components/master-data-page/master-data-page.component';
-import { SinginPageComponent } from './components/singin-page/singin-page.component'; 
+import { SigninPageComponent } from './components/signin-page/signin-page.component';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatTableModule } from '@angular/material/table';
@@ -48,7 +48,7 @@ import { RestorePageComponent } from './components/restore-page/restore-page.com
     AppComponent,
     HomePageComponent,
     MasterDataPageComponent,
-    SinginPageComponent,
+    SigninPageComponent,
     CmsPageComponent,
     DialogdeletePageComponent,
     CmsPerformancePageComponent,

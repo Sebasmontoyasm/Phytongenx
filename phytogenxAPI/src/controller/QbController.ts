@@ -21,7 +21,7 @@ export class QbController {
             response.send(mdList[0]);
             
         }else{
-            response.status(404).json({message: 'Not Result'});
+            response.status(404).json({message: 'The requested information is not found'});
         }
     }
 
@@ -37,7 +37,7 @@ export class QbController {
         if(qbPerformance.length > 0){
             response.send(qbPerformance[0]);
         }else{
-            response.status(404).json({message: 'Not Result'});
+            response.status(404).json({message: 'The requested information is not found'});
         }
     }
 
@@ -58,7 +58,7 @@ export class QbController {
         if(qbdetails.length > 0){
             response.send(qbdetails);
         }else{
-            response.status(404).json({message: 'Not Result'});
+            response.status(404).json({message: 'The requested information is not found'});
         }
     };
 
@@ -78,7 +78,7 @@ export class QbController {
                 if(!invoiceFound){
                     qb.Invoice_Number = Invoice_Number;
                 }else{
-                    return response.status(302).json({message: 'Invoice Found.'})    
+                    return response.status(302).json({message: 'Invoice already exists.'})    
                 }              
             }
 

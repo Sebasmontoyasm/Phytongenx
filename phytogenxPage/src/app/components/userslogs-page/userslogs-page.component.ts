@@ -8,6 +8,7 @@ import { takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs';
 import { UserLog } from 'src/app/interfaces/user/userlog';
 import { Router } from '@angular/router';
+import { AlertcodesService } from 'src/app/services/alerts/alertcodes.service';
 
 @Component({
   selector: 'app-userslogs-page',
@@ -27,7 +28,8 @@ export class UserslogsPageComponent implements OnInit, OnDestroy {
   posts:any;
 
   constructor(private userlogService: UserlogService,
-              private router: Router) { }
+              private router: Router,
+              private alert:AlertcodesService) { }
 
   ngOnInit(): void {
     this.getUserlogs();
@@ -44,13 +46,14 @@ export class UserslogsPageComponent implements OnInit, OnDestroy {
       takeUntil(this.destroy)
     ).subscribe(
       res=>{
-        console.log("userlog: ",res);
         this.posts=res;
         this.dataSource = new MatTableDataSource(this.posts);
         this.dataSource.paginator = this.paginator;
         this.dataSource.sort = this.sort;
       },
-      err => console.log("Error: "+err)
+      error => {
+        this.alert.alertMessage(error[0],error[1]);
+      } 
     );
   }
 

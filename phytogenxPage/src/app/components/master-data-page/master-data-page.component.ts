@@ -8,6 +8,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { Data } from 'src/app/interfaces/data/data';
 import { takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs';
+import { AlertcodesService } from 'src/app/services/alerts/alertcodes.service';
 
 @Component({
   selector: 'app-master-data-page',
@@ -28,7 +29,8 @@ export class MasterDataPageComponent implements OnInit, OnDestroy {
   posts:any;
 
   constructor(private masterDataService:MasterDataService,
-              private _snackBar: MatSnackBar) { }
+              private _snackBar: MatSnackBar,
+              private alert:AlertcodesService) { }
 
   ngOnInit(): void {
     this.getMasterData();
@@ -76,8 +78,8 @@ export class MasterDataPageComponent implements OnInit, OnDestroy {
         this.dataSource.paginator = this.paginator;
         this.dataSource.sort = this.sort;
       },
-      err => {
-        console.log("Something wrong, it can't get Data \n "+err);
+      error => {
+        this.alert.alertMessage(error[0],error[1])
       }
     );
   }

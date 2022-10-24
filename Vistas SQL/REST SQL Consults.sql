@@ -1,17 +1,17 @@
 /**
 * Creación de Usuario SS con todo los permisos
 **/
-CREATE USER 'SS'@'localhost' IDENTIFIED VIA mysql_native_password USING '***';
-GRANT ALL PRIVILEGES ON *.* TO 'SS'@'localhost' REQUIRE NONE WITH GRANT OPTION
-    MAX_QUERIES_PER_HOUR 0 MAX_CONNECTIONS_PER_HOUR 0 MAX_UPDATES_PER_HOUR 0 MAX_USER_CONNECTIONS 0;
-GRANT ALL PRIVILEGES ON `pgenx-cmsqb`.* TO 'SS'@'localhost';
+CREATE USER 'SS'@'localhost' IDENTIFIED VIA mysql_native_password
+USING '***';GRANT SELECT, INSERT, UPDATE, DELETE, FILE, CREATE TEMPORARY TABLES,
+CREATE VIEW, SHOW VIEW, EXECUTE ON *.* TO 'SS'@'localhost'
+REQUIRE NONE WITH MAX_QUERIES_PER_HOUR 0 MAX_CONNECTIONS_PER_HOUR 0 MAX_UPDATES_PER_HOUR 0 MAX_USER_CONNECTIONS 0;
+  
+GRANT ALL PRIVILEGES ON `mysql`.* TO 'SS'@'localhost';
 
 /**
 * Tabla para almacenar la información eliminada por el usuario 
-* en caso de recuperación + un status de por que y quien fue eliminada.
 **/
-CREATE TABLE IF NOT EXISTS data_delete LIKE data;
-ALTER TABLE data_delete  ADD Status VARCHAR(250) NOT NULL ;
+CREATE TABLE IF NOT EXISTS restore LIKE data;
 
 /**
 * Notificación a pedro de que el usuario o cliente local ha realizado un cambio.
@@ -24,38 +24,21 @@ CREATE TABLE IF NOT EXISTS observablePedro(
 
 INSERT INTO observablePedro values(0);
 
-CREATE TABLE user(
-    ID INT NOT NULL PRIMARY KEY AUTO_INCREMENT ,
-    NAME varchar(255) NOT NULL,
-    USERNAME varchar(255) NOT NULL,
-    PASSWORD varchar(255) NOT NULL,
-    ROL varchar(255) NOT NULL,
-    CREATEDAT DATE NOT NULL,
-    UPDATEAT DATE
-);
-
-INSERT INTO `USER`(
-    `NAME`,
-    `USERNAME`,
-    `PASSWORD`,
-    `ROL`,
-    `CREATEDAT`,
-    `UPDATEAT`
-    )
-    VALUES (
-        'Sebastian Montoya',
-        'sebastian.montoya',
-        '123456',
-        'administrator',
-        CURRENT_DATE,
-        null
+CREATE TABLE IF NOT EXISTS user(
+    id INT NOT NULL PRIMARY KEY AUTO_INCREMENT ,
+    name varchar(255) NOT NULL,
+    username varchar(255) NOT NULL,
+    password varchar(255) NOT NULL,
+    rol varchar(255) NOT NULL,
+    createdAt varchar(255) NOT NULL,
+    updateAt varchar(255)
 );
 
 /**
 * Tabla para almacenar los cambios hechos por el usuario y los comentarios 
 **/
 
-CREATE TABLE TABLE IF NOT EXISTS userlogs(
+CREATE TABLE IF NOT EXISTS userlog(
     ID INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
     USERNAME VARCHAR(255) NOT NULL,
     ROL varchar(255) NOT NULL,
@@ -68,30 +51,6 @@ CREATE TABLE TABLE IF NOT EXISTS userlogs(
 );
 
 /**
-* TESTING DELETING METHOD CMS
-*/
-INSERT INTO `data`(
-    `ID`,
-    `PO_Number`,
-    `Date_CSM_Processed`,
-    `PDF_Name`,
-    `Invoice_Number`,
-    `Date_invoice_recieved`,
-    `Date_Quickbooks_Processed`,
-    `NamePDF`
-    )
-    VALUES (
-        '515',
-        '22200B_Misc',
-        '',
-        '',
-        '48128',
-        '08/02/2022 03:19:23',
-        null,
-        null
-);
-
-/**
 * Información en la que Pedro no proceso por que no ha encontrado la factura 
 * Se debe mostrar para realizarla de forma Manual.
 */
@@ -100,29 +59,11 @@ DROP PROCEDURE IF EXISTS cmsupmanualprocedure//
 CREATE PROCEDURE cmsupmanualprocedure()
 BEGIN
     SELECT ID,PO_Number,Date_CSM_Processed FROM data
-	WHERE Date_CSM_Processed="" AND (PO_Number IS NOT NULL OR PO_Number=!'');
+	WHERE (Date_CSM_Processed="" OR Date_CSM_Processed IS NULL) AND (PO_Number IS NOT NULL OR PO_Number=!'');
 END;//
 DELIMITER ;
 
-call cmsupmanualprocedure()
-
-/**
-* Backup archivos eliminados en cms
-* Posibilemente para todo
-*/
-DELIMITER //
-DROP PROCEDURE IF EXISTS databackup//
-CREATE PROCEDURE databackup(IN searchid INT)
-BEGIN
-    INSERT INTO data_delete
-    SELECT ID,PO_Number,Date_CSM_Processed,PDF_Name,Invoice_Number,Date_invoice_recieved,Date_Quickbooks_Processed,NamePDF FROM data
-    WHERE ID = searchid;
-
-    SELECT * FROM data_delete;
-END//
-DELIMITER ;
-
-call databackup(515);
+--call cmsupmanualprocedure()
 
 /**
 * Información en la que Pedro Calidad QB no proceso por que no ha encontrado la PO_NUMBER 
@@ -154,7 +95,7 @@ BEGIN
 END//
 DELIMITER ;
 
-call qbmanually();
+--call qbmanually();
 
 /**
 * Información en la que Pedro Calidad QB no proceso por que no ha encontrado la PO_NUMBER 
@@ -172,7 +113,7 @@ BEGIN
 END//
 DELIMITER ;
 
-call qbduplicated();
+--call qbduplicated();
 
 /**
 * DelayQb es el tiempo que obtiene las PO que no han sido procesadas por Pedro Invoice 
@@ -189,7 +130,7 @@ BEGIN
 END//
 DELIMITER ;
 
-call DelayQb();
+--call DelayQb();
 
 /**
 * Daysince son los dias que han pasado sin que se halla encontrado una PO
@@ -207,7 +148,7 @@ BEGIN
 END//
 DELIMITER ;
 
-call DaysSince();
+--call DaysSince();
     
 DELIMITER //
 DROP PROCEDURE IF EXISTS masterdata//
@@ -244,7 +185,7 @@ BEGIN
 END//
 DELIMITER ;
 
-CALL masterdata();
+--CALL masterdata();
 
 /**
 *
@@ -259,5 +200,183 @@ BEGIN
 END//
 DELIMITER ;
 
-CALL restore_data();
+--CALL restore_data();
 
+/**
+*
+**/
+DELIMITER //
+
+DROP PROCEDURE IF EXISTS update_cms_format//
+CREATE PROCEDURE update_cms_format()
+BEGIN
+
+  DECLARE var_id INTEGER;
+  DECLARE var_cms_date varchar(255);
+
+  DECLARE var_final INTEGER DEFAULT 0;
+
+  DECLARE new_format CURSOR FOR
+  SELECT ID, 
+    if(Date_CSM_Processed = '','', DATE_FORMAT(STR_TO_DATE(Date_CSM_Processed, '%m/%d/%Y %H:%i:%s'), '%m/%d/%Y %H:%i:%s')) AS new_date
+  FROM data;
+
+  DECLARE CONTINUE HANDLER FOR NOT FOUND SET var_final = 1;
+
+  OPEN new_format;
+
+  bucle: LOOP
+
+    FETCH new_format INTO var_id, var_cms_date;
+
+    IF var_final = 1 THEN
+      LEAVE bucle;
+    END IF;
+
+    UPDATE data SET Date_CSM_Processed = var_cms_date WHERE ID = var_id;
+
+  END LOOP bucle;
+  CLOSE new_format;
+END//
+DELIMITER ;
+
+CALL update_cms_format();
+
+
+/**
+*
+**/
+SELECT ID,DATE 
+FROM invoices
+WHERE DATE LIKE '%A%' OR DATE LIKE '%P%';
+
+
+/**
+*
+**/
+DELIMITER //
+
+DROP PROCEDURE IF EXISTS update_invoice_format//
+CREATE PROCEDURE update_invoice_format()
+BEGIN
+
+  DECLARE var_id INTEGER;
+  DECLARE var_invoice_date varchar(255);
+
+  DECLARE var_final INTEGER DEFAULT 0;
+
+  DECLARE new_format CURSOR FOR
+  SELECT ID, 
+         if(Date_invoice_recieved = '','', DATE_FORMAT(STR_TO_DATE(Date_invoice_recieved, '%m/%d/%Y %H:%i:%s'), '%m/%d/%Y %H:%i:%s')) AS new_date
+  FROM data
+  WHERE Date_invoice_recieved LIKE '%/%/%';
+
+  DECLARE CONTINUE HANDLER FOR NOT FOUND SET var_final = 1;
+
+  OPEN new_format;
+
+  bucle: LOOP
+
+    FETCH new_format INTO var_id, var_invoice_date;
+
+    IF var_final = 1 THEN
+      LEAVE bucle;
+    END IF;
+
+    UPDATE data SET Date_invoice_recieved = var_invoice_date WHERE ID = var_id;
+
+  END LOOP bucle;
+  CLOSE new_format;
+END//
+DELIMITER ;
+
+CALL update_invoice_format();
+
+/**
+*
+**/
+DELIMITER //
+
+DROP PROCEDURE IF EXISTS update_qb_format//
+CREATE PROCEDURE update_qb_format()
+BEGIN
+
+  DECLARE var_id INTEGER;
+  DECLARE var_qb_date varchar(255);
+
+  DECLARE var_final INTEGER DEFAULT 0;
+
+  DECLARE new_format CURSOR FOR
+  SELECT ID, 
+         if(Date_Quickbooks_Processed = '','', DATE_FORMAT(STR_TO_DATE(Date_Quickbooks_Processed, '%m/%d/%Y %H:%i:%s'), '%m/%d/%Y %H:%i:%s')) AS new_date
+  FROM data
+  WHERE Date_Quickbooks_Processed LIKE '%/%/%';
+
+  DECLARE CONTINUE HANDLER FOR NOT FOUND SET var_final = 1;
+
+  OPEN new_format;
+
+  bucle: LOOP
+
+    FETCH new_format INTO var_id, var_qb_date;
+
+    IF var_final = 1 THEN
+      LEAVE bucle;
+    END IF;
+
+    UPDATE data SET Date_Quickbooks_Processed = var_qb_date WHERE ID = var_id;
+
+  END LOOP bucle;
+  CLOSE new_format;
+END//
+DELIMITER ;
+
+CALL update_qb_format();
+
+/**
+*
+**/
+SELECT ID,DATE 
+FROM labresults
+WHERE DATE LIKE '%A%' OR DATE LIKE '%P%';
+
+/**
+*
+*
+**/
+DELIMITER //
+
+DROP PROCEDURE IF EXISTS update_labresults_format//
+CREATE PROCEDURE update_labresults_format()
+BEGIN
+
+  DECLARE var_id INTEGER;
+  DECLARE var_labresult_date varchar(255);
+
+  DECLARE var_final INTEGER DEFAULT 0;
+
+  DECLARE new_format CURSOR FOR
+  SELECT ID, 
+         if(Date = '','', DATE_FORMAT(STR_TO_DATE(Date, '%m/%d/%Y %H:%i:%s'), '%m/%d/%Y %H:%i:%s')) AS new_date
+  FROM labresults;
+
+  DECLARE CONTINUE HANDLER FOR NOT FOUND SET var_final = 1;
+
+  OPEN new_format;
+
+  bucle: LOOP
+
+    FETCH new_format INTO var_id, var_labresult_date;
+
+    IF var_final = 1 THEN
+      LEAVE bucle;
+    END IF;
+
+    UPDATE labresults SET Date = var_labresult_date WHERE ID = var_id;
+
+  END LOOP bucle; 
+  CLOSE new_format;
+END//
+DELIMITER ;
+
+CALL update_labresults_format()

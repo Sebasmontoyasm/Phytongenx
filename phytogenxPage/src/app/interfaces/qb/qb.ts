@@ -10,5 +10,5 @@ export interface Qb {
 export interface QbUpdate{
     Invoice_Number: number,
     NamePDF: string,
-    Date_invoice_recieved: string
+    Date_invoice_recieved: string,
 }

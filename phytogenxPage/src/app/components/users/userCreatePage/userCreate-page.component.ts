@@ -1,14 +1,12 @@
 import { Component, OnInit, Inject, OnDestroy } from '@angular/core';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { UserlogService } from 'src/app/services//userlog/userlog.service';
 import { DatePipe } from '@angular/common';
-import { UserLog } from 'src/app/interfaces/user/userlog';
 import { UserService } from 'src/app/services/user/user.service';
-import { User, UserCreate } from 'src/app/interfaces/user/user';
+import { UserCreate } from 'src/app/interfaces/user/user';
 import { FormBuilder, Validators } from '@angular/forms';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-import { Router } from '@angular/router';
+import { AlertcodesService } from 'src/app/services/alerts/alertcodes.service';
 
 @Component({
   selector: 'app-usercreate-page',
@@ -20,9 +18,12 @@ export class UserCreatePageComponent implements OnInit, OnDestroy {
   pipe = new DatePipe('en-US');
   dateAction: any;
   
-  hide = false;
+  hide:boolean = false;
+  APIMessage:string = '';
+
   private isValidusername = /\S+\.\S+/;
   private destroy = new Subject<any>();
+  
 
   userCreateForm: FormBuilder | any  = this.fb.group({
     name: ['',[Validators.required,Validators.pattern(/\S+/)]],
@@ -33,12 +34,11 @@ export class UserCreatePageComponent implements OnInit, OnDestroy {
   });
 
   constructor(@Inject(MAT_DIALOG_DATA)
-   public dialogRef: MatDialogRef<UserCreatePageComponent>,
-   private userService:UserService,
-   private userlogService:UserlogService,
-   private fb:FormBuilder,
-   private newUser: MatDialog,
-   private today: DatePipe  
+    public dialogRef: MatDialogRef<UserCreatePageComponent>,
+    private userService:UserService,
+    private fb:FormBuilder,
+    private newUser: MatDialog, 
+    private alert: AlertcodesService
    ) {
    }
    
@@ -69,18 +69,14 @@ export class UserCreatePageComponent implements OnInit, OnDestroy {
         window.location.reload();
         this.closenewUser();
       }
-    });
-  }
-
-  changeReportUser(user: User) {
-    const localitem: string | any = localStorage.getItem('user');
-    const userToken = JSON.parse(localitem);
-
-
-  
-    //FALTA AQUI
-
-    window.location.reload();
+    },error => {
+      if(error[0] == '302'){
+        this.APIMessage = error[1];
+      }else{
+        this.alert.alertMessage(error[0],error[1]);
+      }
+    }
+    );
   }
 
   rolOption(rol: string): string{

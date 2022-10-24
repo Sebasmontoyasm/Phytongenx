@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { CanActivate } from '@angular/router';
+import { CanActivate, Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { map, take } from 'rxjs/operators';
 import { AuthService } from '../../services/auth/auth.service';
@@ -9,7 +9,6 @@ import { AuthService } from '../../services/auth/auth.service';
 })
 export class CheckSinginGuard implements CanActivate {
   constructor(private authService: AuthService){
-
   }
 
   canActivate(): Observable<boolean> {
@@ -17,8 +16,5 @@ export class CheckSinginGuard implements CanActivate {
       take(1),
       map((isLogged: boolean) => isLogged)
     )
-
-    
   }
-  
 }

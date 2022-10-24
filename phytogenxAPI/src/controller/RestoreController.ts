@@ -18,7 +18,7 @@ export class RestoreController {
             response.send(restores[0]);
             
         }else{
-            response.status(404).json({message: 'Not Result'});
+            response.status(404).json({message: 'You have no records registered so far.'});
         }
     }
 
@@ -30,15 +30,14 @@ export class RestoreController {
         const errors = await validate(request.body,validationOpt);
 
         if(errors.length > 0){
-            return response.status(400).json(errors);
+            return response.status(400).json({message: 'Something has gone wrong.'});
         }
 
         try{
             await restoreRepository.save(request.body);
             response.status(201).json({ message: 'Save restore data.'});
         }catch(e){
-            console.log("Error: "+e);
-            response.status(404).json({ message: 'Fail restore data.'});
+            response.status(404).json({ message: 'The information could not be backed up.'});
         }
     };   
 }

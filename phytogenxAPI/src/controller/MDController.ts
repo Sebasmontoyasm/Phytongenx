@@ -13,14 +13,14 @@ export class MDController {
         try{
             mdList = await mdRepository.query('call masterdata()');
         }catch(e){
-            response.status(404).json({message: 'Somenthing goes wrong!'});
+            response.status(404).json({message: 'Somenthing goes wrong, Please contact with your administrator.'});
         }
-
+        
         if(mdList.length > 0){
             response.send(mdList[0]);
             
         }else{
-            response.status(404).json({message: 'Not Result'});
+            response.status(404).json({message: 'Sorry, the requested information was not found.'});
         }
     }
 
@@ -32,7 +32,7 @@ export class MDController {
             const md = await mdRepository.findOneOrFail({where:{ID:id}});
             response.send(md);
         }catch(e){
-            response.status(404).json({ message: 'Not result'});
+            response.status(404).json({ message: "The requested information is not found."});
         }
     };
     
@@ -68,11 +68,11 @@ export class MDController {
                 await mdRepository.save(request.body);
                 response.status(201).json({ message: 'CMS process created'});
             }catch(e){
-                response.status(404).json({ message: 'Not result'});
+                response.status(404).json({ message: 'Somenthing goes wrong!'});
             }
           
         }else{
-            response.status(302).json({ message: 'PO Number Found.'});    
+            response.status(302).json({ message: 'Purchase order already exists.'});    
         } 
     };
 
@@ -87,10 +87,15 @@ export class MDController {
             response.status(404).json({ message: 'Unknown error, contact your administrator.'});
         }
         
-        mdRepository.delete(id);
-
-        response.status(201).json({message: 'Data deleted'});
-    };
+        try{
+            mdRepository.delete(id);
+            response.status(201).json({message: 'Data deleted.'});
+        }catch(e){
+            response.status(404).json({ message: "The information could not be deleted."});            
+        }
+    
+    }; 
 }
+
 
 export default MDController;

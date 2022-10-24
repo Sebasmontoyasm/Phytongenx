@@ -1,8 +1,8 @@
 <div mat-dialog-content>
     <mat-card class="wight-card">
-        <mat-card-title>Sing In</mat-card-title>
+        <mat-card-title>Sign In</mat-card-title>
         <mat-progress-bar mode="indeterminate"></mat-progress-bar>
-        <form [formGroup]="singInForm" (ngSubmit)="onSingin()">
+        <form [formGroup]="signInForm" (ngSubmit)="onSignin()">
             <mat-card-content>
                 <mat-form-field class="full-width-input">
                     <mat-label>User Name</mat-label>
@@ -31,13 +31,16 @@
                     <mat-error class="margin-error" *ngIf="isValidField('password')">
                         {{getErrorMessage("password")}}
                     </mat-error>
-                </mat-form-field>  
+                </mat-form-field>
+                <mat-error class="margin-error" *ngIf="{APIMessages}">
+                    {{APIMessages}}
+                </mat-error>  
             </mat-card-content>
             <mat-divider inset></mat-divider>
             <mat-card-actions>
-                <button type="button" (click)="closeSingIn()" mat-raised-button color="secondary">Cancel</button>
+                <button type="button" (click)="closeSignIn()" mat-raised-button color="secondary">Cancel</button>
                 <button type="submit"
-                        [disabled]="singInForm.invalid"
+                        [disabled]="signInForm.invalid"
                         mat-raised-button
                         color="primary">Submit</button>
             </mat-card-actions>

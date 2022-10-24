@@ -60,11 +60,11 @@ export class QbService {
   }
 
   private handlerError(err:any): Observable<never> {
-    let errorMessage = 'An error occurred retrienving data';
+    let status: string[] = ['999','Uknow error'];
     if(err){
-      errorMessage= `Error: code ${err.message}`
+      status[0] = err.status;
+      status[1] = err.error.message;
     }
-    window.alert(errorMessage)  
-    return throwError(errorMessage);
+    return throwError(status);
   }
 }

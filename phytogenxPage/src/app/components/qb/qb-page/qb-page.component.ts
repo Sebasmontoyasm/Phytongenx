@@ -20,6 +20,7 @@ import { MasterDataService } from 'src/app/services/masterdata/masterdata.servic
 import { RpaService } from 'src/app/services/rpa/rpa.service';
 import { RestoreService } from 'src/app/services/restore/restore.service';
 import { UserlogService } from 'src/app/services/userlog/userlog.service';
+import { AlertcodesService } from 'src/app/services/alerts/alertcodes.service';
 
 @Component({
   selector: 'app-qb-page',
@@ -37,6 +38,8 @@ export class QbPageComponent implements OnInit, OnDestroy {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
   posts:any;
+
+  ApiMessage:string='';
 
   selectedFiles?: any;
   progress: number = 0;
@@ -67,7 +70,8 @@ export class QbPageComponent implements OnInit, OnDestroy {
               private mdService: MasterDataService,
               private rpaService: RpaService,
               private restoreService: RestoreService,
-              private userlogService: UserlogService) { }
+              private userlogService: UserlogService,
+              private alert: AlertcodesService) { }
 
   ngOnInit(): void {
     const localitem: string | any = localStorage.getItem('user');
@@ -93,7 +97,9 @@ export class QbPageComponent implements OnInit, OnDestroy {
         this.dataSource.paginator = this.paginator;
         this.dataSource.sort = this.sort;
       },
-      err => console.log("Error Qb Update: "+err)
+      error => {
+        this.alert.alertMessage(error[0],error[1]);
+      }
     );
   }
 
@@ -109,13 +115,14 @@ export class QbPageComponent implements OnInit, OnDestroy {
       if(res){
         oldData = res;
       }
+    },error => {
+      this.alert.alertMessage(error[0],error[1]);
     });
     const formValue: QbUpdate | any = this.qbUpdateForm.value;
     let convertDate = new DatePipe('en-US').transform(formValue.Date_invoice_recieved,'MM/dd/yyyy HH:mm:ss');
     formValue.Date_invoice_recieved = convertDate;
     formValue.NamePDF = this.fileName;
     
-    console.log("FORMULARIO DESPUES DE NORMALIZAR:\n",formValue);
     this.qbService.update(id,formValue).pipe(
       takeUntil(this.destroy)
     ).subscribe(res => {
@@ -130,8 +137,16 @@ export class QbPageComponent implements OnInit, OnDestroy {
               console.log("Somenthing wrong");
             }
           },
-          error => console.log("Error with RPA report: "+error),
+          error => {
+            this.alert.alertMessage(error[0],error[1]);  
+          }
         );
+      }
+    }, error => {
+      if(error[0]=='302'){
+        this.ApiMessage = error[1];
+      }else{
+        this.alert.alertMessage(error[0],error[1]);
       }
     }); 
   }
@@ -152,7 +167,7 @@ export class QbPageComponent implements OnInit, OnDestroy {
       takeUntil(this.destroy),
     ).subscribe(res => {
       if(res){
-        //window.location.reload();
+        window.location.reload();
       }
     });
   }
@@ -231,7 +246,9 @@ export class QbPageComponent implements OnInit, OnDestroy {
       res=>{
         console.log("Log Created: \n",res);
       },
-      error => console.log("Something wrong.: "+error)
+      error => {
+        this.alert.alertMessage(error[0],error[1]);
+      }
     );
   }
   /**

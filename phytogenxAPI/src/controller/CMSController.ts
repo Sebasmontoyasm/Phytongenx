@@ -48,36 +48,39 @@ export class CMSController {
             response.send(cmsPerList[0]);
             
         }else{
-            response.status(404).json({message: 'Not Result'});
+            response.status(404).json({message: 'The requested information is not found.'});
         }
     }
 
     static update = async (request: Request, response: Response) =>{
-        const cmsRepository = AppDataSource.getRepository(Data);
-        const {cmsDate,PDF_Name} = request.body;
-        let cms:Data;
-        const id = Number(request.params.id);
         try{
-            cms = await cmsRepository.findOneOrFail({where:{ID:id}});
-            cms.Date_CSM_Processed = cmsDate;
-            cms.PDF_Name = PDF_Name;
-        }catch(e){
-            response.status(404).json({ message: 'Cms not found'});
-        }
-        const validationOpt = { validationError: { target: false, value: false } };
-        const errors = await validate(cms,validationOpt);
-        
-        if(errors.length > 0){
-            return response.status(400).json(errors);
-        }
+            const cmsRepository = AppDataSource.getRepository(Data);
+            const {cmsDate,PDF_Name} = request.body;
+            let cms:Data;
+            const id = Number(request.params.id);
+            try{
+                cms = await cmsRepository.findOneOrFail({where:{ID:id}});
+                cms.Date_CSM_Processed = cmsDate;
+                cms.PDF_Name = PDF_Name;
+            }catch(e){
+                response.status(404).json({ message: 'The information not found.'});
+            }
+            const validationOpt = { validationError: { target: false, value: false } };
+            const errors = await validate(cms,validationOpt);
+            
+            if(errors.length > 0){
+                return response.status(400).json(errors);
+            }
 
-        try{
-            await cmsRepository.save(cms);
+            try{
+                await cmsRepository.save(cms);
+                return response.status(201).json({message: 'Manually proccessed cms performed.'});
+            }catch(e){
+                return response.status(409).json({menssage: 'Unknown error.'})
+            }
         }catch(e){
-            return response.status(409).json({menssage: 'Unknown error, contact your administrator.'})
-        }
 
-        return response.status(201).json({message: 'Manually proccessed cms performed.'});
+        }
     };
 
 }

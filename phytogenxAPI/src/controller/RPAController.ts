@@ -20,7 +20,7 @@ export class RPAController {
         const errors = await validate(report,validationOpt);
         
         if(errors.length > 0){
-            return response.status(400).json(errors);
+            return response.status(400).json({message: 'Database integrity error'});
         }
 
         try{

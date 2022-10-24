@@ -11,14 +11,14 @@ export class UserController {
         try{
             users = await userRepository.find();
         }catch(e){
-            response.status(404).json({message: 'Somenthing goes wrong!'});
+            response.status(404).json({message: 'Something has gone wrong'});
         }
 
         if(users.length > 0){
             response.send(users);
             
         }else{
-            response.status(404).json({message: 'Not Result'});
+            response.status(404).json({message: 'Could not get information in the request'});
         }
     }
 
@@ -30,7 +30,7 @@ export class UserController {
             const user = await userRepository.findOneOrFail({where:{id:id}});
             response.send(user);
         }catch(e){
-            response.status(404).json({ message: 'Not result'});
+            response.status(404).json({ message: 'Could not get information in the request'});
         }
     };
 
@@ -41,7 +41,7 @@ export class UserController {
 
         user.name = name;
         user.rol = rol;
-        user.username = username;
+        user.username = username.toLowerCase();
         user.password = password;
         user.createdAt = createdAt;
         const validationOpt = { validationError: { target: false, value: false } };
@@ -57,56 +57,67 @@ export class UserController {
             await userRepository.save(user);
             response.status(201).json({ message: 'User created'});
         }catch(e){
-            console.log("Error: "+e);
-            response.status(404).json({ message: 'Not result'});
+            response.status(302).json({ message: 'You cannot create the same user.'});
         }
     };
 
     static update = async (request: Request, response: Response) =>{
-
-        const userRepository = AppDataSource.getRepository(User);
-        const {name,rol,password} = request.body;
-        let user:User;
-        const id = Number(request.params.id);
         try{
-            user = await userRepository.findOneOrFail({where:{id:id}});
-            user.name = name;
-            user.rol = rol;
-            user.password = password;
-        }catch(e){
-            response.status(404).json({ message: 'User not found'});
-        }
-        const validationOpt = { validationError: { target: false, value: false } };
-        const errors = await validate(user,validationOpt);
-        
-        if(errors.length > 0){
-            return response.status(400).json(errors);
-        }
+            const userRepository = AppDataSource.getRepository(User);
+            const {name,rol,password} = request.body;
+            let user:User;
+            const id = Number(request.params.id);
+            try{
+                user = await userRepository.findOneOrFail({where:{id:id}});
+                user.name = name;
+                user.rol = rol;
+                user.password = password;
+            }catch(e){
+                response.status(404).json({ message: 'Could not find user required'});
+            }
 
-        try{
-            user.hashPassword();
-            await userRepository.save(user);
-        }catch(e){
-            return response.status(409).json({menssage: 'Username already in use'})
-        }
+            const validationOpt = { validationError: { target: false, value: false } };
+            const errors = await validate(user,validationOpt);
+            
+            if(errors.length > 0){
+                return response.status(400).json({message: 'Something has gone wrong'});
+            }
 
-        return response.status(201).json({message: 'User update'});
+            try{
+                user.hashPassword();
+                await userRepository.save(user);
+                return response.status(201).json({message: 'User updated.'});
+            }catch(e){
+                return response.status(409).json({menssage: 'Username already in use'})
+            }
+
+          
+        }catch(e){
+
+        }
     };
 
     static delete = async (request: Request, response: Response) =>{
-        const userRepository = AppDataSource.getRepository(User);
-        let user:User;
-        const id = Number(request.params.id);
-
         try{
-            user = await userRepository.findOneOrFail({where:{id:id}});
-        }catch(e){
-            response.status(404).json({ message: 'User not found'});
-        }
-        
-        userRepository.delete(id);
+            const userRepository = AppDataSource.getRepository(User);
+            let user:User;
+            const id = Number(request.params.id);
 
-        response.status(201).json({message: 'User deleted'});
+            try{
+                user = await userRepository.findOneOrFail({where:{id:id}});
+            }catch(e){
+                response.status(404).json({message: 'The user was deleted before you tried to delete him'});
+            }
+            
+            try{
+                await userRepository.delete(id);  
+                response.status(201).json({message: 'User deleted'});
+            }catch(e){
+                return response.status(400).json({message: 'Something has gone wrong'});
+            }
+        }catch(e){
+            
+        }
     };
 }
 

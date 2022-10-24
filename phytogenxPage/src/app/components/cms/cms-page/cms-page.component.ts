@@ -19,6 +19,7 @@ import { Data } from 'src/app/interfaces/data/data';
 import { MasterDataService } from 'src/app/services/masterdata/masterdata.service';
 import { RestoreService } from 'src/app/services/restore/restore.service';
 import { RpaService } from 'src/app/services/rpa/rpa.service';
+import { AlertcodesService } from 'src/app/services/alerts/alertcodes.service';
 
 @Component({
   selector: 'app-cms-page',
@@ -70,7 +71,8 @@ export class CmsPageComponent implements OnInit, OnDestroy {
     private userlogService: UserlogService,
     private mdService: MasterDataService,
     private restoreService: RestoreService,
-    private rpaService: RpaService
+    private rpaService: RpaService,
+    private alert: AlertcodesService
     ) { 
     }
 
@@ -96,7 +98,9 @@ export class CmsPageComponent implements OnInit, OnDestroy {
         this.dataSource.paginator = this.paginator;
         this.dataSource.sort = this.sort;
       },
-      err => console.log("Error CMS update: "+err)
+      error =>{
+        this.alert.alertMessage(error[0],error[1]);
+      }
     );
   }
 
@@ -112,6 +116,8 @@ export class CmsPageComponent implements OnInit, OnDestroy {
       if(res){
         oldData = res;
       }
+    }, error => {
+      this.alert.alertMessage(error[0],error[1]);
     });
 
     const formValue: CmsUpdate | any = this.cmsUpdateForm.value;
@@ -135,9 +141,13 @@ export class CmsPageComponent implements OnInit, OnDestroy {
               console.log("Somenthing wrong.");
             }
           },
-          err => console.log("Error with RPA report: "+err),
+          error => {
+            this.alert.alertMessage(error[0],error[1]);
+          }
         );
       }
+    }, error => {
+      this.alert.alertMessage(error[0],error[1]);
     }); 
   }
   
@@ -260,6 +270,8 @@ export class CmsPageComponent implements OnInit, OnDestroy {
       if(res){
         window.location.reload();
       }
+    }, error => {
+      this.alert.alertMessage(error[0],error[1]);
     });
   }
 
@@ -290,7 +302,9 @@ export class CmsPageComponent implements OnInit, OnDestroy {
       res=>{
         console.log("Response: \n",res);
       },
-      err => console.log("Error: "+err)
+      error =>{
+        this.alert.alertMessage(error[0],error[1]);
+      }
     );
   }
 }

@@ -32,16 +32,13 @@
                                 <mat-error *ngIf="isValidField('Invoice_Number')">
                                     {{getErrorMessage("Invoice_Number")}}
                                 </mat-error> 
+                                <mat-error *ngIf="ApiMessage">
+                                        {{ApiMessage}}
+                                </mat-error>
                             </th>
                             
                             <td *matCellDef="let col">
-                                <p *ngIf="col.Invoice_Number" class="align-centerinv">
-                                    <button class="icon-warning">
-                                        <mat-icon class="align-warning" mat-stroked-button *ngIf="col.Date_Quickbooks_Processed"  
-                                                  (click)="openSnackBar(col.Date_Quickbooks_Processed)">
-                                                  notification_important
-                                        </mat-icon>
-                                    </button>
+                                <p *ngIf="col.Invoice_Number" class="center">
                                     {{col.Invoice_Number}} </p>
                                 <tr *ngIf="!col.Invoice_Number">
                                     <mat-form-field>

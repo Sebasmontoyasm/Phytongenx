@@ -10,7 +10,7 @@ export class AuthController {
         const {username,password,UpdateAt} = req.body;
         let rol: string;
         if(!(username && password)) {
-            return res.status(400).json({message: ' Username & Password are required!'});
+            return res.status(400).json({message: 'Username or password are required.'});
         }
 
         const userRepository = AppDataSource.getRepository(User);
@@ -21,14 +21,14 @@ export class AuthController {
             rol = user.rol;
         }catch(e){
             return res.status(400).json({
-                message: ' Username or password incorrect!'
+                message: 'Username or password incorrect.'
             });
         }
         user.UpdateAt = UpdateAt;
         await userRepository.save(user);
 
         if(!user.checkPassword(password)){
-          return res.status(400).json({message: 'Username or Password are incorrect!'});
+          return res.status(400).json({message: 'Username or Password are incorrect.'});
         }
         const token = jwt.sign({ userId: user.id, username: user.name }, config.jwtSecret, {expiresIn: '1h' });
         res.json({message: 'Sing in successfull!', token,username, rol});

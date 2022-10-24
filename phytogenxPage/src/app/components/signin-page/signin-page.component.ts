@@ -1,25 +1,26 @@
-import { Component, OnDestroy, OnInit, Pipe, PipeTransform } from '@angular/core';
+import { Component, OnDestroy, OnInit} from '@angular/core';
 import { AuthService } from 'src/app/services/auth/auth.service';
 import { FormBuilder, Validators} from '@angular/forms';
-import { Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 import { User } from '../../interfaces/user/user';
 import { takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs';
 import { DatePipe } from '@angular/common';
+import { AlertcodesService } from 'src/app/services/alerts/alertcodes.service';
 
 @Component({
-  selector: 'app-singin-page',
-  templateUrl: './singin-page.component.html',
-  styleUrls: ['./singin-page.component.css']
+  selector: 'app-signin-page',
+  templateUrl: './signin-page.component.html',
+  styleUrls: ['./signin-page.component.css']
 })
-export class SinginPageComponent implements OnInit, OnDestroy {
+export class SigninPageComponent implements OnInit, OnDestroy {
   hide = false;
   private isValidusername = /\S+\.\S+/;
   private destroy = new Subject<any>();
 
+  APIMessages: string[] = ['',''];
 
-  singInForm: FormBuilder | any  = this.fb.group({
+  signInForm: FormBuilder | any  = this.fb.group({
     username: ['',[Validators.required,Validators.pattern(this.isValidusername)]],
     password: ['',[Validators.required, Validators.minLength(6)]],
     UpdateAt: []
@@ -27,8 +28,8 @@ export class SinginPageComponent implements OnInit, OnDestroy {
 
   constructor(private authService: AuthService,
               private fb:FormBuilder,
-              private singin: MatDialog,
-              ) { }
+              private signin: MatDialog,
+              private alertCode: AlertcodesService) { }
 
   ngOnInit(): void {
     
@@ -42,11 +43,11 @@ export class SinginPageComponent implements OnInit, OnDestroy {
   getErrorMessage(field: string): string{
     let message:string = "";
 
-    if(this.singInForm.get(field).hasError('required')){ 
+    if(this.signInForm.get(field).hasError('required')){ 
       message = 'You must enter a value.';
-    }else if(this.singInForm.get(field).hasError('pattern')){
+    }else if(this.signInForm.get(field).hasError('pattern')){
       message = 'Not a valid username.';
-    }else if(this.singInForm.get(field).hasError('minlength')){
+    }else if(this.signInForm.get(field).hasError('minlength')){
       message = 'This field must be longer.';
     }
     return message;
@@ -54,14 +55,14 @@ export class SinginPageComponent implements OnInit, OnDestroy {
   }
 
   isValidField(field: string):boolean{
-    return this.singInForm.get(field).touched || this.singInForm.get(field).dirty && !this.singInForm.get(field).valid;
+    return this.signInForm.get(field).touched || this.signInForm.get(field).dirty && !this.signInForm.get(field).valid;
   }
-  onSingin(): void{
-    if(this.singInForm.invalid){
+  onSignin(): void{
+    if(this.signInForm.invalid){
       return;
     }
     
-    const formValue: User | any = this.singInForm.value;
+    const formValue: User | any = this.signInForm.value;
 
     let format: string = 'MM/dd/yyyy HH:mm:ss';
     let date: Date = new Date();
@@ -73,14 +74,20 @@ export class SinginPageComponent implements OnInit, OnDestroy {
       takeUntil(this.destroy)
     ).subscribe(res => {
       if(res){
-        this.closeSingIn();
+        this.closeSignIn();
       }
-
-    });
+    },
+    error => {
+      if(error[0] == '400'){
+        this.APIMessages = error[1];
+      }else{
+        this.alertCode.alertMessage(error[0],error[1]);
+      }
+    }    
+    );
   }
 
-  closeSingIn(): void{
-      this.singin.closeAll();
+  closeSignIn(): void{
+      this.signin.closeAll();
   }
-
 }

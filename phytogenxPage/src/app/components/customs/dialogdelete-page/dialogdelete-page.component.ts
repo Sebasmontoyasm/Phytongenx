@@ -10,7 +10,7 @@ import { Subject } from 'rxjs';
 import { RpaService } from 'src/app/services/rpa/rpa.service';
 import { RestoreService } from 'src/app/services/restore/restore.service';
 import { Data } from 'src/app/interfaces/data/data';
-
+import { AlertcodesService } from 'src/app/services/alerts/alertcodes.service';
 
 @Component({
   selector: 'app-dialogdelete-page',
@@ -25,6 +25,7 @@ export class DialogdeletePageComponent implements OnInit, OnDestroy {
   pipe = new DatePipe('en-US');
   dateAction: any;
   private destroy = new Subject<any>();
+  ready:number = 0;
 
   constructor(@Inject(MAT_DIALOG_DATA) public data: {id: number,title:string},
    public dialogRef: MatDialogRef<DialogdeletePageComponent>,
@@ -32,7 +33,8 @@ export class DialogdeletePageComponent implements OnInit, OnDestroy {
    private userlogService:UserlogService,
    private restoreService:RestoreService,
    private rpaService: RpaService,
-   private userService: UserService
+   private userService: UserService,
+   private alert:AlertcodesService
    ) {
    }
   ngOnDestroy(): void {
@@ -49,41 +51,44 @@ export class DialogdeletePageComponent implements OnInit, OnDestroy {
    */
   deleteService() {
     if(this.data.title == 'CMS' || this.data.title == 'QB'){
+
       let oldData: Data;
       this.mdService.getById(this.data.id).pipe(
         takeUntil(this.destroy)
       ).subscribe(res =>{
         oldData = res;
         this.saverestore(oldData);
-
         this.mdService.deleteById(this.data.id).pipe(
           takeUntil(this.destroy)
-          ).subscribe( res =>{
-              if(!res){
-                console.log("Deleting error.");
-              } 
-            }, err =>{
-              console.log("Error delete data ID: "+err.errorMessage);
-        });
+          ).subscribe();
 
         this.createLog(this.data.id,this.data.title);
 
         this.rpaService.report().pipe(
           takeUntil(this.destroy),
-        ).subscribe( err =>{
-          console.log("Error reporting rpa: "+err.errorMessage);
-        });
-        window.location.reload();
+        ).subscribe();
+      },error => {
+        this.alert.alertMessage(error[0],error[1]);
       });
+
+      new Promise<void>((resolve) => {
+        setTimeout(() => {
+          window.location.reload();
+          resolve();
+        }, 1000);
+      }); 
+
     }else if(this.data.title == 'users'){
       this.userService.delete(this.data.id).pipe(
         takeUntil(this.destroy)
-      ).subscribe(res => {
-        if(!res){
-          window.alert(res);
-        }
-      });
-      window.location.reload();
+      ).subscribe();
+
+      new Promise<void>((resolve) => {
+          setTimeout(() => {
+            window.location.reload();
+            resolve();
+          }, 1000);
+        }); 
     }
   }
 

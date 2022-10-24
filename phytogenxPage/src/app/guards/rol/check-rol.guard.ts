@@ -42,10 +42,10 @@ export class CheckRolGuard implements CanActivate {
     }
 
     regexp = /masterdata\S?/;
-    if(state.url.match(regexp) && (user.rol != 'guest')){
+    if(state.url.match(regexp)){
       return true;
     }
-    this.router.navigate(['']);
+    this.router.navigate(['/homepage']);
     return false;
   }
 }

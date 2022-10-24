@@ -8,6 +8,7 @@ import { Data } from 'src/app/interfaces/data/data';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { Router } from '@angular/router';
+import { AlertcodesService } from 'src/app/services/alerts/alertcodes.service';
 
 @Component({
   selector: 'app-restore-page',
@@ -30,7 +31,8 @@ export class RestorePageComponent implements OnInit,OnDestroy {
   posts:any;
 
   constructor(private restoreService:RestoreService,
-              private router: Router) { }
+              private router: Router,
+              private alert:AlertcodesService) { }
  
 
   ngOnInit(): void {
@@ -53,7 +55,7 @@ export class RestorePageComponent implements OnInit,OnDestroy {
         this.dataSource.sort = this.sort;        
       },
       error => {
-        console.log("Something wrong, it can't get Data \n "+error);
+        this.alert.alertMessage(error[0],error[1]);
       }
     );
   }

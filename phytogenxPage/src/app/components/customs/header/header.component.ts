@@ -3,7 +3,7 @@ import { MatDialog} from '@angular/material/dialog';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { AuthService } from 'src/app/services/auth/auth.service';
-import { SinginPageComponent } from '../../singin-page/singin-page.component';
+import { SigninPageComponent } from '../../signin-page/signin-page.component';
 
 @Component({
   selector: 'app-header',
@@ -41,7 +41,7 @@ export class HeaderComponent implements OnInit, OnDestroy{
     this.singin.closeAll();
   }
   openSingIn(enterAnimationDuration: string, exitAnimationDuration: string): void {
-    this.singin.open(SinginPageComponent, {
+    this.singin.open(SigninPageComponent, {
     position: {top: '130px'},
     width: '30%',
     height: '60%',

@@ -12,6 +12,7 @@ import { Data } from '@angular/router';
 import { MasterDataService } from 'src/app/services/masterdata/masterdata.service';
 import { RestoreService } from 'src/app/services/restore/restore.service';
 import { RpaService } from 'src/app/services/rpa/rpa.service';
+import { AlertcodesService } from 'src/app/services/alerts/alertcodes.service';
 
 @Component({
   selector: 'app-cmscreate-page',
@@ -27,7 +28,7 @@ export class CmscreatePageComponent implements OnInit, OnDestroy {
   currentFile?: any;
   message= '';
   fileInfos?: Observable<any>;
-
+  APIMessages: string='';
   private destroy = new Subject<any>();
 
   validatePDF = /\S+\.pdf/; 
@@ -46,7 +47,8 @@ export class CmscreatePageComponent implements OnInit, OnDestroy {
   private restoreService:RestoreService,
   private rpaService: RpaService, 
   private fb:FormBuilder,
-  private cmsManually: MatDialog) { }
+  private cmsManually: MatDialog,
+  private alert:AlertcodesService) { }
 
   ngOnInit(): void {
   }
@@ -75,7 +77,6 @@ export class CmscreatePageComponent implements OnInit, OnDestroy {
     ).subscribe(res => {
 
       let data:Data | any;
-
       if(res){
         this.mdService.lastData().pipe(
           takeUntil(this.destroy)
@@ -89,15 +90,27 @@ export class CmscreatePageComponent implements OnInit, OnDestroy {
             ).subscribe(res=>{
                 console.log("Reported RPA.");
               },
-              err => console.log("Error: "+err),
+              error =>{
+                this.alert.alertMessage(error[0],error[1])
+              }
             );
             this.closenewCms();
-            window.location.reload();
           }
 
+        },error =>{
+          this.alert.alertMessage(error[0],error[1]);
         });
       }
+    }, error => {
+      if(error[0] == '302'){
+        this.APIMessages = error[1];
+      }else{
+        this.alert.alertMessage(error[0],error[1]);
+      }  
     });
+
+
+
   }
   
   createLog(data: Data) {
@@ -117,9 +130,10 @@ export class CmscreatePageComponent implements OnInit, OnDestroy {
 
     this.userlogService.new(userlog).subscribe(
       res=>{
-        console.log("Log created.");
       },
-      err => console.log("Error: "+err),
+      error =>{
+        this.alert.alertMessage(error[0],error[1]);
+      }
     );
   }
 
@@ -127,9 +141,10 @@ export class CmscreatePageComponent implements OnInit, OnDestroy {
     this.restoreService.save(data).pipe(
       takeUntil(this.destroy),
     ).subscribe(res=>{
-        console.log("Save in restore.");
       },
-      err => console.log("Error: "+err),
+     error =>{
+        this.alert.alertMessage(error[0],error[1]);
+      }
     );
   }
 

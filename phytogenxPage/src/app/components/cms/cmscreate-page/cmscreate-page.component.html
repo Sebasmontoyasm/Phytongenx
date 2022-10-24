@@ -25,9 +25,12 @@
                         {{getErrorMessage("file")}}
                     </mat-error>
                 </div>
-         <mat-error class="margin-error" *ngIf="isValidField('PDF_Name')">
-             {{getErrorMessage("PDF_Name")}}
-         </mat-error>
+                <mat-error class="margin-error" *ngIf="isValidField('PDF_Name')">
+                    {{getErrorMessage("PDF_Name")}}
+                </mat-error>
+                <mat-error>
+                    {{APIMessages}}
+                </mat-error>
             </mat-card-content>
             <mat-divider inset></mat-divider>
             <mat-card-actions>

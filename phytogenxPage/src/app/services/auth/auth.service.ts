@@ -12,8 +12,8 @@ const headers= new HttpHeaders();
 
 headers.append('Content-Type', 'application/json');
 headers.append('Accept', 'application/json');
-headers.append('Access-Control-Allow-Origin', 'http://localhost:3001');
-headers.append('Access-Control-Allow-Methods','GET,HEAD,OPTIONS,POST,PUT');
+headers.append('Access-Control-Allow-Origin', '*');
+headers.append('Access-Control-Allow-Methods','*');
 
 @Injectable({
   providedIn: 'root'
@@ -29,6 +29,9 @@ export class AuthService {
    }
 
   get isLogged():Observable<boolean>{
+    if(this.loggedIn.value == false){
+      this.router.navigate(['/homepage']);
+    }
     return this.loggedIn.asObservable();
   }
 
@@ -85,9 +88,6 @@ export class AuthService {
     }
   
   }
-  private readToken():void{
-    
-  }
 
   private saveLocalStorange(user: UserResponse): void {
     const { id, message, ...rest} = user
@@ -95,11 +95,11 @@ export class AuthService {
   }
 
   private handlerError(err:any): Observable<never> {
-    let errorMessage = 'An error occurred retrienving data';
+    let status: string[] = ['999','Uknow error'];
     if(err){
-      errorMessage= `Error: code ${err.message}`
+      status[0] = err.status;
+      status[1] = err.error.message;
     }
-    window.alert(errorMessage)  
-    return throwError(errorMessage);
+    return throwError(status);
   }
 }

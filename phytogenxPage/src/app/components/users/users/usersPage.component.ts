@@ -9,10 +9,10 @@ import { Subject } from 'rxjs';
 import { User } from 'src/app/interfaces/user/user';
 import { DialogdeletePageComponent } from '../../customs/dialogdelete-page/dialogdelete-page.component';
 import { MatDialog } from '@angular/material/dialog';
-import { UserLog } from 'src/app/interfaces/user/userlog';
 import { UserCreatePageComponent } from '../userCreatePage/userCreate-page.component';
 import { UsereditPageComponent } from '../useredit-page/useredit-page.component';
 import { Overlay } from '@angular/cdk/overlay';
+import { AlertcodesService } from 'src/app/services/alerts/alertcodes.service';
 
 @Component({
   selector: 'app-users',
@@ -25,7 +25,6 @@ export class UsersPageComponent implements OnInit,OnDestroy {
   dataSource!: MatTableDataSource<User>;
   posts:any;
   rol = "guest";
-  deleteID = 0;
   private destroy = new Subject<any>();
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
@@ -33,7 +32,9 @@ export class UsersPageComponent implements OnInit,OnDestroy {
   @ViewChild(MatMenuTrigger) trigger!: MatMenuTrigger;
 
   constructor(private userService:UserService,
-    private dialog: MatDialog, private overlay:Overlay) { }
+    private dialog: MatDialog,
+    private overlay:Overlay,
+    private warningAlert: AlertcodesService) { }
 
   ngOnInit(): void {
     this.getUsers();
@@ -62,7 +63,9 @@ export class UsersPageComponent implements OnInit,OnDestroy {
         this.dataSource.paginator = this.paginator;
         this.dataSource.sort = this.sort;
       },
-      err => console.log("Error: "+err)
+      err => {
+        this.warningAlert.alertMessage(err[0],err[1]);
+      }
     );
   }
 

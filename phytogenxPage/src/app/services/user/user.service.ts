@@ -4,13 +4,15 @@ import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { User } from 'src/app/interfaces/user/user';
 import { environment } from 'src/environments/environment';
+import { AlertcodesService } from '../alerts/alertcodes.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class UserService {
-
-  constructor(private http: HttpClient) {
+  constructor(private http: HttpClient,
+    public alert: AlertcodesService) {
+               
    }
 
    getAll(): Observable<User[]>{
@@ -38,18 +40,25 @@ export class UserService {
    }
 
    delete(id: number): Observable<{}>{
-    return this.http.delete<User>(`${environment.API_URL}/users/${id}`)
-    .pipe(
+    let response = this.http.delete<User>(`${environment.API_URL}/users/${id}`) .pipe(
       catchError(this.handlerError));
+    
+    response.subscribe(res =>{
+      let message:string[] = Object.values(res)
+      this.alert.alertMessage('201',message[0]);
+    },error => {
+      this.alert.alertMessage(error[0],error[1]);
+    })
+    return response;
+   
    }
 
-   handlerError(error: any): Observable<never>{
-    let errorMessage = 'Error unknown';
-    if(error){
-      errorMessage = 'Error'+error.message;
+   private handlerError(err:any): Observable<never> {
+    let status: string[] = ['999','Uknow error'];
+    if(err){
+      status[0] = err.status;
+      status[1] = err.error.message;
     }
-
-    window.alert(errorMessage);
-    return throwError(errorMessage);
-   }
+    return throwError(status);
+  }
 }
