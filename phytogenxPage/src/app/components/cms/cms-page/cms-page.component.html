@@ -32,12 +32,11 @@
                     
                     <button type="button" class="icon" mat-icon-button>
                         <mat-icon (click)="openAddDialog('0ms', '0ms')">add_box</mat-icon>
-                    </button>  
-                   
-                    <button type="button" class="icon" mat-icon-button hidden>
-                        <mat-icon>cloud_upload</mat-icon>
                     </button>
                     <input type="text" class="inputfilter" matInput placeholder="Filter Table" search (keyup)="applyFilter($event)" #input/>
+                    <button type="button" class="align-buildicon" mat-icon-button>
+                        <mat-icon (click)="bulkLoad">create_new_folder</mat-icon>
+                    </button>
                 </div>
                 <div class="bg-primary">
                     <table class="table-primary table table-striped" mat-table matSort [dataSource]="dataSource">
@@ -95,10 +94,12 @@
                                         {{getErrorMessage("cmsDate")}}
                                     </mat-error>
                                 </th>
-                                <td class="center" required *matCellDef="let col">  
+                                <td *matCellDef="let col">  
                                     <mat-form-field class="full-width-input">
-                                        <mat-label>Date</mat-label>
-                                        <input matInput formControlName="cmsDate" type="datetime-local" max="{{today}}">   
+                                        <mat-label>Choose a date</mat-label>
+                                        <input formControlName="cmsDate" matInput [max]=today [matDatepickerFilter]="weekendFilter" [matDatepicker]="picker">
+                                        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                                        <mat-datepicker #picker></mat-datepicker>
                                     </mat-form-field>
                                 </td>
                             </ng-container>

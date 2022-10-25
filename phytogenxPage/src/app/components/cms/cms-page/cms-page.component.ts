@@ -48,7 +48,7 @@ export class CmsPageComponent implements OnInit, OnDestroy {
   fileInfos?: Observable<any>;
 
   fileName: string = '';
-  today = this.datePipe.transform(new Date(), 'yyyy-MM-ddTHH:mm');
+  today:Date = new Date();
   comment: string = '';
   
   private destroy = new Subject<any>();
@@ -57,7 +57,7 @@ export class CmsPageComponent implements OnInit, OnDestroy {
   cmsUpdateForm: FormBuilder | any  = this.fb.group({
     reason: ['',[Validators.required]],
     comment: [{value:'',disabled:true},[Validators.required,Validators.pattern(/\S+/)]],
-    cmsDate: [this.today,[Validators.required]],
+    cmsDate: ['',[Validators.required]],
     PDF_Name: [''],
     file: ['',[Validators.required,Validators.pattern(this.validatePDF)]]
 
@@ -67,7 +67,6 @@ export class CmsPageComponent implements OnInit, OnDestroy {
     private cmsService:CmsService,
     private dialog: MatDialog,
     private fb:FormBuilder,
-    private datePipe: DatePipe,
     private userlogService: UserlogService,
     private mdService: MasterDataService,
     private restoreService: RestoreService,
@@ -121,7 +120,7 @@ export class CmsPageComponent implements OnInit, OnDestroy {
     });
 
     const formValue: CmsUpdate | any = this.cmsUpdateForm.value;
-    let convertDate = new DatePipe('en-US').transform(formValue.cmsDate,'MM/dd/yyyy HH:mm');
+    let convertDate = new DatePipe('en-US').transform(formValue.cmsDate,'MM/dd/yyyy HH:mm:ss');
     let convertPDF_Name: string[] = formValue.PDF_Name.split('.');
 
     formValue.cmsDate = convertDate;
@@ -251,6 +250,16 @@ export class CmsPageComponent implements OnInit, OnDestroy {
   applyFilter(event: Event){
     const filterValue = (event.target as HTMLInputElement).value;
     this.dataSource.filter = filterValue.trim().toLowerCase();
+  }
+
+  weekendFilter = (d: Date | null): boolean => {
+    const day = (d || new Date()).getDay();
+    // Prevent Saturday and Sunday from being selected.
+    return day !== 0 && day !== 6;
+  };
+
+  bulkLoad(){
+    
   }
 
   openAddDialog(enterAnimationDuration: string, exitAnimationDuration: string): void {

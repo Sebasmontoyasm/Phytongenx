@@ -74,7 +74,7 @@ DELIMITER //
 DROP PROCEDURE IF EXISTS qbmanually//
 CREATE PROCEDURE qbmanually()
 BEGIN
-    SELECT a.ID,a.PO_Number,a.Invoice_Number,a.Date_invoice_recieved,a.Date_Quickbooks_Processed, a.NamePDF
+    SELECT a.ID,a.PO_Number,a.Invoice_Number,a.Date_invoice_recieved,a.NamePDF
     FROM ( 
         SELECT ID,PO_Number,Invoice_Number,Date_invoice_recieved, Date_Quickbooks_Processed, NamePDF FROM data
         WHERE (Invoice_Number IS NULL AND Date_invoice_recieved<>'')

@@ -11,6 +11,15 @@ table{
     margin: 0%;    
 }
 
+.align-buildicon{
+    display: inline-block;
+    margin-left: 1180px;
+    background: none;
+    border:0ch;
+    padding: 0px;
+    transform: scale(1.5);
+}
+
 .mat-cell{
     font-size: medium;
     margin: 4px;

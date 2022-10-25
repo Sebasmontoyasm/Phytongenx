@@ -48,7 +48,7 @@ export class QbPageComponent implements OnInit, OnDestroy {
   fileInfos?: Observable<any>;
   
   fileName: string = '';
-  today = this.datePipe.transform(new Date(), 'yyyy-MM-ddTHH:mm')
+  today:Date = new Date();
   comment: string = '';
 
   validatePDF = /\S+\.pdf/; 
@@ -58,7 +58,7 @@ export class QbPageComponent implements OnInit, OnDestroy {
     comment: [{value:'',disabled:true},[Validators.required,Validators.pattern(/\S+/)]],
     NamePDF: [''],
     file: ['',[Validators.required,Validators.pattern(this.validatePDF)]],
-    Date_invoice_recieved: [this.today,[Validators.required]],
+    Date_invoice_recieved: ['',[Validators.required]],
     Invoice_Number: ['',[Validators.pattern('^[0-9]*$'),Validators.minLength(4)]]
   });
   constructor(private qbService:QbService,
@@ -159,6 +159,15 @@ export class QbPageComponent implements OnInit, OnDestroy {
       this.qbUpdateForm.value.comment='';
       this.comment='';
     }
+  }
+  weekendFilter = (d: Date | null): boolean => {
+    const day = (d || new Date()).getDay();
+    // Prevent Saturday and Sunday from being selected.
+    return day !== 0 && day !== 6;
+  };
+
+  bulkLoad(){
+    
   }
 
 

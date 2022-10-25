@@ -4421,8 +4421,24 @@ DELIMITER //
 DROP PROCEDURE IF EXISTS qbmanually//
 CREATE PROCEDURE qbmanually()
 BEGIN
-    SELECT ID,PO_Number,Invoice_Number,Date_CSM_Processed FROM data
-    WHERE Invoice_Number="" AND Date_CSM_Processed!="";
+	SELECT a.ID,a.PO_Number,a.Invoice_Number,a.Date_invoice_recieved,a.NamePDF
+    FROM ( 
+        SELECT ID,PO_Number,Invoice_Number,Date_invoice_recieved, Date_Quickbooks_Processed, NamePDF FROM data
+        WHERE (Invoice_Number IS NULL AND Date_invoice_recieved<>'')
+              OR Date_invoice_recieved='' 
+              OR Date_Quickbooks_Processed='' 
+              OR NamePDF='' 
+              OR Date_invoice_recieved IS NULL 
+              OR Date_Quickbooks_Processed IS NULL 
+              OR NamePDF IS NULL
+    ) a
+        LEFT JOIN (
+            SELECT ID, COUNT(Invoice_Number) AS Repeticiones FROM DATA 
+            WHERE Invoice_Number!=0 OR Invoice_Number IS NOT NULL 
+            GROUP BY Invoice_Number
+            HAVING Repeticiones > 1
+        ) b ON (a.ID = b.ID)
+     GROUP BY ID;
 END//
 DELIMITER ;
 /**
