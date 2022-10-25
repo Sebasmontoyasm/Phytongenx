@@ -15,34 +15,34 @@ export class MasterDataService {
   constructor(private http: HttpClient) { }
 
   getMasterData(){
-    return this.http.get<Data>(`${environment.API_URL}/masterdata`).
+    return this.http.get<Data>(`${environment.API_URL}/api/masterdata`).
     pipe(
       catchError(this.handlerError)
     );
   }
 
   getById(id:number): Observable<Data>{
-    return this.http.get<Data>(`${environment.API_URL}/masterdata/${id}`).
+    return this.http.get<Data>(`${environment.API_URL}/api/masterdata/${id}`).
     pipe(
       catchError(this.handlerError)
     );
    } 
 
   lastData(): Observable<Data> {
-    return this.http.get<Data>(`${environment.API_URL}/masterdata/last`).
+    return this.http.get<Data>(`${environment.API_URL}/api/masterdata/last`).
     pipe(
       catchError(this.handlerError)
     );
   }  
 
   new(dataCreate: DataCreate): Observable<any>{
-    return this.http.post<DataCreate>(`${environment.API_URL}/masterdata`,dataCreate).
+    return this.http.post<DataCreate>(`${environment.API_URL}/api/masterdata`,dataCreate).
     pipe(
       catchError(this.handlerError));
   }
        
   deleteById(id: number): Observable<any> {
-    return this.http.delete<any>(`${environment.API_URL}/masterdata/${id}`).
+    return this.http.delete<any>(`${environment.API_URL}/api/masterdata/${id}`).
     pipe(
       catchError(this.handlerError),
     );

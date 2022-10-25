@@ -13,7 +13,7 @@ export const AppDataSource = new DataSource({
     host: "localhost",
     port: 3306,
     username: "SS",
-    password: "123456",
+    password: "pn8y&P7M2",
     database: "pgenx-cmsqb",
     synchronize: true,
     logging: false,

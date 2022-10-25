@@ -48,7 +48,7 @@ export class AuthService {
 
   login(authData: User): Observable<UserResponse | void> {
     return this.http.
-    post<UserResponse>(`${environment.API_URL}/auth/singin`,authData, { 'headers': headers })
+    post<UserResponse>(`${environment.API_URL}/api/auth/singin`,authData, { 'headers': headers })
     .pipe(
       map((userReponse:UserResponse) => {
         this.saveLocalStorange(userReponse);

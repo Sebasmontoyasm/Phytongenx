@@ -22,7 +22,7 @@ export class CmsService {
    * @returns 
    */  
   manually(): Observable<Cms[]>{
-      return this.http.get<Cms[]>(`${environment.API_URL}/cms`).
+      return this.http.get<Cms[]>(`${environment.API_URL}/api/cms`).
       pipe(
         catchError(this.handlerError));
   }
@@ -32,13 +32,13 @@ export class CmsService {
    * @returns 
    */
   performace(){
-    return this.http.get<CmsPerformance[]>(`${environment.API_URL}/cms/performance`).
+    return this.http.get<CmsPerformance[]>(`${environment.API_URL}/api/cms/performance`).
     pipe(
       catchError(this.handlerError)); 
   }
 
   detail(id:string){
-    return this.http.get<LabResult[]>(`${environment.API_URL}/cms/${id}`).
+    return this.http.get<LabResult[]>(`${environment.API_URL}/api/cms/${id}`).
     pipe(
       catchError(this.handlerError));
   }
@@ -62,7 +62,7 @@ export class CmsService {
   }
 
   update(id:number, CmsUpdate:CmsUpdate): Observable<any>{
-    return this.http.patch<any>(`${environment.API_URL}/cms/${id}`,CmsUpdate)
+    return this.http.patch<any>(`${environment.API_URL}/api/cms/${id}`,CmsUpdate)
     .pipe(
       catchError(this.handlerError),
     );

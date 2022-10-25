@@ -16,31 +16,31 @@ export class UserService {
    }
 
    getAll(): Observable<User[]>{
-    return this.http.get<User[]>(`${environment.API_URL}/users`).
+    return this.http.get<User[]>(`${environment.API_URL}/api/users`).
     pipe(
       catchError(this.handlerError));
    }
 
    getById(id:number): Observable<User>{
-    return this.http.get<User>(`${environment.API_URL}/users/${id}`).
+    return this.http.get<User>(`${environment.API_URL}/api/users/${id}`).
     pipe(
       catchError(this.handlerError));
    }
 
    new(user: User): Observable<any>{
-    return this.http.post<User>(`${environment.API_URL}/users`,user).
+    return this.http.post<User>(`${environment.API_URL}/api/users`,user).
     pipe(
       catchError(this.handlerError));
    }
 
    update(id: number, user:User): Observable<any>{
-    return this.http.patch<any>(`${environment.API_URL}/users/${id}`,user).
+    return this.http.patch<any>(`${environment.API_URL}/api/users/${id}`,user).
     pipe(
       catchError(this.handlerError));
    }
 
    delete(id: number): Observable<{}>{
-    let response = this.http.delete<User>(`${environment.API_URL}/users/${id}`) .pipe(
+    let response = this.http.delete<User>(`${environment.API_URL}/api/users/${id}`) .pipe(
       catchError(this.handlerError));
     
     response.subscribe(res =>{

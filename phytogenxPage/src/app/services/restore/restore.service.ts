@@ -13,13 +13,13 @@ export class RestoreService {
   constructor(private http: HttpClient) { }
 
   getAll(): Observable<Data[]>{
-    return this.http.get<Data[]>(`${environment.API_URL}/restore`).
+    return this.http.get<Data[]>(`${environment.API_URL}/api/restore`).
     pipe(
       catchError(this.handlerError));
   }
 
   save(oldData: Data) {
-    return this.http.post<Data>(`${environment.API_URL}/restore`,oldData).
+    return this.http.post<Data>(`${environment.API_URL}/api/restore`,oldData).
     pipe(
       catchError(this.handlerError));
    }  

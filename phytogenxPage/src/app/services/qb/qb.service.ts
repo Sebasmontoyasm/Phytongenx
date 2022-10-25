@@ -17,22 +17,22 @@ export class QbService {
   constructor(private http: HttpClient){ }
     
   performace(){
-    return this.http.get<QbPerformance>(`${environment.API_URL}/qb/performance`); 
+    return this.http.get<QbPerformance>(`${environment.API_URL}/api/qb/performance`); 
   }
   
   detail(invoice: string){
-    return this.http.get<QbDetail>(`${environment.API_URL}/qb/${invoice}`)
+    return this.http.get<QbDetail>(`${environment.API_URL}/api/qb/${invoice}`)
     .pipe(
       catchError(this.handlerError)
     );
   }
 
   get(){
-    return this.http.get(`${environment.API_URL}/qb`);   
+    return this.http.get(`${environment.API_URL}/api/qb`);   
   }
 
   update(id:number, qbUpdate:QbUpdate): Observable<any>{
-    return this.http.patch<any>(`${environment.API_URL}/qb/${id}`,qbUpdate)
+    return this.http.patch<any>(`${environment.API_URL}/api/qb/${id}`,qbUpdate)
     .pipe(
       catchError(this.handlerError)
     );

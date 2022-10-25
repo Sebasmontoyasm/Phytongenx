@@ -13,13 +13,13 @@ export class UserlogService {
   constructor(private http: HttpClient) { }
 
   getAll(): Observable<UserLog[]>{
-    return this.http.get<UserLog[]>(`${environment.API_URL}/userlogs`).
+    return this.http.get<UserLog[]>(`${environment.API_URL}/api/userlogs`).
     pipe(
       catchError(this.handlerError));
    }
 
   new(log: UserLog) {
-    return this.http.post<UserLog>(`${environment.API_URL}/userlogs`,log).
+    return this.http.post<UserLog>(`${environment.API_URL}/api/userlogs`,log).
     pipe(
       catchError(this.handlerError));
    }  

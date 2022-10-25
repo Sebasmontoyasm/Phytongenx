@@ -39,9 +39,7 @@ CREATE TABLE IF NOT EXISTS `Data` (
 ) ENGINE=InnoDB AUTO_INCREMENT=654 DEFAULT CHARSET=latin1;
 
 CREATE TABLE IF NOT EXISTS observablePedro(
-    STATUS INT NOT NULL);
-
-ALTER TABLE `observablepedro` ADD PRIMARY KEY (`STATUS`);
+    STATUS INT NOT NULL PRIMARY KEY);
 
 DELETE FROM observablePedro;
 INSERT INTO observablePedro values(0);
@@ -4795,6 +4793,24 @@ BEGIN
 END//
 DELIMITER ;
 
+/**
+*
+**/
+CMS_Data
+===========================
+
+DELIMITER //
+DROP PROCEDURE IF EXISTS labresult_detail//
+CREATE PROCEDURE labresult_detail(IN PONUM VARCHAR(255))
+BEGIN
+    SELECT ID, Date, PDFName, PONumber, SubloteCode, Test, State
+	FROM LabResults
+	WHERE PONumber LIKE concat('%',PONUM)
+	ORDER BY ID;
+END//
+DELIMITER ;
+
+call labresult_detail('22167F');
 
 
 /**

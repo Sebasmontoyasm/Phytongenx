@@ -12,7 +12,7 @@ export class RpaService {
   constructor(private http: HttpClient) { }
 
   report(){
-    return this.http.get<any>(`${environment.API_URL}/rpa/status`).
+    return this.http.get<any>(`${environment.API_URL}/api/rpa/status`).
     pipe(
       catchError(this.handlerError));
   }

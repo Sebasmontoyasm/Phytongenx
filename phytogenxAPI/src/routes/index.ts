@@ -10,13 +10,13 @@ import rpa from './rpa';
 
 const routes = Router();
 
-routes.use('/masterdata', masterdata);
-routes.use('/cms',cms);
-routes.use('/qb',qb);
-routes.use('/auth', auth);
-routes.use('/users', user);
-routes.use('/userlogs', userlog);
-routes.use('/restore',restore);
-routes.use('/rpa',rpa);
+routes.use('/api/masterdata', masterdata);
+routes.use('/api/cms',cms);
+routes.use('/api/qb',qb);
+routes.use('/api/auth', auth);
+routes.use('/api/users', user);
+routes.use('/api/userlogs', userlog);
+routes.use('/api/restore',restore);
+routes.use('/api/rpa',rpa);
 
 export default routes;
