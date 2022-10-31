@@ -38,15 +38,6 @@ table{
     padding: 0px;
 }
 
-.align-buildicon{
-    display: inline-block;
-    margin-left: 1160px;
-    background: none;
-    border:0ch;
-    padding: 0px;
-    transform: scale(1.5);
-}
-    
 .btn-action{
     margin: 0px;
     padding: 0px;

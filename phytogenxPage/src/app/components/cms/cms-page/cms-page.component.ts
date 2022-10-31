@@ -6,12 +6,11 @@ import { CmsService} from 'src/app/services/cms/cms.service';
 import { MatDialog } from '@angular/material/dialog';
 import { DialogdeletePageComponent } from '../../customs/dialogdelete-page/dialogdelete-page.component';
 import { CmscreatePageComponent } from '../cmscreate-page/cmscreate-page.component';
-import { HttpEventType, HttpResponse } from '@angular/common/http';
-import { Observable, Subject } from 'rxjs';
+import { Subject } from 'rxjs';
 import { Cms, CmsUpdate } from 'src/app/interfaces/cms/cms';
 import { UserLog } from 'src/app/interfaces/user/userlog';
 import { Roles } from 'src/app/interfaces/user/user';
-import { FormBuilder, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { takeUntil } from 'rxjs/operators';
 import { DatePipe } from '@angular/common';
 import { UserlogService } from 'src/app/services/userlog/userlog.service';
@@ -41,32 +40,30 @@ export class CmsPageComponent implements OnInit, OnDestroy {
   @ViewChild(MatSort) sort!: MatSort;
   posts:any = [];
 
-  selectedFiles?: any;
-  progress: number = 0;
-  currentFile?: any;
-  message= '';
-  fileInfos?: Observable<any>;
+  selectedFile: any;
 
   fileName: string = '';
   today:Date = new Date();
   comment: string = '';
+
+  ApiMessage:string = '';
   
   private destroy = new Subject<any>();
 
   validatePDF = /\S+\.pdf/;
+
   cmsUpdateForm: FormBuilder | any  = this.fb.group({
     reason: ['',[Validators.required]],
     comment: [{value:'',disabled:true},[Validators.required,Validators.pattern(/\S+/)]],
     cmsDate: ['',[Validators.required]],
     PDF_Name: [''],
     file: ['',[Validators.required,Validators.pattern(this.validatePDF)]]
-
   });
 
   constructor(
+    private fb: FormBuilder,
     private cmsService:CmsService,
     private dialog: MatDialog,
-    private fb:FormBuilder,
     private userlogService: UserlogService,
     private mdService: MasterDataService,
     private restoreService: RestoreService,
@@ -87,7 +84,7 @@ export class CmsPageComponent implements OnInit, OnDestroy {
     this.destroy.next({});
     this.destroy.complete();
   }
-  
+
   getCms()
   {
     this.cmsService.manually().subscribe(
@@ -101,6 +98,7 @@ export class CmsPageComponent implements OnInit, OnDestroy {
         this.alert.alertMessage(error[0],error[1]);
       }
     );
+
   }
 
   onUpdate(id: number): void{
@@ -108,6 +106,28 @@ export class CmsPageComponent implements OnInit, OnDestroy {
       return;
     }
 
+    this.cmsService.checkPDF_Name(this.selectedFile.fileName.split('.')[0]).pipe(
+      takeUntil(this.destroy)
+    ).subscribe(
+      res => {
+        const fileForm = new FormData();
+        fileForm.append('file',this.selectedFile.fileRaw,this.selectedFile.fileName);
+        this.cmsService.upload(fileForm).pipe(
+          takeUntil(this.destroy)
+        ).subscribe(
+          res => {
+            this.updateData(id);
+          },error => {
+            this.alert.alertMessage(error[0],error[1]);
+          }
+        );   
+      },error=>{
+        this.ApiMessage = error[1];
+      }
+    );
+  }
+  
+  updateData(id:number){
     let oldData: Data;
     this.mdService.getById(id).pipe(
       takeUntil(this.destroy),
@@ -125,7 +145,6 @@ export class CmsPageComponent implements OnInit, OnDestroy {
 
     formValue.cmsDate = convertDate;
     formValue.PDF_Name = convertPDF_Name[0];
-
     this.cmsService.update(id,formValue).pipe(
       takeUntil(this.destroy)
     ).subscribe(res => {
@@ -137,7 +156,7 @@ export class CmsPageComponent implements OnInit, OnDestroy {
           takeUntil(this.destroy),
         ).subscribe(res=>{
             if(res){
-              console.log("Somenthing wrong.");
+              console.log(res);
             }
           },
           error => {
@@ -147,9 +166,9 @@ export class CmsPageComponent implements OnInit, OnDestroy {
       }
     }, error => {
       this.alert.alertMessage(error[0],error[1]);
-    }); 
+    });
   }
-  
+
   /**
    * recolecta el PDF cargado para mandarlo al backend
    * @param event PDF file.
@@ -160,43 +179,15 @@ export class CmsPageComponent implements OnInit, OnDestroy {
   }
 
   onFileSelected(event:any):void{
-    this.selectedFiles = event.target.files;
-    this.cmsUpdateForm.value.PDF_Name = this.selectedFiles[0].name;
+    this.ApiMessage='';
+    const [ file ] = event.target.files;
+    this.cmsUpdateForm.value.PDF_Name = file.name;
+    this.selectedFile = {
+      fileRaw:file,
+      fileName:file.name
+    }
   }
 
-  onUploadFile(){
-      //PENDIENTE
-      this.progress = 0;
-      if (this.selectedFiles) {
-        const file: File | null = this.selectedFiles.item(0);
-        if (file) {
-          this.currentFile = file;
-          this.cmsService.upload(this.currentFile).subscribe({
-            next: (event: any) => {
-              if (event.type === HttpEventType.UploadProgress) {
-                this.progress = Math.round(100 * event.loaded / event.total);
-              } else if (event instanceof HttpResponse) {
-                this.message = event.body.message;
-                this.fileInfos = this.cmsService.getFiles();
-              }     
-            },
-            error: (err: any) => {
-              console.log(err);
-              this.progress = 0;
-  
-              if (err.error && err.error.message) {
-                this.message = err.error.message;
-              } else {
-                this.message = 'Could not upload the file!';
-              }
-              this.currentFile = undefined;
-            }
-          });
-        }
-        this.selectedFiles = undefined;
-      }
-    }  
-  
   /**
    * Animacion para abrir una ventana emergente
    * Para confirmar eliminación de archivo.
@@ -257,10 +248,6 @@ export class CmsPageComponent implements OnInit, OnDestroy {
     // Prevent Saturday and Sunday from being selected.
     return day !== 0 && day !== 6;
   };
-
-  bulkLoad(){
-    
-  }
 
   openAddDialog(enterAnimationDuration: string, exitAnimationDuration: string): void {
     this.dialog.open(CmscreatePageComponent, {

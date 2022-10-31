@@ -4,55 +4,26 @@
     <body>
         <div class="masthead bg-primary">   
                 <div class="search-div">
-                    <div *ngIf="message" class="alert alert-secondary" role="alert">{{ message }}</div>
-                    <div class="row" hidden>
-                        <div *ngIf="currentFile" class="progress my-3">
-                            <div
-                                class="progress-bar progress-bar-info progress-bar-striped"
-                                role="progressbar"
-                                attr.aria-valuenow="{{ progress }}"
-                                aria-valuemin="0"
-                                aria-valuemax="100"
-                                [ngStyle]="{ width: progress + '%' }">
-                            {{ progress }}%
-                            </div>
-                        </div>
-                    </div>
-                      <div class="card mt-3" hidden>
-                        <div class="card-header">List of Files</div>
-                        <ul
-                          class="list-group list-group-flush"
-                          *ngFor="let file of fileInfos | async"
-                        >
-                          <li class="list-group-item">
-                            <a href="{{ file.url }}">{{ file.name }}</a>
-                          </li>
-                        </ul>
-                      </div>
-                    
                     <button type="button" class="icon" mat-icon-button>
                         <mat-icon (click)="openAddDialog('0ms', '0ms')">add_box</mat-icon>
                     </button>
                     <input type="text" class="inputfilter" matInput placeholder="Filter Table" search (keyup)="applyFilter($event)" #input/>
-                    <button type="button" class="align-buildicon" mat-icon-button>
-                        <mat-icon (click)="bulkLoad">create_new_folder</mat-icon>
-                    </button>
                 </div>
                 <div class="bg-primary">
                     <table class="table-primary table table-striped" mat-table matSort [dataSource]="dataSource">
-                        <ng-container matColumnDef="ID">
-                            <th *matHeaderCellDef> # </th>  
-                            <td class="center" *matCellDef="let col">
-                                <p class="align-center"> {{col.ID}} </p>
-                            </td>
-                        </ng-container>
-                        <ng-container  matColumnDef="PO_NUMBER">
-                            <th *matHeaderCellDef> PO Number </th>
-                            <td class="center" *matCellDef="let col">
-                                <p class="align-center">{{col.PO_Number}}</p> 
-                            </td>
-                        </ng-container>
                         <form [formGroup]="cmsUpdateForm">
+                            <ng-container matColumnDef="ID">
+                                <th *matHeaderCellDef> # </th>  
+                                <td class="center" *matCellDef="let col">
+                                    <p class="align-center"> {{col.ID}} </p>
+                                </td>
+                            </ng-container>
+                            <ng-container  matColumnDef="PO_NUMBER">
+                                <th *matHeaderCellDef> PO Number </th>
+                                <td class="center" *matCellDef="let col">
+                                    <p class="align-center">{{col.PO_Number}}</p> 
+                                </td>
+                            </ng-container>
                             <ng-container matColumnDef="Reason">
                                 <th *matHeaderCellDef> 
                                     Reason 
@@ -109,6 +80,9 @@
                                     Upload PDF
                                     <mat-error *ngIf="isValidField('file')">
                                         {{getErrorMessage("file")}}
+                                    </mat-error>
+                                    <mat-error *ngIf=ApiMessage>
+                                        {{ApiMessage}}
                                     </mat-error>
                                 </th>
                                 <td class="center" *matCellDef="let col">
