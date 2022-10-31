@@ -4,9 +4,8 @@ import { UserlogService } from 'src/app/services/userlog/userlog.service';
 import { UserLog } from 'src/app/interfaces/user/userlog';
 import { CmsService } from 'src/app/services/cms/cms.service';
 import { FormBuilder, Validators } from '@angular/forms';
-import { Observable, Subject } from 'rxjs';
+import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-import { HttpEventType, HttpResponse } from '@angular/common/http';
 import { DatePipe } from '@angular/common';
 import { Data } from '@angular/router';
 import { MasterDataService } from 'src/app/services/masterdata/masterdata.service';
@@ -23,12 +22,9 @@ export class CmscreatePageComponent implements OnInit, OnDestroy {
 
   today = new Date();
 
-  selectedFiles?: any;
+  selectedFile: any;
   progress: number = 0;
-  currentFile?: any;
-  message= '';
-  fileInfos?: Observable<any>;
-  APIMessages: string='';
+  ApiMessage: string='';
   private destroy = new Subject<any>();
 
   validatePDF = /\S+\.pdf/; 
@@ -63,6 +59,32 @@ export class CmscreatePageComponent implements OnInit, OnDestroy {
       return;
     }
 
+    this.cmsService.checkPDF_Name(this.selectedFile.fileName.split('.')[0]).pipe(
+      takeUntil(this.destroy)
+    ).subscribe(
+      res => {
+        const fileForm = new FormData();
+        fileForm.append('file',this.selectedFile.fileRaw,this.selectedFile.fileName);
+        this.cmsService.upload(fileForm).pipe(
+          takeUntil(this.destroy)
+        ).subscribe(
+          res => {
+            this.createData();
+          },error => {
+            this.alert.alertMessage(error[0],error[1]);
+          }
+        );   
+      },error=>{
+        this.ApiMessage = error[1];
+      }
+    );
+    
+
+
+
+  }
+
+  createData(){
     let convertdate = new DatePipe('en-US').transform(this.today,'MM/dd/yyyy HH:mm:ss');
     const formValue = this.cmsCreateForm.value;
     formValue.Date_CSM_Processed= convertdate;
@@ -103,14 +125,11 @@ export class CmscreatePageComponent implements OnInit, OnDestroy {
       }
     }, error => {
       if(error[0] == '302'){
-        this.APIMessages = error[1];
+        this.ApiMessage = error[1];
       }else{
         this.alert.alertMessage(error[0],error[1]);
       }  
     });
-
-
-
   }
   
   createLog(data: Data) {
@@ -149,42 +168,14 @@ export class CmscreatePageComponent implements OnInit, OnDestroy {
   }
 
   onFileSelected(event:any):void{
-    this.selectedFiles = event.target.files;
-    this.cmsCreateForm.value.PDF_Name = this.selectedFiles[0].name;
+    this.ApiMessage='';
+    const [ file ] = event.target.files;
+    this.cmsCreateForm.value.PDF_Name = file.name;
+    this.selectedFile = {
+      fileRaw:file,
+      fileName:file.name
+    }
   }
-
-  onUploadFile(){
-      this.progress = 0;
-      if (this.selectedFiles) {
-        const file: File | null = this.selectedFiles.item(0);
-        if (file) {
-          this.currentFile = file;
-          this.cmsService.upload(this.currentFile).subscribe({
-            next: (event: any) => {
-              if (event.type === HttpEventType.UploadProgress) {
-                this.progress = Math.round(100 * event.loaded / event.total);
-              } else if (event instanceof HttpResponse) {
-                this.message = event.body.message;
-                this.fileInfos = this.cmsService.getFiles();
-              }     
-            },
-            error: (err: any) => {
-              console.log(err);
-              this.progress = 0;
-  
-              if (err.error && err.error.message) {
-                this.message = err.error.message;
-              } else {
-                this.message = 'Could not upload the file!';
-              }
-              this.currentFile = undefined;
-            }
-          });
-        }
-        this.selectedFiles = undefined;
-      }
-    }  
-
     getErrorMessage(field: string): string{
       let message:string = "";
       if(this.cmsCreateForm.get(field).hasError('required')){ 

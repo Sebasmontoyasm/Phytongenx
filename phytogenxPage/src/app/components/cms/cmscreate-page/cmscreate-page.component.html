@@ -29,12 +29,12 @@
                     {{getErrorMessage("PDF_Name")}}
                 </mat-error>
                 <mat-error>
-                    {{APIMessages}}
+                    {{ApiMessage}}
                 </mat-error>
             </mat-card-content>
             <mat-divider inset></mat-divider>
             <mat-card-actions>
-                <button type="button" (click)="closenewCms()" (click)="onUploadFile()" mat-raised-button color="secondary">Cancel</button>
+                <button type="button" (click)="closenewCms()" mat-raised-button color="secondary">Cancel</button>
                 <button type="submit"
                         [disabled]="cmsCreateForm.invalid"
                         mat-raised-button
