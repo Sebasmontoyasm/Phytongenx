@@ -62,6 +62,25 @@ export class QbController {
         }
     };
 
+    static getNamePDF = async (request: Request, response: Response) => {
+        const NamePDF = request.params.namepdf;
+        const mdRepository = AppDataSource.getRepository(Data);
+
+        let pdfFound: Data[];
+        pdfFound = await mdRepository.createQueryBuilder()
+        .where("LOWER(NamePDF) = LOWER(:NamePDF)", { NamePDF }).getMany();
+
+        if(!pdfFound[0]){
+            response.status(201).json({ message: 'New File.'});
+        }else{
+            response.status(404).json({ message: "The PDF already exists, please change the name or check the data."});
+        } 
+    };
+    
+    static upload = async (request: Request, response: Response) =>{
+        response.send({data: 'File Updload'});   
+    };
+
     static update = async (request: Request, response: Response) =>{
         const qbRepository = AppDataSource.getRepository(Data);
         const {Invoice_Number,NamePDF,Date_invoice_recieved} = request.body;
@@ -88,7 +107,6 @@ export class QbController {
             if(errors.length > 0){
                 return response.status(400).json(errors);
             }
-
             qb.NamePDF = NamePDF;
             qb.Date_invoice_recieved = Date_invoice_recieved;
             qb.Date_Quickbooks_Processed = 'Manually proccessed.';
