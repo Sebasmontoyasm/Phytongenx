@@ -10,8 +10,6 @@ import { catchError } from 'rxjs/operators';
 })
 export class MasterDataService {
 
-  url='http://localhost:3000/api/data/';
-
   constructor(private http: HttpClient) { }
 
   getMasterData(){
