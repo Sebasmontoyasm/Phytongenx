@@ -35,6 +35,22 @@ export class CMSController {
         }
     };
 
+    static getPDF_Name = async (request: Request, response: Response) => {
+        const PDF_Name = request.params.pdfname;
+        const mdRepository = AppDataSource.getRepository(Data);
+
+        let pdfFound: Data[];
+        pdfFound = await mdRepository.createQueryBuilder()
+        .where("LOWER(PDF_Name) = LOWER(:PDF_Name)", { PDF_Name }).getMany();
+
+            
+        if(!pdfFound[0]){
+            response.status(201).json({ message: 'New File.'});
+        }else{
+            response.status(404).json({ message: "The PDF already exists, please change the name or check the data."});
+        } 
+    };
+
     static performance = async (request: Request, response: Response) => {
         const cmsPerformanceRepository = AppDataSource.getRepository(Labresults);
         let cmsPerList: CmsPerformance[];
@@ -51,6 +67,10 @@ export class CMSController {
             response.status(404).json({message: 'The requested information is not found.'});
         }
     }
+
+    static upload = async (request: Request, response: Response) =>{
+        response.send({data: 'File Updload'});
+    };
 
     static update = async (request: Request, response: Response) =>{
         try{
@@ -82,5 +102,4 @@ export class CMSController {
 
         }
     };
-
 }
