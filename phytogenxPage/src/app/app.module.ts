@@ -42,6 +42,7 @@ import { DatePipe } from '@angular/common';
 import { CmscreatePageComponent } from './components/cms/cmscreate-page/cmscreate-page.component';
 import { UserslogsPageComponent } from './components/userslogs-page/userslogs-page.component';
 import { RestorePageComponent } from './components/restore-page/restore-page.component';
+import {MatCheckboxModule} from '@angular/material/checkbox';
 
 @NgModule({
   declarations: [
@@ -91,7 +92,9 @@ import { RestorePageComponent } from './components/restore-page/restore-page.com
     MatButtonModule,
     ReactiveFormsModule,
     MatSelectModule,
-    MatOptionModule
+    MatOptionModule,
+    MatCheckboxModule,
+    MatTableModule
   ],
   providers: [
     MatDatepickerModule,
