@@ -8,9 +8,6 @@
                     <mat-icon >arrow_back</mat-icon>
                 </button> 
                 <input class="inputfilter" matInput placeholder="Filter Table" search (keyup)="applyFilter($event)" #input/>
-                <button type="button" class="align-buildicon" mat-icon-button>
-                    <mat-icon (click)="bulkLoad">create_new_folder</mat-icon>
-                </button>
             </div> 
             <div class="bg-primary">
                 <table class="table-primary table table-striped" mat-table matSort [dataSource]="dataSource">
@@ -90,6 +87,9 @@
                                 Final PDF name
                                 <mat-error *ngIf="isValidField('file')">
                                     {{getErrorMessage("file")}}
+                                </mat-error>
+                                <mat-error *ngIf="ApiMessagePDF">
+                                    {{ApiMessagePDF}}
                                 </mat-error>
                             </th>
                             <td class="center" *matCellDef="let col">

@@ -12,7 +12,6 @@ import { UserLog } from 'src/app/interfaces/user/userlog';
 import { FormBuilder, Validators } from '@angular/forms';
 import { DatePipe } from '@angular/common';
 import { Router } from '@angular/router';
-import { HttpEventType, HttpResponse } from '@angular/common/http';
 import { Roles } from 'src/app/interfaces/user/user';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Data } from 'src/app/interfaces/data/data';
@@ -40,12 +39,9 @@ export class QbPageComponent implements OnInit, OnDestroy {
   posts:any;
 
   ApiMessage:string='';
+  ApiMessagePDF:string='';
 
-  selectedFiles?: any;
-  progress: number = 0;
-  currentFile?: any;
-  message= '';
-  fileInfos?: Observable<any>;
+  selectedFile: any;
   
   fileName: string = '';
   today:Date = new Date();
@@ -65,7 +61,6 @@ export class QbPageComponent implements OnInit, OnDestroy {
               private dialog: MatDialog,
               private fb:FormBuilder,
               private router: Router,
-              private datePipe: DatePipe,
               private _snackBar: MatSnackBar,
               private mdService: MasterDataService,
               private rpaService: RpaService,
@@ -108,6 +103,29 @@ export class QbPageComponent implements OnInit, OnDestroy {
       return;
     }
     
+    this.qbService.checkNamePDF(this.selectedFile.fileName).pipe(
+      takeUntil(this.destroy)
+    ).subscribe(
+      res => {
+        const fileForm = new FormData();
+        fileForm.append('file',this.selectedFile.fileRaw,this.selectedFile.fileName);
+        this.qbService.upload(fileForm).pipe(
+          takeUntil(this.destroy)
+        ).subscribe(
+          res => {
+            this.updateData(id);
+          },error => {
+            this.alert.alertMessage(error[0],error[1]);
+          }
+        );   
+      },error=>{
+        this.ApiMessagePDF = error[1];
+      }
+    );
+   
+  }
+
+  updateData(id:number){
     let oldData: Data;
     this.mdService.getById(id).pipe(
       takeUntil(this.destroy),
@@ -118,11 +136,12 @@ export class QbPageComponent implements OnInit, OnDestroy {
     },error => {
       this.alert.alertMessage(error[0],error[1]);
     });
+
     const formValue: QbUpdate | any = this.qbUpdateForm.value;
     let convertDate = new DatePipe('en-US').transform(formValue.Date_invoice_recieved,'MM/dd/yyyy HH:mm:ss');
     formValue.Date_invoice_recieved = convertDate;
     formValue.NamePDF = this.fileName;
-    
+  
     this.qbService.update(id,formValue).pipe(
       takeUntil(this.destroy)
     ).subscribe(res => {
@@ -166,11 +185,6 @@ export class QbPageComponent implements OnInit, OnDestroy {
     return day !== 0 && day !== 6;
   };
 
-  bulkLoad(){
-    
-  }
-
-
   saverestore(oldData: Data){
     this.restoreService.save(oldData).pipe(
       takeUntil(this.destroy),
@@ -191,43 +205,16 @@ export class QbPageComponent implements OnInit, OnDestroy {
   }
   
   onFileSelected(event:any):void{
-    this.selectedFiles = event.target.files;
-    this.fileName = this.selectedFiles[0].name;
-  }
+    this.ApiMessagePDF='';
+    const [ file ] = event.target.files;
 
-  onUploadFile(){
-    //PENDIENTE
-    this.progress = 0;
-    if (this.selectedFiles) {
-      const file: File | null = this.selectedFiles.item(0);
-      if (file) {
-        this.currentFile = file;
-        this.qbService.upload(this.currentFile).subscribe({
-          next: (event: any) => {
-            if (event.type === HttpEventType.UploadProgress) {
-              this.progress = Math.round(100 * event.loaded / event.total);
-            } else if (event instanceof HttpResponse) {
-              this.message = event.body.message;
-              this.fileInfos = this.qbService.getFiles();
-            }     
-          },
-          error: (err: any) => {
-            console.log(err);
-            this.progress = 0;
-
-            if (err.error && err.error.message) {
-              this.message = err.error.message;
-            } else {
-              this.message = 'Could not upload the file!';
-            }
-            this.currentFile = undefined;
-          }
-        });
-      }
-      this.selectedFiles = undefined;
+    this.fileName = file.name;
+    this.selectedFile = {
+      fileRaw:file,
+      fileName:file.name
     }
   }
-    
+
   createLog(id: number) {
     const localitem: string | any = localStorage.getItem('user');
     const user = JSON.parse(localitem);
