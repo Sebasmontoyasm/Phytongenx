@@ -6,13 +6,11 @@ import { validate } from "class-validator";
 export class RPAController {
 
     static status = async (request: Request, response: Response) => {
-
         const rpaRepository = AppDataSource.getRepository(observablepedro);
         let report:observablepedro[];
         try{
             report = await rpaRepository.find();
             report[0].STATUS = 1;
-            
         }catch(e){
             response.status(404).json({ message: 'Database integrity error.'});
         }
