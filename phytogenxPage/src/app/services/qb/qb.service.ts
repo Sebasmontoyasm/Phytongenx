@@ -12,8 +12,6 @@ import { QbPerformance } from 'src/app/interfaces/qb/qb-performance';
 })
 export class QbService {
 
-  url='http://localhost:3000/api/qb/';
-
   constructor(private http: HttpClient){ }
     
   performace(){
@@ -38,25 +36,17 @@ export class QbService {
     );
   }
 
-  upload(file: File): Observable<HttpEvent<any>> {
-    const formData: FormData = new FormData();
-
-    formData.append('file', file);
-    console.log("File: "+file);
-    console.log("form: ",formData);
-
-    this.http.post(this.url+"upload",formData);
-
-    const req = new HttpRequest('POST', `${this.url}upload`, formData, {
-      reportProgress: true,
-      responseType: 'json'
-    });
-
-    return this.http.request(req);
+  upload(fileForm: FormData): Observable<any> {
+    return this.http.post<any>(`${environment.API_URL}/api/qb/upload`,fileForm).
+    pipe(
+      catchError(this.handlerError));
   }
 
-  getFiles(): Observable<any> {
-    return this.http.get(`${this.url}files`);
+  checkNamePDF(NamePDF:string){
+    return this.http.get<any>(`${environment.API_URL}/api/qb/pdf/${NamePDF}`)
+    .pipe(
+      catchError(this.handlerError),
+    );
   }
 
   private handlerError(err:any): Observable<never> {
