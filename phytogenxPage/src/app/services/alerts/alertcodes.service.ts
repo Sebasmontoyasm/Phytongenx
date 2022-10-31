@@ -11,9 +11,7 @@ export class AlertcodesService {
     if(code == '201'){
       this._APIRestAlerts.open(message,'Ok');
     }else if(code == '0'){
-
       message = 'The connection to the server has been lost';
-
       this._APIRestAlerts.open('Error Code: '+code
       +" - "+message+" - Please contact with your administrator.",'Ok');
     }else if(code == '404'){
