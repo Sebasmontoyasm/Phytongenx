@@ -13,8 +13,6 @@ import { LabResult } from 'src/app/interfaces/cms/cms-labresult';
 })
 export class CmsService {
 
-  url='http://localhost:3000/api/cms/';
-
   constructor(private http: HttpClient){ }
 
   /**
@@ -43,22 +41,10 @@ export class CmsService {
       catchError(this.handlerError));
   }
 
-  upload(file: File): Observable<HttpEvent<any>> {
-    //Falta
-    const formData: FormData = new FormData();
-
-    formData.append('file', file);
-    console.log("File: "+file);
-    console.log("form: ",formData);
-
-    this.http.post(this.url+"upload",formData);
-
-    const req = new HttpRequest('POST', `${this.url}upload`, formData, {
-      reportProgress: true,
-      responseType: 'json'
-    });
-
-    return this.http.request(req);
+  upload(fileForm: FormData):Observable<any> {
+    return this.http.post<any>(`${environment.API_URL}/api/cms/upload`,fileForm).
+    pipe(
+      catchError(this.handlerError));
   }
 
   update(id:number, CmsUpdate:CmsUpdate): Observable<any>{
@@ -68,17 +54,21 @@ export class CmsService {
     );
   }
 
-  getFiles(): Observable<any> {
-    return this.http.get(`${this.url}files`);
+  checkPDF_Name(PDF_Name:string): Observable<any>{{
+    return this.http.get<any>(`${environment.API_URL}/api/cms/pdf/${PDF_Name}`)
+    .pipe(
+      catchError(this.handlerError),
+    );
   }
+}
 
-  private handlerError(err:any): Observable<never> {
-    let status: string[] = ['999','Uknow error'];
-    if(err){
-      status[0] = err.status;
-      status[1] = err.error.message;
-    }
-    return throwError(status);
+private handlerError(err:any): Observable<never> {
+  let status: string[] = ['999','Uknow error'];
+  if(err){
+    status[0] = err.status;
+    status[1] = err.error.message;
   }
+  return throwError(status);
+}
 }
 
