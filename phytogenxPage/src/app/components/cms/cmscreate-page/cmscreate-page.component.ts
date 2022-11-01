@@ -92,7 +92,7 @@ export class CmscreatePageComponent implements OnInit, OnDestroy {
 
     formValue.PDF_Name = splitstr[0];
     formValue.Date_CSM_Processed = convertdate;
-    formValue.Date_invoice_recieved = 'Waiting for Invoice.'; 
+    formValue.Date_Quickbooks_Processed = 'Waiting for Invoice.'; 
 
     this.mdService.new(formValue).pipe(
       takeUntil(this.destroy),

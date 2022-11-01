@@ -1,1 +1,1 @@
-start cmd /k "xcopy "C:\Users\RPA01\Documents\UiPath\Pedro_Phytongenx - Development" "C:\Users\RPA01\OneDrive - Phytogenx\AP\Backup\Pedro" /C /s /h /-y /y && exit"
+start cmd /k "xcopy "C:\Users\RPA01\Documents\UiPath\Pedro_Phytongenx - Development" "C:\Users\RPA01\OneDrive - Phytogenx\AP\Backup\Pedro" /C /s /h /-y /y && exit"

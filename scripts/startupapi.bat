@@ -1,1 +1,1 @@
-start cmd /k "C:\webtools\Phytongenx\phytogenxAPI && npm run dev"
+cd "C:\webtools\Phytongenx\phytogenxAPI" && start npm run dev

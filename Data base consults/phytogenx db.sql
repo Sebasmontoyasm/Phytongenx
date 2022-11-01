@@ -23,20 +23,17 @@ MAX_CONNECTIONS_PER_HOUR 0 MAX_UPDATES_PER_HOUR 0 MAX_USER_CONNECTIONS 0;GRANT A
 -- Dumping database structure for pgenx-cmsqb
 CREATE DATABASE IF NOT EXISTS `pgenx-cmsqb` /*!40100 DEFAULT CHARACTER SET latin1 */;
 USE `pgenx-cmsqb`;
-
--- Dumping structure for table pgenx-cmsqb.Data
-CREATE TABLE IF NOT EXISTS `Data` (
-  `ID` int(11) NOT NULL AUTO_INCREMENT,
-  `PO_Number` varchar(100) DEFAULT NULL,
-  `Date_CSM_Processed` varchar(150) DEFAULT NULL,
-  `PDF_Name` varchar(300) DEFAULT NULL,
-  `Invoice_Number` int(11) DEFAULT NULL,
-  `Date_invoice_recieved` varchar(150) DEFAULT NULL,
-  `Date_Quickbooks_Processed` varchar(150) DEFAULT NULL,
-  `NamePDF` varchar(300) DEFAULT NULL,
-  PRIMARY KEY (`ID`),
-  UNIQUE INDEX `U_PO_Number` (`PO_Number`)
-) 
+CREATE TABLE `data` (
+	`ID` int NOT NULL AUTO_INCREMENT,
+ 	`PO_Number` varchar(100) NULL,
+	`Date_CSM_Processed` varchar(150) NULL, 
+	`PDF_Name` varchar(300) NULL, `Invoice_Number` int(11) NULL, 
+	`Date_invoice_recieved` varchar(150) NULL, 
+	`Date_Quickbooks_Processed` varchar(150) NULL, 
+	`NamePDF` varchar(300) NULL, 
+	UNIQUE INDEX `IDX_e35ff831f898e4310104c33f83` (`PO_Number`), 
+	PRIMARY KEY (`ID`)
+);
 
 ALTER TABLE `data` ADD UNIQUE(`PO_Number`);
 
@@ -46,14 +43,16 @@ CREATE TABLE IF NOT EXISTS observablePedro(
 DELETE FROM observablePedro;
 INSERT INTO observablePedro values(0);
 
-CREATE TABLE IF NOT EXISTS user(
-    id INT NOT NULL PRIMARY KEY AUTO_INCREMENT ,
-    name varchar(255) NOT NULL,
-    username varchar(255) NOT NULL,
-    password varchar(255) NOT NULL,
-    rol varchar(255) NOT NULL,
-    createdAt varchar(255) NOT NULL,
-    updateAt varchar(255)
+CREATE TABLE `user` (
+	`id` int NOT NULL AUTO_INCREMENT, 
+	`name` varchar(255) NOT NULL, 
+	`rol` varchar(255) NOT NULL, 
+	`username` varchar(255) NOT NULL, 
+	`password` varchar(255) NOT NULL, 
+	`createdAt` varchar(255) NOT NULL, 
+	`UpdateAt` varchar(255), 
+	UNIQUE INDEX `IDX_78a916df40e02a9deb1c4b75ed` (`username`), 
+	PRIMARY KEY (`id`)
 );
 
 CREATE TABLE IF NOT EXISTS restore LIKE data;
@@ -67,7 +66,8 @@ CREATE TABLE IF NOT EXISTS userlog (
 	action varchar(250) NOT NULL,
 	date_action varchar(100) NOT NULL,
 	PRIMARY KEY (id)
-)
+);
+
 
 -- Dumping structure for table pgenx-cmsqb.DuplicateInvoice
 CREATE TABLE IF NOT EXISTS `DuplicateInvoice` (
@@ -6120,6 +6120,40 @@ BEGIN
 END;
 DELIMITER ;
 
+DELIMITER //
+DROP PROCEDURE IF EXISTS sp_extraer_datos_editado//
+CREATE PROCEDURE sp_extraer_datos_editado()
+BEGIN
+	SELECT PO_Number AS "PO #",
+	Date_CSM_Processed AS "Date CMS Processed",
+	PDF_Name AS "PDF Name",
+	Invoice_Number AS "Invoice #",
+	Date_invoice_recieved AS "Date invoice recieved",
+	Date_Quickbooks_Processed AS "Date Quickbooks Processed",
+	NamePDF AS "NamePDF" 
+	FROM data;
+END;
+DELIMITER ;
+
+DELIMITER //
+DROP PROCEDURE IF EXISTS sp_extraer_datos_observablepedro//
+CREATE PROCEDURE sp_extraer_datos_observablepedro()
+BEGIN
+	SELECT *
+	FROM observablepedro;
+END;
+DELIMITER ;
+
+DELIMITER //
+DROP PROCEDURE IF EXISTS sp_updateObservable//
+CREATE PROCEDURE sp_updateObservable()
+BEGIN
+	UPDATE observablepedro SET STATUS='0' 
+	WHERE STATUS=1;
+END;
+DELIMITER //
+
+
 /* Llamado de la funcion */
 /* call sp_InsertDataCMS(var1,var2,var3); */
 
@@ -6128,13 +6162,12 @@ DELIMITER ;
 * Se debe mostrar para realizarla de forma Manual.
 */
 DELIMITER //
-DROP PROCEDURE IF EXISTS cmsupmanualprocedure//
-CREATE PROCEDURE cmsupmanualprocedure()
+DROP PROCEDURE IF EXISTS cmsmanualprocedure//
+CREATE PROCEDURE cmsmanualprocedure()
 BEGIN
-	SELECT  @i := @i + 1 as ITEM, ID,PO_Number,Date_CSM_Processed FROM data d
-	CROSS JOIN (SELECT @i := 0) r
-	WHERE (d.Date_CSM_Processed="" OR d.Date_CSM_Processed IS NULL) AND (d.PO_Number IS NOT NULL OR d.PO_Number=!'');
-END;//
+	SELECT ID,PO_Number,Date_CSM_Processed FROM data 
+	WHERE (Date_CSM_Processed="" OR Date_CSM_Processed IS NULL) AND (PO_Number IS NOT NULL OR PO_Number=!'');
+END; 
 DELIMITER ;
 
 /**

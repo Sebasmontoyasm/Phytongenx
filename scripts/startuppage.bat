@@ -1,1 +1,1 @@
-start cmd /k "cd C:\webtools\Phytongenx\phytogenxPage && npm run start"
+cd "C:\webtools\Phytongenx\phytogenxPage" && start npm run start
