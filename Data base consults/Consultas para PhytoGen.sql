@@ -1,9 +1,7 @@
-/**
-* NAME: CMS_PERFORMANCE
-* Estados de Laboratorio Genericos
-* @Co-Author: Sebastian Montoya
-* @Update: 14/09/2022
-**/
+-- Estados de Laboratorio Genericos
+-- @Co-Author: Sebastian Montoya
+-- @Update: 14/09/2022
+
 CMS_Performance
 ============================
 
@@ -19,18 +17,15 @@ BEGIN
 END//
 DELIMITER ;
 
-call cms_performance()
+-- call cms_performance();
 
-/**
-* PO Numbers a las que se les debe agregar el Link de acceso en Master Data Page
-* en MasterData
-* Primary Key PO_Number
-* @Author: Sebastian Montoya
-* @Update: 14/09/2022
-**/
 
-CMS_Data_Objetives
-===========================
+-- Ordenes de compra que tienen detalle y 
+-- se muestran anexadas en el pagina de masterdata.
+-- Primary Key PO_Number
+-- @Author: Sebastian Montoya
+-- @Update: 14/09/2022
+
 DELIMITER //
 DROP PROCEDURE IF EXISTS cms_data_objetives//
 CREATE PROCEDURE cms_data_objetives()
@@ -41,17 +36,13 @@ BEGIN
 END//
 DELIMITER ;
 
-call cms_data_objetives();
+--call cms_data_objetives();
 
-/**
-* Estado de Resultados de Laboratorios Especificos.
-* Primary Key PO_Number
-* @Co-Author: Sebastian Montoya
-* @Update: 14/09/2022
-**/
 
-CMS_Data
-===========================
+-- Estado de Resultados de Laboratorios Especificos.
+-- Primary Key PO_Number debe ignorar 
+-- @Co-Author: Sebastian Montoya
+-- @Update: 14/09/2022
 
 DELIMITER //
 DROP PROCEDURE IF EXISTS labresult_detail//
@@ -64,17 +55,14 @@ BEGIN
 END//
 DELIMITER ;
 
-call labresult_detail('22167F');
+--call labresult_detail('22167F');
 
-/**
-* Estado final de la factura con intentos de RPA 
-* NAME: QB_PERFORMANCE
-* Estados de Facturación Genericos
-* @Co-Author: Sebastian Montoya
-* @Update: 14/09/2022
-**/
-QB_Performance
-===========================
+
+-- Estado final de la factura con metricas de PEdro RPA.
+-- NAME: QB_PERFORMANCE
+-- Estados de Facturación Genericos
+-- @Co-Author: Sebastian Montoya
+-- @Update: 14/09/2022
 
 DELIMITER //
 DROP PROCEDURE IF EXISTS qb_performance//
@@ -94,17 +82,14 @@ END//
 DELIMITER ;
 
 
-call qb_performance();
-/**
-* Invoices a las que se les debe agregar el Link de acceso
-* en MasterData
-* Primary Key InvoiceNumber
-* @Author: Sebastian Montoya
-* @Update: 14/09/2022
-**/
+--call qb_performance();
 
-Qb_Data_Objetives
-===========================
+-- Invoices a las que se les debe agregar el Link de acceso
+-- en MasterData
+-- Primary Key InvoiceNumber
+-- @Author: Sebastian Montoya
+-- @Update: 14/09/2022
+
 DELIMITER //
 DROP PROCEDURE IF EXISTS qb_data_objetives//
 CREATE PROCEDURE qb_data_objetives()
@@ -115,16 +100,13 @@ BEGIN
 END//
 DELIMITER ;
 
-call qb_data_objetives();
+--call qb_data_objetives();
 
-/**
-* Detalle de Estado final de la factura.
-* Primary Key InvoiceNumber
-* @Co-Author: Sebastian Montoya
-* @Update: 14/09/2022
-**/
-QBData
-===========================
+-- Detalle de Estado final de la factura.
+-- Primary Key InvoiceNumber
+-- @Co-Author: Sebastian Montoya
+-- @Update: 14/09/2022
+
 DELIMITER //
 DROP PROCEDURE IF EXISTS qb_data//
 CREATE PROCEDURE qb_data(IN SELINV VARCHAR(255))
@@ -136,5 +118,5 @@ BEGIN
 END//
 DELIMITER ;
 
-call qb_data("47144");
+--call qb_data("47144");
 

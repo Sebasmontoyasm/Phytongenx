@@ -1,0 +1,73 @@
+<div mat-dialog-content>
+    <mat-card class="wight-card">
+        <mat-card-title>{{user.username}}</mat-card-title>
+        <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+        <form [formGroup]="changePassForm" (ngSubmit)="onchangePass()">
+            <mat-card-content>
+                <mat-form-field class="full-width-input"> 
+                    <mat-label>Password</mat-label>
+                    <input 
+                    [type]="!hide ? 'password' : 'text'"
+                    formControlName="password"
+                    matInput 
+                    placeholder="password"
+                    required>
+                    <button type="button" mat-icon-button matSuffix (click)="hide = !hide">
+                        <mat-icon *ngIf="hide">visibility</mat-icon>
+                        <mat-icon *ngIf="!hide">visibility_off</mat-icon>
+                    </button>  
+                    <mat-error class="margin-error" *ngIf="isValidField('password')">
+                        {{getErrorMessage("password")}}
+                    </mat-error> 
+                </mat-form-field>
+                
+                <mat-error class="apimessage" *ngIf="ApiMessage">
+                    {{ApiMessage}}
+                </mat-error> 
+                
+                <mat-progress-bar class="margin-bar" mode="buffer"></mat-progress-bar>
+
+                <mat-form-field class="full-width-input"> 
+                    <mat-label>New Password</mat-label>
+                    <input 
+                    [type]="!hide2 ? 'password' : 'text'"
+                    formControlName="newpassword"
+                    matInput 
+                    placeholder="new password"
+                    required>
+                    <button type="button" mat-icon-button matSuffix (click)="hide2 = !hide2">
+                        <mat-icon *ngIf="hide2">visibility</mat-icon>
+                        <mat-icon *ngIf="!hide2">visibility_off</mat-icon>
+                    </button>
+                    <mat-error class="margin-error" *ngIf="isValidField('newpassword')">
+                        {{getErrorMessage("newpassword")}}
+                    </mat-error> 
+                </mat-form-field>
+                <mat-form-field class="full-width-input"> 
+                    <mat-label>Reply</mat-label>
+                    <input 
+                    type="password"
+                    formControlName="replypass"
+                    matInput 
+                    placeholder="reply password"
+                    required>
+                    <mat-error class="margin-error" *ngIf="isValidField('replypass')">
+                        {{getErrorMessage("replypass")}}
+                    </mat-error> 
+                </mat-form-field>
+               
+            </mat-card-content>
+            <mat-divider inset></mat-divider>
+            <mat-card-actions>
+                <button type="button" (click)="closechangePass()" mat-raised-button color="secondary">Cancel</button>
+                <button type="submit"
+                        [disabled]="mathpass"
+                        mat-raised-button
+                        color="primary">Change</button>
+            </mat-card-actions>
+        </form>
+        <mat-card-footer>
+          <mat-divider inset></mat-divider>
+        </mat-card-footer>
+    </mat-card>
+</div>

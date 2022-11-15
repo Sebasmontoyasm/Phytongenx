@@ -2,7 +2,7 @@
 import { Injectable } from '@angular/core';
 import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
-import { User } from 'src/app/interfaces/user/user';
+import { ChangePass, User } from 'src/app/interfaces/user/user';
 import { environment } from 'src/environments/environment';
 import { AlertcodesService } from '../alerts/alertcodes.service';
 
@@ -35,6 +35,12 @@ export class UserService {
 
    update(id: number, user:User): Observable<any>{
     return this.http.patch<any>(`${environment.API_URL}/api/users/${id}`,user).
+    pipe(
+      catchError(this.handlerError));
+   }
+
+   changePassword(id:number,changePass: ChangePass){
+    return this.http.patch<any>(`${environment.API_URL}/api/users/changePassword/${id}`,changePass).
     pipe(
       catchError(this.handlerError));
    }

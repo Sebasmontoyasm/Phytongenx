@@ -43,6 +43,7 @@ import { CmscreatePageComponent } from './components/cms/cmscreate-page/cmscreat
 import { UserslogsPageComponent } from './components/userslogs-page/userslogs-page.component';
 import { RestorePageComponent } from './components/restore-page/restore-page.component';
 import {MatCheckboxModule} from '@angular/material/checkbox';
+import { ChangepassPageComponent } from './components/users/changepass-page/changepass-page.component';
 
 @NgModule({
   declarations: [
@@ -65,7 +66,8 @@ import {MatCheckboxModule} from '@angular/material/checkbox';
     UsereditPageComponent,
     CmscreatePageComponent,
     UserslogsPageComponent,
-    RestorePageComponent
+    RestorePageComponent,
+    ChangepassPageComponent
   ],
   imports: [
     BrowserModule,

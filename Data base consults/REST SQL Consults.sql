@@ -1,29 +1,18 @@
-/**
-* Creación de Usuario SS con todo los permisos
-**/
-CREATE USER 'SS'@'localhost' IDENTIFIED VIA mysql_native_password
-USING '***';GRANT SELECT, INSERT, UPDATE, DELETE, FILE, CREATE TEMPORARY TABLES,
-CREATE VIEW, SHOW VIEW, EXECUTE ON *.* TO 'SS'@'localhost'
-REQUIRE NONE WITH MAX_QUERIES_PER_HOUR 0 MAX_CONNECTIONS_PER_HOUR 0 MAX_UPDATES_PER_HOUR 0 MAX_USER_CONNECTIONS 0;
-  
-GRANT ALL PRIVILEGES ON `mysql`.* TO 'SS'@'localhost';
+-- Tabla para almacenar la información eliminada por el usuario 
 
-/**
-* Tabla para almacenar la información eliminada por el usuario 
-**/
 CREATE TABLE IF NOT EXISTS restore LIKE data;
 
-/**
-* Notificación a pedro de que el usuario o cliente local ha realizado un cambio.
-* 0: Sin cambio
-* 1: Se realiza cambio
-**/
 
+-- Notificación a pedro de que el usuario o cliente local ha realizado un cambio.
+-- 0: Sin cambio
+-- 1: Se debe actualizar los cambios
 CREATE TABLE IF NOT EXISTS observablePedro(
     STATUS INT NOT NULL);
 
 INSERT INTO observablePedro values(0);
 
+
+-- Tabla usuarios para el control de accesos 
 CREATE TABLE IF NOT EXISTS user(
     id INT NOT NULL PRIMARY KEY AUTO_INCREMENT ,
     name varchar(255) NOT NULL,
@@ -34,9 +23,8 @@ CREATE TABLE IF NOT EXISTS user(
     updateAt varchar(255)
 );
 
-/**
-* Tabla para almacenar los cambios hechos por el usuario y los comentarios 
-**/
+-- Tabla para almacenar los cambios hechos por el usuario y los comentarios 
+-- al actualizar, eliminar o crear registros.
 
 CREATE TABLE IF NOT EXISTS userlog (
 	id int NOT NULL AUTO_INCREMENT,
@@ -49,10 +37,10 @@ CREATE TABLE IF NOT EXISTS userlog (
 	PRIMARY KEY (id)
 )
 
-/**
-* Información en la que Pedro no proceso por que no ha encontrado la factura 
-* Se debe mostrar para realizarla de forma Manual.
-*/
+
+-- Registros que no han sido procesados por CMS
+-- ya que no se registraron correctamente.
+
 DELIMITER //
 DROP PROCEDURE IF EXISTS cmsupmanualprocedure//
 CREATE PROCEDURE cmsupmanualprocedure()
@@ -65,10 +53,18 @@ DELIMITER ;
 
 --call cmsupmanualprocedure()
 
-/**
-* Información en la que Pedro Calidad QB no proceso por que no ha encontrado la PO_NUMBER 
-* Se debe mostrar para realizarla de forma Manual.
-*/
+DELIMITER //
+DROP PROCEDURE IF EXISTS cmsmanualprocedure//
+CREATE PROCEDURE cmsmanualprocedure()
+BEGIN
+	SELECT ID,PO_Number,Date_CSM_Processed FROM data 
+	WHERE (Date_CSM_Processed="" OR Date_CSM_Processed IS NULL) AND (PO_Number IS NOT NULL OR PO_Number=!'');
+END //
+DELIMITER ;
+
+
+-- Ordenes de compra que han sido procesadas por pedro para realizarlas
+-- de forma manual.
 
 DELIMITER //
 DROP PROCEDURE IF EXISTS qbmanually//
@@ -97,10 +93,9 @@ DELIMITER ;
 
 --call qbmanually();
 
-/**
-* Información en la que Pedro Calidad QB no proceso por que no ha encontrado la PO_NUMBER 
-* Se debe mostrar para realizarla de forma Manual.
-*/
+
+-- Información en la que Pedro Calidad QB no proceso por que no ha encontrado la PO_NUMBER 
+-- Se debe mostrar para realizarla de forma Manual.
 
 DELIMITER //
 DROP PROCEDURE IF EXISTS qbduplicated//
@@ -115,10 +110,10 @@ DELIMITER ;
 
 --call qbduplicated();
 
-/**
-* DelayQb es el tiempo que obtiene las PO que no han sido procesadas por Pedro Invoice 
-* No se encontro la factura correspondiente a esa PO.
-**/
+
+-- DelayQb es el tiempo que obtiene las PO que no han sido procesadas por Pedro Invoice 
+-- No se encontro la factura correspondiente a esa PO.
+
 
 DELIMITER //
 DROP PROCEDURE IF EXISTS DelayQb//
@@ -132,11 +127,10 @@ DELIMITER ;
 
 --call DelayQb();
 
-/**
-* Daysince son los dias que han pasado sin que se halla encontrado una PO
-* Relacionada a una Factura Existente.
-* Se retiraron las que se realizarón manual que no tienen ni Invonce ni PO
-**/
+
+-- Daysince son los dias que han pasado sin que se halla encontrado una PO
+-- Relacionada a una Factura Existente.
+-- Se retiraron las que se realizarón manual que no tienen ni Invonce ni PO
 
 DELIMITER //
 DROP PROCEDURE IF EXISTS DaysSince//
@@ -149,7 +143,15 @@ END//
 DELIMITER ;
 
 --call DaysSince();
-    
+
+-- Recoleccion de toda la información de masterdata
+-- Información Basica: ID,Numero de Orden de Compra, Fecha de CMS,
+-- PDF de orden de compra, Numero de factura, Fecha de Factrua,
+-- Fecha de procesamiento, Dias sin que ha encotnrado la Orden de compra
+-- DelayQb es el tiempo que obtiene las PO que no han sido procesadas por Pedro Invoice
+-- Facturas con Detalles, Ordenes de compra con detalles, Registros con comentarios,
+-- comentario si lo posee de la actualización.
+
 DELIMITER //
 DROP PROCEDURE IF EXISTS masterdata//
 CREATE PROCEDURE masterdata()
@@ -187,9 +189,11 @@ DELIMITER ;
 
 --CALL masterdata();
 
-/**
-*
-**/
+-- Registros antes de realizar el cambio para
+-- la recuperación de la información.
+-- Informacion de Master Data +
+-- Action realizada y fecha de cambio.
+
 DELIMITER //
 DROP PROCEDURE IF EXISTS restore_data//
 CREATE PROCEDURE restore_data()
@@ -202,9 +206,8 @@ DELIMITER ;
 
 --CALL restore_data();
 
-/**
-*
-**/
+-- Actualizacion de fecha de procesamiento de CMS
+-- formato unificado (Mes - Dia - Año) - (Hora Militar - Minutos - Segundos)
 DELIMITER //
 
 DROP PROCEDURE IF EXISTS update_cms_format//
@@ -242,18 +245,9 @@ DELIMITER ;
 
 CALL update_cms_format();
 
+-- Actualizacion de fecha de la factura
+-- formato unificado (Mes - Dia - Año) - (Hora Militar - Minutos - Segundos)
 
-/**
-*
-**/
-SELECT ID,DATE 
-FROM invoices
-WHERE DATE LIKE '%A%' OR DATE LIKE '%P%';
-
-
-/**
-*
-**/
 DELIMITER //
 
 DROP PROCEDURE IF EXISTS update_invoice_format//
@@ -292,9 +286,10 @@ DELIMITER ;
 
 CALL update_invoice_format();
 
-/**
-*
-**/
+
+-- Actualizacion de fecha de procesamiento de Quickbooks
+-- formato unificado (Mes - Dia - Año) - (Hora Militar - Minutos - Segundos)
+
 DELIMITER //
 
 DROP PROCEDURE IF EXISTS update_qb_format//
@@ -333,16 +328,9 @@ DELIMITER ;
 
 CALL update_qb_format();
 
-/**
-*
-**/
-SELECT ID,DATE 
-FROM labresults
-WHERE DATE LIKE '%A%' OR DATE LIKE '%P%';
+-- Actualizacion de fecha de Facturas en la tabla Invoices
+-- formato unificado (Mes - Dia - Año) - (Hora Militar - Minutos - Segundos)
 
-/**
-*
-**/
 DELIMITER //
 
 DROP PROCEDURE IF EXISTS update_invoicesTable_format//
@@ -380,10 +368,10 @@ DELIMITER ;
 
 CALL update_invoicesTable_format();
 
-/**
-*
-*
-**/
+
+-- Actualizacion de fecha los resultados de laboratorio.
+-- formato unificado (Mes - Dia - Año) - (Hora Militar - Minutos - Segundos)
+
 DELIMITER //
 
 DROP PROCEDURE IF EXISTS update_labresults_format//
@@ -419,4 +407,4 @@ BEGIN
 END//
 DELIMITER ;
 
-CALL update_labresults_format()
+CALL update_labresults_format();

@@ -1,0 +1,42 @@
+.mat-card {
+    margin: 1rem auto;
+    text-align: center;
+    font-weight: 100px;
+    border-color: blueviolet;
+}
+.mat-error{
+    font-size: small;    
+}
+.mat-card-title{
+    color: black;
+}
+
+.full-width-input{
+    width: 100%;
+    margin: 2%;
+    padding: 2%;
+    padding-bottom: 7%;
+    font-size: medium;
+}
+
+.margin-error{
+    margin-top: 25px;
+    font-size: medium;
+}
+.margin-bar{
+    padding-top: 10px;
+    padding-bottom: 5px;
+}
+
+.apimessage{
+    margin: 0%;
+    margin-left: 5px;
+    padding: 0%;
+    font-size: small;
+    text-align: left;
+}
+
+button{
+    width: 40%;
+}
+

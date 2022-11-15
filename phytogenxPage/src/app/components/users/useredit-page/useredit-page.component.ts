@@ -25,7 +25,7 @@ export class UsereditPageComponent implements OnInit, OnDestroy {
   userEditForm: FormBuilder | any  = this.fb.group({
     name: ['',[Validators.required,Validators.pattern(/\S+/)]],
     rol: ['',[Validators.required,Validators.pattern(/\S+/),Validators.minLength(2)]],
-    password: ['',[Validators.required, Validators.minLength(6)]]
+    password: ['',[Validators.minLength(6)]]
   });
 
   constructor(@Inject(MAT_DIALOG_DATA) public data: {user: UserEdit},

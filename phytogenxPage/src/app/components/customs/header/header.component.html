@@ -10,6 +10,7 @@
                     <li *ngIf="isLogged && rol === 'administrator'" class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded" href="/qb">QB</a></li>
                     <li *ngIf="isLogged && rol === 'cms'" class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded" href="/cms">CMS</a></li>
                     <li *ngIf="isLogged && rol === 'qb'" class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded" href="/qb">QB</a></li>
+                    
                     <li class="nav-item mx-0 mx-lg-1"> 
                         <button *ngIf="!isLogged" mat-icon-button>
                             <mat-icon  class="btn-icon" [ngStyle]="{'color':'white'}" *ngIf="!isLogged" (click)="closeSingIn()" (click)="openSingIn('1000ms', '1000ms')">account_circle</mat-icon>
@@ -22,7 +23,7 @@
                         </button>
                     </li>
                     <li  class="nav-item mx-0 mx-lg-1">
-                        <button *ngIf="isLogged && rol === 'administrator'" mat-icon-button [matMenuTriggerFor]="settings">
+                        <button *ngIf="isLogged" mat-icon-button [matMenuTriggerFor]="settings">
                             <mat-icon  class="btn-icon" [ngStyle]="{'color':'white'}">settings</mat-icon>
                         </button>
                     </li> 
@@ -30,18 +31,21 @@
                     <mat-menu #settings="matMenu" >
                         <button mat-menu-item>
                         </button>
-                        <button mat-menu-item>
+                        <button *ngIf="isLogged" (click)="closeChangePass()" (click)="openChangePass('1000ms', '1000ms')" mat-menu-item>
+                            <mat-icon class="icon">autorenew</mat-icon>
+                            <span class="disable-link">Change password</span>
+                        </button>
+                        <button *ngIf="isLogged && rol === 'administrator'" mat-menu-item>
                             <mat-icon class="icon">account_circle</mat-icon>
-                            <span><a href="/users">Users</a></span>
+                            <span><a class="disable-link" href="/users">Users</a></span>
                         </button>
-                        <button mat-menu-item>
+                        <button  *ngIf="isLogged && rol === 'administrator'" mat-menu-item>
                             <mat-icon class="icon">assignment</mat-icon>
-                            <span><a href="/userslogs">Users logs</a></span>
-                           
+                            <span><a class="disable-link" href="/userslogs">Users logs</a></span>
                         </button>
-                        <button mat-menu-item>
+                        <button *ngIf="isLogged && rol === 'administrator'" mat-menu-item>
                             <mat-icon class="icon">restore</mat-icon>
-                            <span><a href="/restore">Restore Data</a></span>
+                            <span><a class="disable-link" href="/restore">Restore Data</a></span>
                         </button>
                     </mat-menu>
                 </ul>

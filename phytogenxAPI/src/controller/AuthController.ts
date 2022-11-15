@@ -5,7 +5,22 @@ import { AppDataSource } from '../data-source';
 import * as jwt from 'jsonwebtoken';
 import config from '../config/config';
 
+
+/**
+ * Controlador para la
+ * Autentificación de los usuarios y
+ * creación de Tokens de sesión. 
+ */
 export class AuthController {
+
+    /**
+     * 
+     * @param req (Usuario y contraseña para registro)
+     * @param res (Tokens y usuario para la sesión)
+     * @returns Token de registro
+     * @returns Usuario registrado.
+     * @returns Rol de autentificación.
+     */
     static singin = async (req: Request, res: Response) =>{
         const {username,password,UpdateAt} = req.body;
         let rol: string;
@@ -34,6 +49,12 @@ export class AuthController {
         res.json({message: 'Sing in successfull!', token,username, rol});
     };
 
+    /**
+     * Metodo para actualizar la clave.
+     * @param req (Clave nueva)
+     * @param res "Mensaje de clave cambiada."
+     * @returns "Mensaje de Satifactorio o de error."
+     */
 
     static changePassword = async (req: Request, res: Response) => {
         const { id } = res.locals.jwtPayload;

@@ -5,7 +5,7 @@
         <form [formGroup]="signInForm" (ngSubmit)="onSignin()">
             <mat-card-content>
                 <mat-form-field class="full-width-input">
-                    <mat-label>User Name</mat-label>
+                    <mat-label>User</mat-label>
                     <input type="text" 
                     formControlName="username" 
                     matInput
@@ -23,7 +23,7 @@
                     matInput 
                     placeholder="password"
                     required>
-
+                    
                     <button type="button" mat-icon-button matSuffix (click)="hide = !hide">
                         <mat-icon *ngIf="hide">visibility</mat-icon>
                         <mat-icon *ngIf="!hide">visibility_off</mat-icon>

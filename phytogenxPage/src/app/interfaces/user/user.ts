@@ -23,9 +23,14 @@ export interface UserCreate {
 }
 
 export interface UserEdit {
-    id: number
+    id: number;
     name: string;
     rol: Roles;
     username: string;
     password: string;
+}
+
+export interface ChangePass{
+    password: string;
+    newpassword: string;
 }

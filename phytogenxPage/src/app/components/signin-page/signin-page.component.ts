@@ -18,7 +18,7 @@ export class SigninPageComponent implements OnInit, OnDestroy {
   private isValidusername = /\S+\.\S+/;
   private destroy = new Subject<any>();
 
-  APIMessages: string[] = ['',''];
+  APIMessages: string = '';
 
   signInForm: FormBuilder | any  = this.fb.group({
     username: ['',[Validators.required,Validators.pattern(this.isValidusername)]],

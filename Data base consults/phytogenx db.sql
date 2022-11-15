@@ -1,27 +1,27 @@
-/**
-CREATE USER 'SS'@'localhost' IDENTIFIED VIA mysql_native_password USING '***';
+
+CREATE USER 'SS'@'localhost' IDENTIFIED VIA mysql_native_password USING '-- -- -- ';
 GRANT SELECT, INSERT, UPDATE, DELETE, CREATE, DROP, FILE, INDEX, ALTER, CREATE TEMPORARY TABLES,
-CREATE VIEW, EVENT, TRIGGER, SHOW VIEW, EXECUTE ON *.* TO 'SS'@'localhost' REQUIRE NONE WITH MAX_QUERIES_PER_HOUR 0
-MAX_CONNECTIONS_PER_HOUR 0 MAX_UPDATES_PER_HOUR 0 MAX_USER_CONNECTIONS 0;GRANT ALL PRIVILEGES ON `pgenx-cmsqb`.* TO 'SS'@'localhost';
-**/
-
--- --------------------------------------------------------
--- Host:                         192.190.43.234
--- Server version:               10.4.22-MariaDB - MariaDB Server
--- Server OS:                    Linux
--- HeidiSQL Version:             11.3.0.6295
--- --------------------------------------------------------
-
-/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
-/*!40101 SET NAMES utf8 */;
-/*!50503 SET NAMES utf8mb4 */;
-/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
-/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
-/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
+CREATE VIEW, EVENT, TRIGGER, SHOW VIEW, EXECUTE ON -- .--  TO 'SS'@'localhost' REQUIRE NONE WITH MAX_QUERIES_PER_HOUR 0
+MAX_CONNECTIONS_PER_HOUR 0 MAX_UPDATES_PER_HOUR 0 MAX_USER_CONNECTIONS 0;GRANT ALL PRIVILEGES ON `pgenx-cmsqb`.--  TO 'SS'@'localhost';
 
 
--- Dumping database structure for pgenx-cmsqb
-CREATE DATABASE IF NOT EXISTS `pgenx-cmsqb` /*!40100 DEFAULT CHARACTER SET latin1 */;
+--  -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+--  Host:                         192.190.43.234
+--  Server version:               10.4.22-MariaDB - MariaDB Server
+--  Server OS:                    Linux
+--  HeidiSQL Version:             11.3.0.6295
+--  -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+
+-- !40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT ;
+-- !40101 SET NAMES utf8 ;
+-- !50503 SET NAMES utf8mb4 ;
+-- !40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 ;
+-- !40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' ;
+-- !40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 ;
+
+
+--  Dumping database structure for pgenx-cmsqb
+CREATE DATABASE IF NOT EXISTS `pgenx-cmsqb` -- !40100 DEFAULT CHARACTER SET latin1 ;
 USE `pgenx-cmsqb`;
 CREATE TABLE `data` (
 	`ID` int NOT NULL AUTO_INCREMENT,
@@ -34,6 +34,20 @@ CREATE TABLE `data` (
 	UNIQUE INDEX `IDX_e35ff831f898e4310104c33f83` (`PO_Number`), 
 	PRIMARY KEY (`ID`)
 );
+
+CREATE TABLE `data` (
+	`ID` int NOT NULL AUTO_INCREMENT,
+	`PO_Number` varchar(100) NULL,
+	`Date_CSM_Processed` varchar(150) NULL,
+	`PDF_Name` varchar(300) NULL, 
+	`Invoice_Number` int(11) NULL, 
+	`Date_invoice_recieved` varchar(150) NULL, 
+	`Date_Quickbooks_Processed` varchar(150) NULL, 
+	`NamePDF` varchar(300) NULL, 
+	UNIQUE INDEX `IDX_e35ff831f898e4310104c33f83` (`PO_Number`), 
+	PRIMARY KEY (`ID`)
+) 
+ENGINE=InnoDB;
 
 ALTER TABLE `data` ADD UNIQUE(`PO_Number`);
 
@@ -69,7 +83,7 @@ CREATE TABLE IF NOT EXISTS userlog (
 );
 
 
--- Dumping structure for table pgenx-cmsqb.DuplicateInvoice
+--  Dumping structure for table pgenx-cmsqb.DuplicateInvoice
 CREATE TABLE IF NOT EXISTS `DuplicateInvoice` (
   `ID` int(11) NOT NULL AUTO_INCREMENT,
   `PO_Number` varchar(150) DEFAULT NULL,
@@ -81,7 +95,7 @@ CREATE TABLE IF NOT EXISTS `DuplicateInvoice` (
   PRIMARY KEY (`ID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
--- Dumping structure for table pgenx-cmsqb.Invoices
+--  Dumping structure for table pgenx-cmsqb.Invoices
 CREATE TABLE IF NOT EXISTS `Invoices` (
   `ID` int(11) NOT NULL AUTO_INCREMENT,
   `Date` varchar(200) DEFAULT NULL,
@@ -91,7 +105,7 @@ CREATE TABLE IF NOT EXISTS `Invoices` (
   PRIMARY KEY (`ID`)
 ) ENGINE=InnoDB AUTO_INCREMENT=491 DEFAULT CHARSET=latin1;
 
--- Dumping structure for table pgenx-cmsqb.LabResults
+--  Dumping structure for table pgenx-cmsqb.LabResults
 CREATE TABLE IF NOT EXISTS `LabResults` (
   `ID` int(11) NOT NULL AUTO_INCREMENT,
   `Code` varchar(300) DEFAULT NULL,
@@ -104,7 +118,7 @@ CREATE TABLE IF NOT EXISTS `LabResults` (
   PRIMARY KEY (`ID`)
 ) ENGINE=InnoDB AUTO_INCREMENT=3195 DEFAULT CHARSET=latin1;
 
--- Dumping structure for table pgenx-cmsqb.NoDictionary
+--  Dumping structure for table pgenx-cmsqb.NoDictionary
 CREATE TABLE IF NOT EXISTS `NoDictionary` (
   `ID` int(11) NOT NULL AUTO_INCREMENT,
   `PDFName` varchar(300) DEFAULT NULL,
@@ -115,7 +129,7 @@ CREATE TABLE IF NOT EXISTS `NoDictionary` (
   PRIMARY KEY (`ID`)
 ) ENGINE=InnoDB AUTO_INCREMENT=44 DEFAULT CHARSET=latin1;
 
--- Volcando estructura para tabla pgenx-cmsqb.NoTestFound
+--  Volcando estructura para tabla pgenx-cmsqb.NoTestFound
 CREATE TABLE IF NOT EXISTS `NoTestFound` (
   `ID` int(11) NOT NULL AUTO_INCREMENT,
   `PDFName` varchar(300) DEFAULT NULL,
@@ -126,7 +140,7 @@ CREATE TABLE IF NOT EXISTS `NoTestFound` (
 ) ENGINE=InnoDB AUTO_INCREMENT=269 DEFAULT CHARSET=latin1;
 
 
--- Dumping structure for table pgenx-cmsqb.SubloteCodeNoFound
+--  Dumping structure for table pgenx-cmsqb.SubloteCodeNoFound
 CREATE TABLE IF NOT EXISTS `SubloteCodeNoFound` (
   `ID` int(11) NOT NULL AUTO_INCREMENT,
   `PDFName` varchar(300) DEFAULT NULL,
@@ -135,7 +149,7 @@ CREATE TABLE IF NOT EXISTS `SubloteCodeNoFound` (
   PRIMARY KEY (`ID`)
 ) ENGINE=InnoDB AUTO_INCREMENT=122 DEFAULT CHARSET=latin1;
 
--- Volcando datos para la tabla pgenx-cmsqb.Data: ~363 rows (aproximadamente)
+--  Volcando datos para la tabla pgenx-cmsqb.Data: ~363 rows (aproximadamente)
 DELETE FROM `Data`;
 INSERT INTO `Data` (`ID`, `PO_Number`, `Date_CSM_Processed`, `PDF_Name`, `Invoice_Number`, `Date_invoice_recieved`, `Date_Quickbooks_Processed`, `NamePDF`) VALUES
 	(8, '22147G', '6/6/2022 11:45', '128-310061-0', 47217, '7/21/2022 18:43', '7/21/2022 18:43', 'PDA 47217 PO 22147G 20220720.pdf'),
@@ -502,8 +516,8 @@ INSERT INTO `Data` (`ID`, `PO_Number`, `Date_CSM_Processed`, `PDF_Name`, `Invoic
 	(784, '22293-MISC', '10/28/2022 11:28:38', '128-325498-0', NULL, NULL, NULL, NULL),
 	(785, '22293D', '10/28/2022 04:06:38', '128-325504-0', NULL, NULL, NULL, NULL);
 
-/*!40103 SET TIME_ZONE=IFNULL(@OLD_TIME_ZONE, 'system') */;
--- Dumping data for table pgenx-cmsqb.DuplicateInvoice: ~0 rows (approximately)
+-- !40103 SET TIME_ZONE=IFNULL(@OLD_TIME_ZONE, 'system') ;
+--  Dumping data for tablem pgenx-cmsqb.DuplicateInvoice: ~0 rows (approximately)
 DELETE FROM `DuplicateInvoice`;
 INSERT INTO `DuplicateInvoice` (`ID`, `PO_Number`, `Date`, `Invoice_Updated_Quickbook`, `Invoice_duplicate`, `Date_Quickbooks_Processed`, `NamePDF`) VALUES
 	(1, '22284B', '10/26/2022 18:02:39', 49755, 49756, '10/20/2022 18:07:54', 'PDA 49755 PO 22284B 20221020.pdf'),
@@ -513,7 +527,7 @@ INSERT INTO `DuplicateInvoice` (`ID`, `PO_Number`, `Date`, `Invoice_Updated_Quic
 	(5, '22284B', '10/28/2022 18:06:09', 49755, 49756, '10/20/2022 18:07:54', 'PDA 49755 PO 22284B 20221020.pdf');
 
 
--- Volcando datos para la tabla pgenx-cmsqb.Invoices: ~630 rows (aproximadamente)
+--  Volcando datos para la tabla pgenx-cmsqb.Invoices: ~630 rows (aproximadamente)
 
 DELETE FROM `Invoices`;
 INSERT INTO `Invoices` (`ID`, `Date`, `PONumber`, `InvoiceNumber`, `State`) VALUES
@@ -1148,7 +1162,7 @@ INSERT INTO `Invoices` (`ID`, `Date`, `PONumber`, `InvoiceNumber`, `State`) VALU
 	(649, '10/28/2022 18:05:39', '22292E', '49880', 'Incompleted: No updated in CMS'),
 	(650, '10/28/2022 18:06:08', '22284B', '49756', 'PO number already proccesed in other invoice');
 
--- Volcando datos para la tabla pgenx-cmsqb.LabResults: ~3.989 rows (aproximadamente)
+--  Volcando datos para la tabla pgenx-cmsqb.LabResults: ~3.989 rows (aproximadamente)
 DELETE FROM `LabResults`;
 INSERT INTO `LabResults` (`ID`, `Code`, `Date`, `PDFName`, `PONumber`, `SubloteCode`, `Test`, `State`) VALUES
 	(1, '220614031 -TAMC', '6/24/2022 11:39', '128-312395-0.pdf', 'PO # 22166D', '220614031', 'TAMC', 'Complete'),
@@ -5176,9 +5190,9 @@ INSERT INTO `LabResults` (`ID`, `Code`, `Date`, `PDFName`, `PONumber`, `SubloteC
 	(4257, '221020032-TAMC', '10/28/2022 16:05:54', '128-325504-0.pdf', 'PO # 22293D', '221020032', 'TAMC', 'Completed'),
 	(4258, '221020032-TYMC', '10/28/2022 16:06:27', '128-325504-0.pdf', 'PO # 22293D', '221020032', 'TYMC', 'Completed');
 
--- Volcando datos para la tabla pgenx-cmsqb.NoDictionary: ~51 rows (aproximadamente)
+--  Volcando datos para la tabla pgenx-cmsqb.NoDictionary: ~51 rows (aproximadamente)
 
--- Volcando datos para la tabla pgenx-cmsqb.NoDictionary: ~51 rows (aproximadamente)
+--  Volcando datos para la tabla pgenx-cmsqb.NoDictionary: ~51 rows (aproximadamente)
 DELETE FROM `NoDictionary`;
 INSERT INTO `NoDictionary` (`ID`, `PDFName`, `SubloteCode`, `Test`, `Result`, `Date`) VALUES
 	(1, 'F128-314832-0.pdf', '220701012', 'Escherichia', '', '07/18/2022 02:25:30'),
@@ -5233,7 +5247,7 @@ INSERT INTO `NoDictionary` (`ID`, `PDFName`, `SubloteCode`, `Test`, `Result`, `D
 	(50, 'F128-325393-0.pdf', '221012001', 'Staphylococcus', '', '10/27/2022 11:26:45'),
 	(51, 'F128-325393-0.pdf', '221012001', 'Salmonella', '', '10/27/2022 11:43:59');
 
--- Volcando datos para la tabla pgenx-cmsqb.NoTestFound: ~268 rows (aproximadamente)
+--  Volcando datos para la tabla pgenx-cmsqb.NoTestFound: ~268 rows (aproximadamente)
 
 DELETE FROM `NoTestFound`;
 INSERT INTO `NoTestFound` (`ID`, `PDFName`, `SubLoteCode`, `Test`, `Date`) VALUES
@@ -5506,226 +5520,10 @@ INSERT INTO `NoTestFound` (`ID`, `PDFName`, `SubLoteCode`, `Test`, `Date`) VALUE
 	(267, 'F128-325393-0.pdf', '221012001', 'Escherichia coli', '10/27/2022 11:43:22'),
 	(268, 'F128-325393-0.pdf', '221012001', 'Candida albicans', '10/27/2022 11:45:56');
 
--- Volcando datos para la tabla pgenx-cmsqb.SubloteCodeNoFound: ~231 rows (aproximadamente)
--- Dumping data for table pgenx-cmsqb.NoTestFound: ~212 rows (approximately)
-DELETE FROM `NoTestFound`;
-/*!40000 ALTER TABLE `NoTestFound` DISABLE KEYS */;
-INSERT INTO `NoTestFound` (`ID`, `PDFName`, `SubLoteCode`, `Test`, `Date`) VALUES
-	(1, 'F128-314257-0.pdf', '220701002 ', 'Escherichia coli', '07/12/2022 01:17:56'),
-	(2, 'F128-314257-0.pdf', '220701002 ', 'Staphylococcus aureus', '07/12/2022 01:18:21'),
-	(3, 'F128-314257-0.pdf', '220701002 ', 'Pseudomonas aeruginosa', '07/12/2022 01:18:48'),
-	(4, 'F128-314257-0.pdf', '220701002 ', 'Candida albicans', '07/12/2022 01:19:12'),
-	(5, 'F128-314257-0.pdf', '220622017 ', 'Staphylococcus aureus', '07/12/2022 01:28:13'),
-	(6, 'F128-314257-0.pdf', '220622017 ', 'Pseudomonas aeruginosa', '07/12/2022 01:28:37'),
-	(7, 'F128-314257-0.pdf', '220701002 ', 'Escherichia coli', '07/12/2022 02:13:24'),
-	(8, 'F128-314257-0.pdf', '220701002 ', 'Staphylococcus aureus', '07/12/2022 02:13:50'),
-	(9, 'F128-314257-0.pdf', '220701002 ', 'Pseudomonas aeruginosa', '07/12/2022 02:14:16'),
-	(10, 'F128-314257-0.pdf', '220701002 ', 'Candida albicans', '07/12/2022 02:14:42'),
-	(11, 'F128-314257-0.pdf', '220622017 ', 'Staphylococcus aureus', '07/12/2022 02:16:08'),
-	(12, 'F128-314257-0.pdf', '220622017 ', 'Pseudomonas aeruginosa', '07/12/2022 02:16:34'),
-	(13, 'F128-314257-0.pdf', '220701002 ', 'Escherichia coli', '07/12/2022 02:40:14'),
-	(14, 'F128-314257-0.pdf', '220701002 ', 'Staphylococcus aureus', '07/12/2022 02:40:43'),
-	(15, 'F128-314257-0.pdf', '220701002 ', 'Pseudomonas aeruginosa', '07/12/2022 02:41:10'),
-	(16, 'F128-314257-0.pdf', '220701002 ', 'Candida albicans', '07/12/2022 02:41:37'),
-	(17, 'F128-314257-0.pdf', '220622017 ', 'Staphylococcus aureus', '07/12/2022 02:43:04'),
-	(18, 'F128-314257-0.pdf', '220622017 ', 'Pseudomonas aeruginosa', '07/12/2022 02:43:33'),
-	(19, 'F128-314610-0.pdf', '220705001 ', 'Escherichia coli', '07/14/2022 01:08:19'),
-	(20, 'F128-314610-0.pdf', '220705001 ', 'Staphylococcus aureus', '07/14/2022 01:11:20'),
-	(21, 'F128-314610-0.pdf', '220705001 ', 'Pseudomonas aeruginosa', '07/14/2022 01:11:37'),
-	(22, 'F128-314610-0.pdf', '220705001 ', 'Candida albicans', '07/14/2022 01:11:54'),
-	(23, 'F128-314742-0.pdf', '220624035', 'Escherichia coli', '07/15/2022 12:05:46'),
-	(24, 'F128-314742-0.pdf', '220707002', 'Escherichia coli', '07/15/2022 12:06:57'),
-	(25, 'F128-314742-0.pdf', '220624035', 'Staphylococcus aureus', '07/15/2022 12:08:19'),
-	(26, 'F128-314742-0.pdf', '220707002', 'Staphylococcus aureus', '07/15/2022 12:09:30'),
-	(27, 'F128-314742-0.pdf', '220624035', 'Pseudomonas aeruginosa', '07/15/2022 12:10:52'),
-	(28, 'F128-314742-0.pdf', '220707002', 'Pseudomonas aeruginosa', '07/15/2022 12:12:04'),
-	(29, 'F128-314742-0.pdf', '220624035', 'Candida albicans', '07/15/2022 12:13:26'),
-	(30, 'F128-314742-0.pdf', '220707002', 'Candida albicans', '07/15/2022 12:14:37'),
-	(31, 'F128-314742-0.pdf', '220624035', 'Escherichia coli', '07/15/2022 02:19:58'),
-	(32, 'F128-314742-0.pdf', '220707002', 'Pseudomonas aeruginosa', '07/15/2022 02:25:07'),
-	(33, '128-315256-0.pdf', '220610004', 'TAMC', '07/20/2022 09:33:39'),
-	(34, '128-315554-0.pdf', '210311009', 'TAMC', '07/22/2022 11:51:40'),
-	(35, '128-315554-0.pdf', '210311009', 'TYMC', '07/22/2022 11:56:48'),
-	(36, 'F128-315671-0.pdf', '220711068', 'Staphylococcus aureus', '07/25/2022 05:58:23'),
-	(37, 'F128-315671-0.pdf', '220711068', 'Pseudomonas aeruginosa', '07/25/2022 06:26:39'),
-	(38, 'F128-315671-0.pdf', '220711068', 'Pseudomonas aeruginosa', '07/25/2022 06:38:44'),
-	(39, '128-316194-0.pdf', '220712007', 'Staphylococcus aureus', '07/27/2022 02:31:15'),
-	(40, '128-316194-0.pdf', '220712007', 'Pseudomonas aeruginosa', '07/27/2022 02:38:06'),
-	(41, 'F128-315993-0.pdf', '220719018', 'Staphylococcus aureus', '07/27/2022 03:54:45'),
-	(42, 'F128-315993-0.pdf', '220719018', 'Pseudomonas aeruginosa', '07/27/2022 03:54:50'),
-	(43, 'F128-315993-0.pdf', '220714042', 'Staphylococcus aureus', '07/27/2022 03:56:23'),
-	(44, 'F128-315993-0.pdf', '220714042', 'Pseudomonas aeruginosa', '07/27/2022 03:56:28'),
-	(45, 'F128-316201-0.pdf', '220720008', 'Staphylococcus aureus', '07/28/2022 01:20:37'),
-	(46, 'F128-316201-0.pdf', '220720008', 'Pseudomonas aeruginosa', '07/28/2022 01:20:42'),
-	(47, 'F128-316199-0.pdf', '220720022', 'TAMC', '07/28/2022 01:27:13'),
-	(48, 'F128-316199-0.pdf', '220720022', 'TYMC', '07/28/2022 01:27:18'),
-	(49, 'F128-316390-0.pdf', '220715014', 'Escherichia coli', '08/01/2022 12:49:32'),
-	(50, 'F128-316390-0.pdf', '220715014', 'Staphylococcus aureus', '08/01/2022 12:49:37'),
-	(51, 'F128-316390-0.pdf', '220715014', 'Pseudomonas aeruginosa', '08/01/2022 12:49:42'),
-	(52, 'F128-316390-0.pdf', '220715014', 'Candida albicans', '08/01/2022 12:49:47'),
-	(53, 'F128-314742-0.pdf', '220624035', 'Escherichia coli', '08/02/2022 03:28:43'),
-	(54, 'F128-314742-0.pdf', '220707002', 'Escherichia coli', '08/02/2022 03:32:42'),
-	(55, 'F128-314742-0.pdf', '220624035', 'Staphylococcus aureus', '08/02/2022 03:33:17'),
-	(56, 'F128-314742-0.pdf', '220707002', 'Staphylococcus aureus', '08/02/2022 03:33:52'),
-	(57, 'F128-314742-0.pdf', '220624035', 'Pseudomonas aeruginosa', '08/02/2022 03:34:27'),
-	(58, 'F128-314742-0.pdf', '220707002', 'Pseudomonas aeruginosa', '08/02/2022 03:35:02'),
-	(59, 'F128-314742-0.pdf', '220624035', 'Candida albicans', '08/02/2022 03:35:37'),
-	(60, 'F128-314742-0.pdf', '220707002', 'Candida albicans', '08/02/2022 03:36:12'),
-	(61, 'F128-316672-0.pdf', '220725003', 'Escherichia coli', '08/03/2022 11:17:25'),
-	(62, 'F128-316672-0.pdf', '220726003', 'Escherichia coli', '08/03/2022 11:18:00'),
-	(63, 'F128-316672-0.pdf', '220725003', 'Staphylococcus aureus', '08/03/2022 11:18:35'),
-	(64, 'F128-316672-0.pdf', '220726003', 'Staphylococcus aureus', '08/03/2022 11:19:09'),
-	(65, 'F128-316672-0.pdf', '220725003', 'Pseudomonas aeruginosa', '08/03/2022 11:19:44'),
-	(66, 'F128-316672-0.pdf', '220726003', 'Pseudomonas aeruginosa', '08/03/2022 11:20:19'),
-	(67, 'F128-316672-0.pdf', '220725003', 'Candida albicans', '08/03/2022 11:20:53'),
-	(68, 'F128-316672-0.pdf', '220726003', 'Candida albicans', '08/03/2022 11:21:28'),
-	(69, 'F128-316911-0.pdf', '220727004', 'Escherichia coli', '08/05/2022 11:41:38'),
-	(70, 'F128-316911-0.pdf', '220728010', 'Escherichia coli', '08/05/2022 11:42:12'),
-	(71, 'F128-316911-0.pdf', '220727004', 'Staphylococcus aureus', '08/05/2022 11:42:47'),
-	(72, 'F128-316911-0.pdf', '220728010', 'Staphylococcus aureus', '08/05/2022 11:43:21'),
-	(73, 'F128-316911-0.pdf', '220727004', 'Pseudomonas aeruginosa', '08/05/2022 11:43:56'),
-	(74, 'F128-316911-0.pdf', '220728010', 'Pseudomonas aeruginosa', '08/05/2022 11:44:30'),
-	(75, 'F128-316911-0.pdf', '220727004', 'Candida albicans', '08/05/2022 11:45:04'),
-	(76, 'F128-316911-0.pdf', '220728010', 'Candida albicans', '08/05/2022 11:45:39'),
-	(77, 'F128-317011-0.pdf', '220728053', 'Escherichia coli', '08/08/2022 01:01:23'),
-	(78, 'F128-317011-0.pdf', '220729008', 'Escherichia coli', '08/08/2022 01:01:58'),
-	(79, 'F128-317011-0.pdf', '220728053', 'Staphylococcus aureus', '08/08/2022 01:02:32'),
-	(80, 'F128-317011-0.pdf', '220729008', 'Staphylococcus aureus', '08/08/2022 01:03:07'),
-	(81, 'F128-317011-0.pdf', '220728053', 'Pseudomonas aeruginosa', '08/08/2022 01:03:41'),
-	(82, 'F128-317011-0.pdf', '220729008', 'Pseudomonas aeruginosa', '08/08/2022 01:04:16'),
-	(83, 'F128-317011-0.pdf', '220728053', 'Candida albicans', '08/08/2022 01:04:51'),
-	(84, 'F128-317011-0.pdf', '220729008', 'Candida albicans', '08/08/2022 01:05:25'),
-	(85, 'F128-317539-0.pdf', '220801007', 'Escherichia coli', '08/11/2022 10:41:50'),
-	(86, 'F128-317539-0.pdf', '220802001', 'Escherichia coli', '08/11/2022 10:42:23'),
-	(87, 'F128-317539-0.pdf', '220803005', 'Escherichia coli', '08/11/2022 10:42:57'),
-	(88, 'F128-317539-0.pdf', '220801007', 'Staphylococcus aureus', '08/11/2022 10:43:31'),
-	(89, 'F128-317539-0.pdf', '220802001', 'Staphylococcus aureus', '08/11/2022 10:44:05'),
-	(90, 'F128-317539-0.pdf', '220803005', 'Staphylococcus aureus', '08/11/2022 10:44:38'),
-	(91, 'F128-317539-0.pdf', '220801007', 'Pseudomonas aeruginosa', '08/11/2022 10:45:12'),
-	(92, 'F128-317539-0.pdf', '220802001', 'Pseudomonas aeruginosa', '08/11/2022 10:45:46'),
-	(93, 'F128-317539-0.pdf', '220803005', 'Pseudomonas aeruginosa', '08/11/2022 10:46:19'),
-	(94, 'F128-317539-0.pdf', '220801007', 'Candida albicans', '08/11/2022 10:46:53'),
-	(95, 'F128-317539-0.pdf', '220802001', 'Candida albicans', '08/11/2022 10:47:27'),
-	(96, 'F128-317539-0.pdf', '220803005', 'Candida albicans', '08/11/2022 10:48:00'),
-	(97, 'F128-317633-0.pdf', '220803006', 'Escherichia coli', '08/12/2022 11:28:56'),
-	(98, 'F128-317633-0.pdf', '220803006', 'Staphylococcus aureus', '08/12/2022 11:29:02'),
-	(99, 'F128-317633-0.pdf', '220803006', 'Pseudomonas aeruginosa', '08/12/2022 11:29:07'),
-	(100, 'F128-317633-0.pdf', '220803006', 'Candida albicans', '08/12/2022 11:29:12'),
-	(101, 'F128-318221-0.pdf', '220728042', 'Escherichia coli', '08/18/2022 10:39:54'),
-	(102, 'F128-318221-0.pdf', '220810003', 'Escherichia coli', '08/18/2022 10:52:00'),
-	(103, 'F128-318221-0.pdf', '220728042', 'Staphylococcus aureus', '08/18/2022 11:07:03'),
-	(104, 'F128-318221-0.pdf', '220810003', 'Staphylococcus aureus', '08/18/2022 11:27:07'),
-	(105, 'F128-318221-0.pdf', '220728042', 'Pseudomonas aeruginosa', '08/18/2022 11:30:05'),
-	(106, 'F128-318221-0.pdf', '220810003', 'Pseudomonas aeruginosa', '08/18/2022 11:31:11'),
-	(107, 'F128-318221-0.pdf', '220728042', 'Candida albicans', '08/18/2022 11:32:10'),
-	(108, 'F128-318221-0.pdf', '220810003', 'Candida albicans', '08/18/2022 11:33:03'),
-	(109, 'F128-318221-0.pdf', '220804007', 'Escherichia coli', '08/18/2022 11:57:12'),
-	(110, 'F128-318221-0.pdf', '220804007', 'Staphylococcus aureus', '08/18/2022 11:57:34'),
-	(111, 'F128-318221-0.pdf', '220804007', 'Pseudomonas aeruginosa', '08/18/2022 11:57:55'),
-	(112, 'F128-318221-0.pdf', '220804007', 'Salmonella sp.', '08/18/2022 11:58:17'),
-	(113, 'F128-318221-0.pdf', '220804007', 'Candida albicans', '08/18/2022 11:58:38'),
-	(114, 'F128-318330-0.pdf', '220810011', 'Escherichia coli', '08/19/2022 11:01:17'),
-	(115, 'F128-318330-0.pdf', '220811004', 'Escherichia coli', '08/19/2022 11:01:52'),
-	(116, 'F128-318330-0.pdf', '220810011', 'Staphylococcus aureus', '08/19/2022 11:02:28'),
-	(117, 'F128-318330-0.pdf', '220811004', 'Staphylococcus aureus', '08/19/2022 11:03:03'),
-	(118, 'F128-318330-0.pdf', '220810011', 'Pseudomonas aeruginosa', '08/19/2022 11:03:38'),
-	(119, 'F128-318330-0.pdf', '220811004', 'Pseudomonas aeruginosa', '08/19/2022 11:04:13'),
-	(120, 'F128-318330-0.pdf', '220810011', 'Candida albicans', '08/19/2022 11:04:49'),
-	(121, 'F128-318330-0.pdf', '220811004', 'Candida albicans', '08/19/2022 11:05:24'),
-	(122, 'F128-318330-0.pdf', '220811009', 'Escherichia coli', '08/19/2022 11:06:50'),
-	(123, 'F128-318330-0.pdf', '220811009', 'Staphylococcus aureus', '08/19/2022 11:06:56'),
-	(124, 'F128-318330-0.pdf', '220811009', 'Pseudomonas aeruginosa', '08/19/2022 11:07:02'),
-	(125, 'F128-318330-0.pdf', '220811009', 'Candida albicans', '08/19/2022 11:07:08'),
-	(126, 'F128-318330-0.pdf', '220810056', 'Escherichia coli', '08/19/2022 11:08:46'),
-	(127, 'F128-318330-0.pdf', '220810056', 'Staphylococcus aureus', '08/19/2022 11:08:52'),
-	(128, 'F128-318330-0.pdf', '220810056', 'Pseudomonas aeruginosa', '08/19/2022 11:08:57'),
-	(129, 'F128-318330-0.pdf', '220810056', 'Salmonella sp.', '08/19/2022 11:09:03'),
-	(130, 'F128-318330-0.pdf', '220810056', 'Candida albicans', '08/19/2022 11:09:09'),
-	(131, 'F128-318330-0.pdf', '220810055', 'Escherichia coli', '08/19/2022 11:10:49'),
-	(132, 'F128-318330-0.pdf', '220810055', 'Staphylococcus aureus', '08/19/2022 11:10:55'),
-	(133, 'F128-318330-0.pdf', '220810055', 'Pseudomonas aeruginosa', '08/19/2022 11:11:01'),
-	(134, 'F128-318330-0.pdf', '220810055', 'Salmonella sp.', '08/19/2022 11:11:07'),
-	(135, 'F128-318330-0.pdf', '220810055', 'Candida albicans', '08/19/2022 11:11:12'),
-	(136, 'F128-318330-0.pdf', '220811007', 'Escherichia coli', '08/19/2022 11:12:53'),
-	(137, 'F128-318330-0.pdf', '220811007', 'Staphylococcus aureus', '08/19/2022 11:12:58'),
-	(138, 'F128-318330-0.pdf', '220811007', 'Pseudomonas aeruginosa', '08/19/2022 11:13:04'),
-	(139, 'F128-318330-0.pdf', '220811007', 'Salmonella sp.', '08/19/2022 11:13:10'),
-	(140, 'F128-318330-0.pdf', '220811007', 'Candida albicans', '08/19/2022 11:13:16'),
-	(141, 'F128-318421-0.pdf', '220811042', 'Escherichia coli', '08/22/2022 10:47:14'),
-	(142, 'F128-318421-0.pdf', '220811042', 'Staphylococcus aureus', '08/22/2022 10:47:21'),
-	(143, 'F128-318421-0.pdf', '220811042', 'Pseudomonas aeruginosa', '08/22/2022 10:47:28'),
-	(144, 'F128-318421-0.pdf', '220811042', 'Candida albicans', '08/22/2022 10:47:36'),
-	(145, '128-318771-0.pdf', '220809026', 'TAMC', '08/24/2022 09:34:35'),
-	(146, '128-318771-0.pdf', '220809026', 'TYMC', '08/24/2022 09:35:20'),
-	(147, 'F128-318769-0.pdf', '220816004', 'Staphylococcus aureus', '08/24/2022 11:03:12'),
-	(148, 'F128-318769-0.pdf', '220816004', 'Pseudomonas aeruginosa', '08/24/2022 11:03:17'),
-	(149, 'F128-318910-0.pdf', '220811025', 'Staphylococcus aureus', '08/25/2022 12:47:21'),
-	(150, 'F128-318910-0.pdf', '220811025', 'Pseudomonas aeruginosa', '08/25/2022 12:47:36'),
-	(151, 'F128-318910-0.pdf', '220815021', 'Staphylococcus aureus', '08/25/2022 12:49:49'),
-	(152, 'F128-318910-0.pdf', '220815021', 'Pseudomonas aeruginosa', '08/25/2022 12:50:04'),
-	(153, 'F128-318910-0.pdf', '220817003', 'Staphylococcus aureus', '08/25/2022 12:52:18'),
-	(154, 'F128-318910-0.pdf', '220817003', 'Pseudomonas aeruginosa', '08/25/2022 12:52:34'),
-	(155, 'F128-318910-0.pdf', '220815024', 'Staphylococcus aureus', '08/25/2022 12:54:48'),
-	(156, 'F128-318910-0.pdf', '220815024', 'Pseudomonas aeruginosa', '08/25/2022 12:55:03'),
-	(157, 'F128-319029-0.pdf', '220818018', 'Staphylococcus aureus', '08/26/2022 11:47:43'),
-	(158, 'F128-319029-0.pdf', '220818018', 'Pseudomonas aeruginosa', '08/26/2022 11:48:07'),
-	(159, 'F128-320158-0.pdf', '220817020', 'Escherichia coli', '09/06/2022 03:07:53'),
-	(160, 'F128-320158-0.pdf', '220817020', 'Staphylococcus aureus', '09/06/2022 03:07:59'),
-	(161, 'F128-320158-0.pdf', '220817020', 'Pseudomonas aeruginosa', '09/06/2022 03:08:26'),
-	(162, 'F128-320158-0.pdf', '220817020', 'Candida albicans', '09/06/2022 03:08:32'),
-	(163, 'F128-320158-0.pdf', '220829010', 'Escherichia coli', '09/06/2022 03:10:00'),
-	(164, 'F128-320158-0.pdf', '220829010', 'Staphylococcus aureus', '09/06/2022 03:10:06'),
-	(165, 'F128-320158-0.pdf', '220829010', 'Pseudomonas aeruginosa', '09/06/2022 03:10:11'),
-	(166, 'F128-320158-0.pdf', '220829010', 'Candida albicans', '09/06/2022 03:10:17'),
-	(167, 'F128-320253-0.pdf', '220825007', 'Escherichia coli', '09/07/2022 02:01:02'),
-	(168, 'F128-320253-0.pdf', '220825007', 'Staphylococcus aureus', '09/07/2022 02:01:25'),
-	(169, 'F128-320253-0.pdf', '220825007', 'Pseudomonas aeruginosa', '09/07/2022 02:01:49'),
-	(170, 'F128-320253-0.pdf', '220825007', 'Candida albicans', '09/07/2022 02:02:13'),
-	(171, 'F128-320512-0.pdf', '220816008', 'Escherichia coli', '09/09/2022 11:08:20'),
-	(172, 'F128-320512-0.pdf', '220816008', 'Pseudomonas aeruginosa', '09/09/2022 11:08:48'),
-	(173, 'F128-320512-0.pdf', '220816008', 'Staphylococcus aureus', '09/09/2022 11:09:16'),
-	(174, 'F128-320512-0.pdf', '220816008', 'Candida albicans', '09/09/2022 11:09:45'),
-	(175, 'F128-321193-0.pdf', '220830025', 'Escherichia coli', '09/16/2022 10:32:59'),
-	(176, 'F128-321193-0.pdf', '220908005', 'Escherichia coli', '09/16/2022 10:33:37'),
-	(177, 'F128-321193-0.pdf', '220830025', 'Staphylococcus aureus', '09/16/2022 10:34:14'),
-	(178, 'F128-321193-0.pdf', '220908005', 'Staphylococcus aureus', '09/16/2022 10:34:52'),
-	(179, 'F128-321193-0.pdf', '220830025', 'Pseudomonas aeruginosa', '09/16/2022 10:35:30'),
-	(180, 'F128-321193-0.pdf', '220908005', 'Pseudomonas aeruginosa', '09/16/2022 10:36:08'),
-	(181, 'F128-321193-0.pdf', '220830025', 'Candida albicans', '09/16/2022 10:36:45'),
-	(182, 'F128-321193-0.pdf', '220908005', 'Candida albicans', '09/16/2022 10:37:22'),
-	(183, 'F128-321273-0.pdf', '220908032', 'Escherichia coli', '09/19/2022 12:27:08'),
-	(184, 'F128-321273-0.pdf', '220909001', 'Escherichia coli', '09/19/2022 12:27:47'),
-	(185, 'F128-321273-0.pdf', '220908032', 'Staphylococcus aureus', '09/19/2022 12:28:26'),
-	(186, 'F128-321273-0.pdf', '220909001', 'Staphylococcus aureus', '09/19/2022 12:29:05'),
-	(187, 'F128-321273-0.pdf', '220908032', 'Pseudomonas aeruginosa', '09/19/2022 12:29:44'),
-	(188, 'F128-321273-0.pdf', '220909001', 'Pseudomonas aeruginosa', '09/19/2022 12:30:23'),
-	(189, 'F128-321273-0.pdf', '220908032', 'Candida albicans', '09/19/2022 12:31:02'),
-	(190, 'F128-321273-0.pdf', '220909001', 'Candida albicans', '09/19/2022 12:31:42'),
-	(191, 'F128-321273-0.pdf', '220909024', 'Escherichia coli', '09/19/2022 12:33:15'),
-	(192, 'F128-321273-0.pdf', '220909024', 'Staphylococcus aureus', '09/19/2022 12:33:21'),
-	(193, 'F128-321273-0.pdf', '220909024', 'Pseudomonas aeruginosa', '09/19/2022 12:33:27'),
-	(194, 'F128-321273-0.pdf', '220909024', 'Candida albicans', '09/19/2022 12:33:33'),
-	(195, 'F128-321553-0.pdf', '220912001', 'Escherichia coli', '09/20/2022 06:25:19'),
-	(196, 'F128-321553-0.pdf', '220912001', 'Staphylococcus aureus', '09/20/2022 06:25:26'),
-	(197, 'F128-321553-0.pdf', '220912001', 'Pseudomonas aeruginosa', '09/20/2022 06:25:34'),
-	(198, 'F128-321553-0.pdf', '220912001', 'Candida albicans', '09/20/2022 06:25:41'),
-	(199, 'F128-321758-0.pdf', '220902031', 'Staphylococcus aureus', '09/21/2022 12:47:02'),
-	(200, 'F128-321758-0.pdf', '220902031', 'Pseudomonas aeruginosa', '09/21/2022 12:47:07'),
-	(201, 'F128-321809-0.pdf', '220912051', 'Escherichia coli', '09/22/2022 12:24:46'),
-	(202, 'F128-321809-0.pdf', '220913001', 'Escherichia coli', '09/22/2022 12:25:35'),
-	(203, 'F128-321809-0.pdf', '220914007', 'Escherichia coli', '09/22/2022 12:26:13'),
-	(204, 'F128-321809-0.pdf', '220912051', 'Staphylococcus aureus', '09/22/2022 12:26:50'),
-	(205, 'F128-321809-0.pdf', '220913001', 'Staphylococcus aureus', '09/22/2022 12:27:27'),
-	(206, 'F128-321809-0.pdf', '220914007', 'Staphylococcus aureus', '09/22/2022 12:28:04'),
-	(207, 'F128-321809-0.pdf', '220912051', 'Pseudomonas aeruginosa', '09/22/2022 12:28:42'),
-	(208, 'F128-321809-0.pdf', '220913001', 'Pseudomonas aeruginosa', '09/22/2022 12:29:19'),
-	(209, 'F128-321809-0.pdf', '220914007', 'Pseudomonas aeruginosa', '09/22/2022 12:29:56'),
-	(210, 'F128-321809-0.pdf', '220912051', 'Candida albicans', '09/22/2022 12:30:33'),
-	(211, 'F128-321809-0.pdf', '220913001', 'Candida albicans', '09/22/2022 12:31:10'),
-	(212, 'F128-321809-0.pdf', '220914007', 'Candida albicans', '09/22/2022 12:31:48');
-/*!40000 ALTER TABLE `NoTestFound` ENABLE KEYS */;
+--  Volcando datos para la tabla pgenx-cmsqb.SubloteCodeNoFound: ~231 rows (aproximadamente)
+--  Dumping data for table pgenx-cmsqb.NoTestFound: ~212 rows (approximately)
 
--- Volcando datos para la tabla pgenx-cmsqb.SubloteCodeNoFound: ~231 rows (aproximadamente)
+--  Volcando datos para la tabla pgenx-cmsqb.SubloteCodeNoFound: ~231 rows (aproximadamente)
 DELETE FROM `SubloteCodeNoFound`;
 INSERT INTO `SubloteCodeNoFound` (`ID`, `PDFName`, `SubLoteCode`, `Date`) VALUES
 	(1, '128-314445-0.pdf', '220705005 ', '07/13/2022 12:20:29'),
@@ -5960,7 +5758,7 @@ INSERT INTO `SubloteCodeNoFound` (`ID`, `PDFName`, `SubLoteCode`, `Date`) VALUES
 	(233, '128-325480-0.pdf', '220211007A', '10/28/2022 11:15:56'),
 	(234, '128-325480-0.pdf', '220211007A', '10/28/2022 11:20:08');
 
--- Dumping structure for procedure pgenx-cmsqb.sp_Actualizar_CMS
+--  Dumping structure for procedure pgenx-cmsqb.sp_Actualizar_CMS
 DELIMITER //
 DROP PROCEDURE IF EXISTS sp_Actualizar_CMS//
 CREATE PROCEDURE `sp_Actualizar_CMS`(
@@ -5979,28 +5777,28 @@ BEGIN
 			SET ', in_campoActualizar, '=''', in_valorActualizar, '''
 			WHERE Id=',@MaxId);
 	
-	-- SELECT @Query;
+	--  SELECT @Query;
 	PREPARE smpt FROM @Query;
-	-- ejecutamos el Statement
+	--  ejecutamos el Statement
 	EXECUTE smpt;
-	-- liberamos la memoria
+	--  liberamos la memoria
 	DEALLOCATE PREPARE smpt;
 END//
 DELIMITER ;
 
--- Dumping structure for procedure pgenx-cmsqb.sp_extraer_datos
+--  Dumping structure for procedure pgenx-cmsqb.sp_extraer_datos
 DELIMITER //
 DROP PROCEDURE IF EXISTS sp_extraer_datos//
 CREATE PROCEDURE `sp_extraer_datos`(
 	IN `in_PO_Number` VARCHAR(150)
 )
 BEGIN
-	SELECT * FROM `Data`
+	SELECT --  FROM `Data`
 	WHERE in_PO_Number = PO_Number;
 END//
 DELIMITER ;
 
--- Dumping structure for procedure pgenx-cmsqb.sp_InsertDataCMS
+--  Dumping structure for procedure pgenx-cmsqb.sp_InsertDataCMS
 DELIMITER //
 DROP PROCEDURE IF EXISTS sp_InsertDataCMS//
 CREATE PROCEDURE `sp_InsertDataCMS`(
@@ -6014,7 +5812,7 @@ BEGIN
 END//
 DELIMITER ;
 
--- Dumping structure for procedure pgenx-cmsqb.sp_InsertDataInvDup
+--  Dumping structure for procedure pgenx-cmsqb.sp_InsertDataInvDup
 DELIMITER //
 DROP PROCEDURE IF EXISTS sp_InsertDataInvDup//
 CREATE PROCEDURE `sp_InsertDataInvDup`(
@@ -6031,7 +5829,7 @@ BEGIN
 END//
 DELIMITER ;
 
--- Dumping structure for procedure pgenx-cmsqb.sp_insertDataLabResults
+--  Dumping structure for procedure pgenx-cmsqb.sp_insertDataLabResults
 DELIMITER //
 DROP PROCEDURE IF EXISTS sp_insertDataLabResults//
 CREATE PROCEDURE `sp_insertDataLabResults`(
@@ -6049,7 +5847,7 @@ BEGIN
 END//
 DELIMITER ;
 
--- Dumping structure for procedure pgenx-cmsqb.sp_insertDataNoTestFound
+--  Dumping structure for procedure pgenx-cmsqb.sp_insertDataNoTestFound
 DELIMITER //
 DROP PROCEDURE IF EXISTS sp_insertDataNoTestFound//
 CREATE PROCEDURE `sp_insertDataNoTestFound`(
@@ -6064,7 +5862,7 @@ BEGIN
 END//
 DELIMITER ;
 
--- Dumping structure for procedure pgenx-cmsqb.sp_insertDataSubloteCodeNoFound
+--  Dumping structure for procedure pgenx-cmsqb.sp_insertDataSubloteCodeNoFound
 DELIMITER //
 DROP PROCEDURE IF EXISTS sp_insertDataSubloteCodeNoFound//
 CREATE PROCEDURE `sp_insertDataSubloteCodeNoFound`(
@@ -6078,7 +5876,7 @@ BEGIN
 END//
 DELIMITER ;
 
--- Dumping structure for procedure pgenx-cmsqb.sp_insertInvoices
+--  Dumping structure for procedure pgenx-cmsqb.sp_insertInvoices
 DELIMITER //
 DROP PROCEDURE IF EXISTS sp_insertInvoices//
 CREATE PROCEDURE `sp_insertInvoices`(
@@ -6093,7 +5891,7 @@ BEGIN
 END//
 DELIMITER ;
 
--- Dumping structure for procedure pgenx-cmsqb.sp_InsertNoDictionary
+--  Dumping structure for procedure pgenx-cmsqb.sp_InsertNoDictionary
 DELIMITER //
 DROP PROCEDURE IF EXISTS sp_InsertNoDictionary//
 CREATE PROCEDURE `sp_InsertNoDictionary`(
@@ -6109,7 +5907,7 @@ BEGIN
 END//
 DELIMITER ;
 
-/* PROCEDIMIENTOS */
+--  PROCEDIMIENTOS 
 
 DELIMITER //
 DROP PROCEDURE IF EXISTS sp_InsertDataCMS//
@@ -6139,7 +5937,7 @@ DELIMITER //
 DROP PROCEDURE IF EXISTS sp_extraer_datos_observablepedro//
 CREATE PROCEDURE sp_extraer_datos_observablepedro()
 BEGIN
-	SELECT *
+	SELECT -- 
 	FROM observablepedro;
 END;
 DELIMITER ;
@@ -6153,27 +5951,40 @@ BEGIN
 END;
 DELIMITER //
 
+DELIMITER //
+DROP PROCEDURE IF EXISTS sp_InsertDataCMS//
+CREATE PROCEDURE sp_InsertDataCMS(
+	IN `in_PO_Number` VARCHAR(100),
+	IN `in_Date_CSM_Processed` VARCHAR(150),
+	IN `in_PDF_Name` VARCHAR(300)
+)
+BEGIN
+	INSERT INTO `Data` (PO_Number,Date_CSM_Processed,PDF_Name)
+	VALUES (in_PO_Number,in_Date_CSM_Processed,in_PDF_Name);
+END;
+DELIMITER //
 
-/* Llamado de la funcion */
-/* call sp_InsertDataCMS(var1,var2,var3); */
+--  Llamado de la funcion 
+--  call sp_InsertDataCMS(var1,var2,var3); 
 
-/**
-* Información en la que Pedro no proceso por que no ha encontrado la factura 
-* Se debe mostrar para realizarla de forma Manual.
-*/
+
+--  Información en la que Pedro no proceso por que no ha encontrado la factura 
+--  Se debe mostrar para realizarla de forma Manual.
+
 DELIMITER //
 DROP PROCEDURE IF EXISTS cmsmanualprocedure//
 CREATE PROCEDURE cmsmanualprocedure()
 BEGIN
 	SELECT ID,PO_Number,Date_CSM_Processed FROM data 
 	WHERE (Date_CSM_Processed="" OR Date_CSM_Processed IS NULL) AND (PO_Number IS NOT NULL OR PO_Number=!'');
-END; 
+END //
 DELIMITER ;
 
-/**
-* Información en la que Pedro Calidad QB no proceso por que no ha encontrado la PO_NUMBER 
-* Se debe mostrar para realizarla de forma Manual.
-*/
+-- CALL cmsmanualprocedure();
+
+--  Información en la que Pedro Calidad QB no proceso por que no ha encontrado la PO_NUMBER 
+--  Se debe mostrar para realizarla de forma Manual.
+
 
 DELIMITER //
 DROP PROCEDURE IF EXISTS qbmanually//
@@ -6199,10 +6010,10 @@ BEGIN
      GROUP BY ID;
 END//
 DELIMITER ;
-/**
-* Información en la que Pedro Calidad QB no proceso por que no ha encontrado la PO_NUMBER 
-* Se debe mostrar para realizarla de forma Manual.
-*/
+
+--  Información en la que Pedro Calidad QB no proceso por que no ha encontrado la PO_NUMBER 
+--  Se debe mostrar para realizarla de forma Manual.
+
 
 DELIMITER //
 DROP PROCEDURE IF EXISTS qbduplicated//
@@ -6215,10 +6026,10 @@ BEGIN
 END//
 DELIMITER ;
 
-/**
-* DelayQb es el tiempo que obtiene las PO que no han sido procesadas por Pedro Invoice 
-* No se encontro la factura correspondiente a esa PO.
-**/
+
+--  DelayQb es el tiempo que obtiene las PO que no han sido procesadas por Pedro Invoice 
+--  No se encontro la factura correspondiente a esa PO.
+
 
 DELIMITER //
 DROP PROCEDURE IF EXISTS DelayQb//
@@ -6230,11 +6041,11 @@ BEGIN
 END//
 DELIMITER ;
 
-/**
-* Daysince son los dias que han pasado sin que se halla encontrado una PO
-* Relacionada a una Factura Existente.
-* Se retiraron las que se realizarón manual que no tienen ni Invonce ni PO
-**/
+
+--  Daysince son los dias que han pasado sin que se halla encontrado una PO
+--  Relacionada a una Factura Existente.
+--  Se retiraron las que se realizarón manual que no tienen ni Invonce ni PO
+
 
 DELIMITER //
 DROP PROCEDURE IF EXISTS DaysSince//
@@ -6281,9 +6092,9 @@ BEGIN
 END//
 DELIMITER ;
 
-/**
-*
-**/
+
+-- 
+
 DELIMITER //
 DROP PROCEDURE IF EXISTS restore_data//
 CREATE PROCEDURE restore_data()
@@ -6294,11 +6105,11 @@ BEGIN
 END//
 DELIMITER ;
 
-/**CALL restore_data();**/
+--  CALL restore_data();
 
-/**
-*
-**/
+
+-- 
+
 DELIMITER //
 
 DROP PROCEDURE IF EXISTS update_cms_format//
@@ -6334,11 +6145,11 @@ BEGIN
 END//
 DELIMITER ;
 
-/**CALL update_cms_format();
+CALL update_cms_format();
 
-/**
-*
-**/
+
+-- 
+
 DELIMITER //
 
 DROP PROCEDURE IF EXISTS update_invoice_format//
@@ -6375,12 +6186,12 @@ BEGIN
 END//
 DELIMITER ;
 
-/**CALL update_invoice_format();
-**/
-/**
+CALL update_invoice_format();
 
-*
-**/
+
+
+-- 
+
 DELIMITER //
 
 DROP PROCEDURE IF EXISTS update_qb_format//
@@ -6417,14 +6228,13 @@ BEGIN
 END//
 DELIMITER ;
 
-/**CALL update_qb_format();
+CALL update_qb_format();
 
-/**
-*
-*
-**/
+
+-- 
+-- 
+
 DELIMITER //
-
 DROP PROCEDURE IF EXISTS update_labresults_format//
 CREATE PROCEDURE update_labresults_format()
 BEGIN
@@ -6460,9 +6270,9 @@ DELIMITER ;
 
 CALL update_labresults_format();
 
-/**
-*
-**/
+
+-- 
+
 DELIMITER //
 
 DROP PROCEDURE IF EXISTS update_invoicesTable_format//
@@ -6500,12 +6310,12 @@ DELIMITER ;
 
 CALL update_invoicesTable_format();
 
-/**
-* NAME: CMS_PERFORMANCE
-* Estados de Laboratorio Genericos
-* @Co-Author: Sebastian Montoya
-* @Update: 14/09/2022
-**/
+
+--  NAME: CMS_PERFORMANCE
+--  Estados de Laboratorio Genericos
+--  @Co-Author: Sebastian Montoya
+--  @Update: 14/09/2022
+
 
 DELIMITER //
 DROP PROCEDURE IF EXISTS cms_performance//
@@ -6519,13 +6329,13 @@ BEGIN
 END//
 DELIMITER ;
 
-/**
-* PO Numbers a las que se les debe agregar el Link de acceso en Master Data Page
-* en MasterData
-* Primary Key PO_Number
-* @Author: Sebastian Montoya
-* @Update: 14/09/2022
-**/
+
+--  PO Numbers a las que se les debe agregar el Link de acceso en Master Data Page
+--  en MasterData
+--  Primary Key PO_Number
+--  @Author: Sebastian Montoya
+--  @Update: 14/09/2022
+
 
 DELIMITER //
 DROP PROCEDURE IF EXISTS cms_data_objetives//
@@ -6537,12 +6347,12 @@ BEGIN
 END//
 DELIMITER ;
 
-/**
-* Estado de Resultados de Laboratorios Especificos.
-* Primary Key PO_Number
-* @Co-Author: Sebastian Montoya
-* @Update: 14/09/2022
-**/
+
+--  Estado de Resultados de Laboratorios Especificos.
+--  Primary Key PO_Number
+--  @Co-Author: Sebastian Montoya
+--  @Update: 14/09/2022
+
 
 DELIMITER //
 DROP PROCEDURE IF EXISTS cms_data//
@@ -6555,13 +6365,13 @@ BEGIN
 END//
 DELIMITER ;
 
-/**
-* Estado final de la factura con intentos de RPA 
-* NAME: QB_PERFORMANCE
-* Estados de Facturación Genericos
-* @Co-Author: Sebastian Montoya
-* @Update: 14/09/2022
-**/
+
+--  Estado final de la factura con intentos de RPA 
+--  NAME: QB_PERFORMANCE
+--  Estados de Facturación Genericos
+--  @Co-Author: Sebastian Montoya
+--  @Update: 14/09/2022
+
 DELIMITER //
 DROP PROCEDURE IF EXISTS qb_performance//
 CREATE PROCEDURE qb_performance()
@@ -6579,9 +6389,9 @@ BEGIN
 END//
 DELIMITER ;
 
-/**
-*
-**/
+
+-- 
+
 
 DELIMITER //
 DROP PROCEDURE IF EXISTS labresult_detail//
@@ -6594,16 +6404,16 @@ BEGIN
 END//
 DELIMITER ;
 
-call labresult_detail('22167F');
+--  CALL labresult_detail('22167F');
 
 
-/**
-* Invoices a las que se les debe agregar el Link de acceso
-* en MasterData
-* Primary Key InvoiceNumber
-* @Author: Sebastian Montoya
-* @Update: 14/09/2022
-**/
+
+--  Invoices a las que se les debe agregar el Link de acceso
+--  en MasterData
+--  Primary Key InvoiceNumber
+--  @Author: Sebastian Montoya
+--  @Update: 14/09/2022
+
 
 DELIMITER //
 DROP PROCEDURE IF EXISTS qb_data_objetives//
@@ -6615,12 +6425,12 @@ BEGIN
 END//
 DELIMITER ;
 
-/**
-* Detalle de Estado final de la factura.
-* Primary Key InvoiceNumber
-* @Co-Author: Sebastian Montoya
-* @Update: 14/09/2022
-**/
+
+--  Detalle de Estado final de la factura.
+--  Primary Key InvoiceNumber
+--  @Co-Author: Sebastian Montoya
+--  @Update: 14/09/2022
+
 DELIMITER //
 DROP PROCEDURE IF EXISTS qb_data//
 CREATE PROCEDURE qb_data(IN INVN INT)

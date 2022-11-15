@@ -4,6 +4,7 @@ import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { AuthService } from 'src/app/services/auth/auth.service';
 import { SigninPageComponent } from '../../signin-page/signin-page.component';
+import { ChangepassPageComponent } from '../../users/changepass-page/changepass-page.component';
 
 @Component({
   selector: 'app-header',
@@ -16,7 +17,9 @@ export class HeaderComponent implements OnInit, OnDestroy{
 
   private destroy = new Subject<any>();
 
-  constructor(public singin: MatDialog, private authService: AuthService) { }
+  constructor(private singin: MatDialog,
+              private chpassword: MatDialog,
+              private authService: AuthService) { }
 
   ngOnInit(): void {
     this.authService.isLogged.pipe(
@@ -40,8 +43,23 @@ export class HeaderComponent implements OnInit, OnDestroy{
   closeSingIn(){
     this.singin.closeAll();
   }
+
+  closeChangePass(){
+    this.chpassword.closeAll();
+  }
+
   openSingIn(enterAnimationDuration: string, exitAnimationDuration: string): void {
     this.singin.open(SigninPageComponent, {
+    position: {top: '130px'},
+    width: '30%',
+    height: '60%',
+    enterAnimationDuration,
+    exitAnimationDuration
+  });
+  }
+
+  openChangePass(enterAnimationDuration: string, exitAnimationDuration: string): void {
+    this.chpassword.open(ChangepassPageComponent, {
     position: {top: '130px'},
     width: '30%',
     height: '60%',

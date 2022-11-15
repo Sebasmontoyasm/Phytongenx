@@ -5,22 +5,26 @@ import { AppDataSource } from "../data-source";
 import { validate } from "class-validator";
 import { Labresults } from "../entity/Labresults";
 
+/**
+ * 
+ */
 export class CMSController {
 
     static getAll = async (request: Request, response: Response) => {
         const cmsRepository = AppDataSource.getRepository(Data);
         let cmsPerList: Data[];
         try{
-            cmsPerList = await cmsRepository.query('call cmsupmanualprocedure()');
+            cmsPerList = await cmsRepository.query('call cmsmanualprocedure()');
+
+            if(cmsPerList.length > 0){
+                response.send(cmsPerList[0]);
+                
+            }else{
+                response.status(404).json({message: 'Not Result'});
+            }
+
         }catch(e){
             response.status(404).json({message: 'Somenthing goes wrong!'});
-        }
-
-        if(cmsPerList.length > 0){
-            response.send(cmsPerList[0]);
-            
-        }else{
-            response.status(404).json({message: 'Not Result'});
         }
     }
 
