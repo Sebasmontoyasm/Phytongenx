@@ -8,6 +8,6 @@ const router = Router();
 router.post('/singin', AuthController.singin);
 
 // Change password
-router.post('/change-password',[checkJwt], AuthController.changePassword);
+router.patch('/change-password',[checkJwt], AuthController.changePassword);
 
 export default router;

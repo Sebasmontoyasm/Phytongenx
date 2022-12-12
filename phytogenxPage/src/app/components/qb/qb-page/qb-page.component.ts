@@ -55,7 +55,7 @@ export class QbPageComponent implements OnInit, OnDestroy {
     NamePDF: [''],
     file: ['',[Validators.required,Validators.pattern(this.validatePDF)]],
     Date_invoice_recieved: ['',[Validators.required]],
-    Invoice_Number: ['',[Validators.pattern('^[0-9]*$'),Validators.minLength(4)]]
+    Invoice_Number: ['',[Validators.required,Validators.pattern('^[0-9]*$'),Validators.minLength(4)]]
   });
   constructor(private qbService:QbService,
               private dialog: MatDialog,

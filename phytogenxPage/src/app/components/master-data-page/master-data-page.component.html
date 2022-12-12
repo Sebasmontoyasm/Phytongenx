@@ -7,16 +7,21 @@
                 <button class="icon" mat-icon-button [matMenuTriggerFor]="menu">
                     <mat-icon >assessment</mat-icon>
                     <mat-menu #menu="matMenu">
+                        <button *ngIf="rol != 'guest'" mat-menu-item>
+                            <mat-icon>label_important</mat-icon>
+                            <a class="disable-link" href="./dashboard"><span>Metrics</span></a>
+                        </button>
                         <button *ngIf="rol === 'cms' || rol === 'administrator'" mat-menu-item>
                             <mat-icon>label_important</mat-icon>
-                            <a href="./cms/performance"><span>CMS Performance</span></a>
+                            <a class="disable-link" href="./cms/performance"><span>CMS Performance</span></a>
                         </button>
                         <button *ngIf="rol === 'qb' || rol === 'administrator'" mat-menu-item>
                             <mat-icon>label_important</mat-icon>
-                            <a href="./qb/performance"><span>QB Performance</span></a>
+                            <a class="disable-link" href="./qb/performance"><span>QB Performance</span></a>
                         </button>
                     </mat-menu>
                 </button>          
+                
                 <input class="inputfilter" matInput placeholder="Filter Table" search (keyup)="applyFilter($event)" #input/>
             </div>  
             <div>
@@ -46,15 +51,15 @@
                         </td>
                     </ng-container>
                     <ng-container matColumnDef="Date_CSM_Processed">
-                        <th *matHeaderCellDef mat-sort-header> Date CSM Processed </th>
+                        <th *matHeaderCellDef mat-sort-header> CMS Process Date </th>
                         <td *matCellDef="let row">{{row.Date_CSM_Processed}} </td>
                     </ng-container>
                     <ng-container matColumnDef="PDF_Name">
-                        <th *matHeaderCellDef mat-sort-header> Lab Results PDF </th>
+                        <th *matHeaderCellDef mat-sort-header> Lab Result PDF </th>
                         <td *matCellDef="let row">{{row.PDF_Name}} </td>
                     </ng-container>
                     <ng-container matColumnDef="NamePDF">
-                        <th *matHeaderCellDef mat-sort-header> Final PDF Name </th>
+                        <th *matHeaderCellDef mat-sort-header> Merge PDF Name </th>
                         <td *matCellDef="let row">{{row.NamePDF}} </td>
                     </ng-container>
                     <ng-container matColumnDef="Invoice_Number">
@@ -72,19 +77,19 @@
                         </td>
                     </ng-container>
                     <ng-container matColumnDef="Date_invoice_recieved">
-                        <th *matHeaderCellDef mat-sort-header> Date Invoice </th>
+                        <th *matHeaderCellDef mat-sort-header> Invoice Date </th>
                         <td *matCellDef="let row">{{row.Date_invoice_recieved}} </td>
                     </ng-container>
                     <ng-container matColumnDef="Date_Quickbooks_Processed">
-                        <th *matHeaderCellDef mat-sort-header> Date QB Processed </th>
+                        <th *matHeaderCellDef mat-sort-header> QB Process Date  </th>
                         <td *matCellDef="let row">{{row.Date_Quickbooks_Processed}} </td>
                     </ng-container>
                     <ng-container matColumnDef="DelayQb">
-                        <th *matHeaderCellDef mat-sort-header> Delay QB process </th>
+                        <th *matHeaderCellDef mat-sort-header> Delay QB Process </th>
                         <td class="center" *matCellDef="let row">{{row.DelayQb}} </td>
                     </ng-container>
                     <ng-container matColumnDef="DaysSince">
-                        <th *matHeaderCellDef mat-sort-header> Days since received </th>
+                        <th *matHeaderCellDef mat-sort-header> Days since receive </th>
                         <td class="center" *matCellDef="let row">{{row.DaysSince}} </td>
                     </ng-container>
 

@@ -1,17 +1,3 @@
-
-CREATE USER 'SS'@'localhost' IDENTIFIED VIA mysql_native_password USING '-- -- -- ';
-GRANT SELECT, INSERT, UPDATE, DELETE, CREATE, DROP, FILE, INDEX, ALTER, CREATE TEMPORARY TABLES,
-CREATE VIEW, EVENT, TRIGGER, SHOW VIEW, EXECUTE ON -- .--  TO 'SS'@'localhost' REQUIRE NONE WITH MAX_QUERIES_PER_HOUR 0
-MAX_CONNECTIONS_PER_HOUR 0 MAX_UPDATES_PER_HOUR 0 MAX_USER_CONNECTIONS 0;GRANT ALL PRIVILEGES ON `pgenx-cmsqb`.--  TO 'SS'@'localhost';
-
-
---  -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
---  Host:                         192.190.43.234
---  Server version:               10.4.22-MariaDB - MariaDB Server
---  Server OS:                    Linux
---  HeidiSQL Version:             11.3.0.6295
---  -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
-
 -- !40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT ;
 -- !40101 SET NAMES utf8 ;
 -- !50503 SET NAMES utf8mb4 ;
@@ -34,6 +20,9 @@ CREATE TABLE `data` (
 	UNIQUE INDEX `IDX_e35ff831f898e4310104c33f83` (`PO_Number`), 
 	PRIMARY KEY (`ID`)
 );
+
+-- Tabla con la información procesada por 
+-- Pedro o manualmente.
 
 CREATE TABLE `data` (
 	`ID` int NOT NULL AUTO_INCREMENT,
@@ -65,8 +54,20 @@ CREATE TABLE `user` (
 	`password` varchar(255) NOT NULL, 
 	`createdAt` varchar(255) NOT NULL, 
 	`UpdateAt` varchar(255), 
-	UNIQUE INDEX `IDX_78a916df40e02a9deb1c4b75ed` (`username`), 
+	UNIQUE INDEX `IDX_USERNAME` (`username`), 
 	PRIMARY KEY (`id`)
+);
+
+
+DELETE FROM user;
+INSERT INTO user values(
+	1,
+	"Default Admin",
+	"administrator",
+	"default.admin",
+	"123456",
+	"11/11/2022 09:14:30",
+	NULL
 );
 
 CREATE TABLE IF NOT EXISTS restore LIKE data;
@@ -81,7 +82,6 @@ CREATE TABLE IF NOT EXISTS userlog (
 	date_action varchar(100) NOT NULL,
 	PRIMARY KEY (id)
 );
-
 
 --  Dumping structure for table pgenx-cmsqb.DuplicateInvoice
 CREATE TABLE IF NOT EXISTS `DuplicateInvoice` (
@@ -516,6 +516,7 @@ INSERT INTO `Data` (`ID`, `PO_Number`, `Date_CSM_Processed`, `PDF_Name`, `Invoic
 	(784, '22293-MISC', '10/28/2022 11:28:38', '128-325498-0', NULL, NULL, NULL, NULL),
 	(785, '22293D', '10/28/2022 04:06:38', '128-325504-0', NULL, NULL, NULL, NULL);
 
+
 -- !40103 SET TIME_ZONE=IFNULL(@OLD_TIME_ZONE, 'system') ;
 --  Dumping data for tablem pgenx-cmsqb.DuplicateInvoice: ~0 rows (approximately)
 DELETE FROM `DuplicateInvoice`;
@@ -528,7 +529,6 @@ INSERT INTO `DuplicateInvoice` (`ID`, `PO_Number`, `Date`, `Invoice_Updated_Quic
 
 
 --  Volcando datos para la tabla pgenx-cmsqb.Invoices: ~630 rows (aproximadamente)
-
 DELETE FROM `Invoices`;
 INSERT INTO `Invoices` (`ID`, `Date`, `PONumber`, `InvoiceNumber`, `State`) VALUES
 	(1, '7/25/2022 18:17', '22166E', '47548', 'Complete'),
@@ -1161,6 +1161,9 @@ INSERT INTO `Invoices` (`ID`, `Date`, `PONumber`, `InvoiceNumber`, `State`) VALU
 	(648, '10/27/2022 23:36:58', '22284B', '49756', 'PO number already proccesed in other invoice'),
 	(649, '10/28/2022 18:05:39', '22292E', '49880', 'Incompleted: No updated in CMS'),
 	(650, '10/28/2022 18:06:08', '22284B', '49756', 'PO number already proccesed in other invoice');
+
+
+
 
 --  Volcando datos para la tabla pgenx-cmsqb.LabResults: ~3.989 rows (aproximadamente)
 DELETE FROM `LabResults`;
@@ -5977,7 +5980,7 @@ CREATE PROCEDURE cmsmanualprocedure()
 BEGIN
 	SELECT ID,PO_Number,Date_CSM_Processed FROM data 
 	WHERE (Date_CSM_Processed="" OR Date_CSM_Processed IS NULL) AND (PO_Number IS NOT NULL OR PO_Number=!'');
-END //
+END//
 DELIMITER ;
 
 -- CALL cmsmanualprocedure();

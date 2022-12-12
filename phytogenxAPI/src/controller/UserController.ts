@@ -33,43 +33,7 @@ export class UserController {
             response.status(404).json({ message: 'Could not get information in the request'});
         }
     };
-
-    static changePasswordId = async (req: Request, res: Response) => {
-        const { id } = res.locals.jwtPayload;
-        const { password, newpassword } = req.body;
     
-        if (!(password && newpassword)) {
-          res.status(400).json({ message: 'Old password & new password are required' });
-        }
-    
-        const userRepository = AppDataSource.getRepository(User);
-        let user: User;
-    
-        try {
-          user = await userRepository.findOneOrFail({where:{id:id}});
-        } catch (e) {
-          res.status(400).json({ message: 'Somenthing goes wrong!' });
-        }
-    
-        if (!user.checkPassword(password)) {
-          return res.status(401).json({ message: 'Password incorrect.' });
-        }
-    
-        user.password = newpassword;
-        const validationOps = { validationError: { target: false, value: false } };
-        const errors = await validate(user, validationOps);
-
-        if (errors.length > 0) {
-            return res.status(400).json(errors);
-        }
-
-        user.hashPassword();
-        console.log("encrip \n",user.password);
-        userRepository.save(user);
-
-        res.json({ message: 'Password change.' });
-    };
-
     static new = async (request: Request, response: Response) => {
         const userRepository = AppDataSource.getRepository(User);
         const {name,rol,username,password,createdAt} = request.body;

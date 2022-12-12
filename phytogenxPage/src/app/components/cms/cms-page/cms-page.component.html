@@ -35,8 +35,9 @@
                                     <mat-form-field class="full-width-input">
                                         <mat-label>Select reason</mat-label>
                                         <mat-select formControlName="reason">   
-                                            <mat-option (click)="otherOption('disable')" value="Opcion 1">1</mat-option>
-                                            <mat-option (click)="otherOption('disable')" value="Opcion 2">2</mat-option>
+                                            <mat-option (click)="otherOption('disable')" value="1">Error in lab result data.</mat-option>
+                                            <mat-option (click)="otherOption('disable')" value="2">Can't wait for bot Pedro.</mat-option>
+                                            <mat-option (click)="otherOption('disable')" value="3">Email didn't arrive in Pedro's inbox.</mat-option>
                                             <mat-option (click)="otherOption('enable')" value="Other">Other</mat-option>
                                         </mat-select>
                                     </mat-form-field>
@@ -60,7 +61,7 @@
 
                             <ng-container matColumnDef="Date_CSM_Processed">
                                 <th *matHeaderCellDef> 
-                                    Data CSM Processed 
+                                    CMS Process Date
                                     <mat-error *ngIf="isValidField('cmsDate')">
                                         {{getErrorMessage("cmsDate")}}
                                     </mat-error>
@@ -77,7 +78,7 @@
 
                             <ng-container matColumnDef="Upload_PDF">
                                 <th *matHeaderCellDef>
-                                    Upload PDF
+                                    Upload Lab PDF
                                     <mat-error *ngIf="isValidField('file')">
                                         {{getErrorMessage("file")}}
                                     </mat-error>

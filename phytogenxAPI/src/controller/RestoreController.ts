@@ -11,7 +11,7 @@ export class RestoreController {
         try{
             restores = await restoreRepository.query("CALL restore_data()");
         }catch(e){
-            response.status(404).json({message: 'Somenthing goes wrong!'});
+            response.status(404).json({message: 'Somenthing goes wrong'});
         }
 
         if(restores.length > 0){
@@ -37,7 +37,7 @@ export class RestoreController {
             await restoreRepository.save(request.body);
             response.status(201).json({ message: 'Save restore data.'});
         }catch(e){
-            response.status(404).json({ message: 'The information could not be backed up.'});
+            response.status(404).json({ message: "Register couldn't be backed up."});
         }
     };   
 }

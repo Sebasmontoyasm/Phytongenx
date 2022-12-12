@@ -32,11 +32,6 @@
                         <td *matCellDef="let row"> {{row.rol}} </td>
                     </ng-container>
 
-                    <ng-container matColumnDef="Date_Action">
-                        <th *matHeaderCellDef mat-sort-header> Date Action </th>
-                        <td *matCellDef="let row"> {{row.date_action}} </td>
-                    </ng-container>
-
                     <ng-container matColumnDef="action">
                         <th *matHeaderCellDef mat-sort-header> Action </th>
                         <td *matCellDef="let row">{{row.action}} </td>
@@ -46,7 +41,7 @@
                         <td *matCellDef="let row">{{row.comment}} </td>
                     </ng-container>
                    <ng-container matColumnDef="date_action">
-                    <th *matHeaderCellDef mat-sort-header> Date Action </th>
+                    <th *matHeaderCellDef mat-sort-header> Action date </th>
                     <td *matCellDef="let row">{{row.date_action}} </td>
                 </ng-container>
 

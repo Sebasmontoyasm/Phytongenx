@@ -14,6 +14,7 @@ import { NotFoundComponent } from './components/customs/not-found/not-found.comp
 import { CheckRolGuard } from './guards/rol/check-rol.guard';
 import { UserslogsPageComponent } from './components/userslogs-page/userslogs-page.component';
 import { RestorePageComponent } from './components/restore-page/restore-page.component';
+import { MetricsComponent } from './components/dashboard/metrics/metrics.component'
 
 const routes: Routes = [
   { path:'', redirectTo:'/homepage', pathMatch:'full'},
@@ -28,6 +29,7 @@ const routes: Routes = [
   { path:'users',canActivate:[CheckSinginGuard, CheckRolGuard], component: UsersPageComponent},
   { path:'userslogs',canActivate:[CheckSinginGuard, CheckRolGuard], component: UserslogsPageComponent},
   { path:'restore',canActivate:[CheckSinginGuard, CheckRolGuard], component: RestorePageComponent},
+  { path:'dashboard',canActivate:[CheckSinginGuard, CheckRolGuard], component: MetricsComponent},
   { path: '**', component: NotFoundComponent },
 
 ];

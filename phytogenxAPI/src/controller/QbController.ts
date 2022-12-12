@@ -14,7 +14,7 @@ export class QbController {
         try{
             mdList = await mdRepository.query('call qbmanually()');
         }catch(e){
-            response.status(404).json({message: 'Somenthing goes wrong!'});
+            response.status(404).json({message: 'Somenthing goes wrong'});
         }
 
         if(mdList.length > 0){
@@ -31,7 +31,7 @@ export class QbController {
         try{
             qbPerformance = await invoicesRepository.query('call qb_performance()');
         }catch(e){
-            response.status(404).json({message: 'Somenthing goes wrong!'});
+            response.status(404).json({message: 'Somenthing goes wrong'});
         }
 
         if(qbPerformance.length > 0){
@@ -52,7 +52,7 @@ export class QbController {
                                                             order:{Date:"DESC"}
                                                         });
         }catch(e){
-            response.status(404).json({message: 'Somenthing goes wrong!'});
+            response.status(404).json({message: 'Somenthing goes wrong'});
         }
 
         if(qbdetails.length > 0){
@@ -78,7 +78,7 @@ export class QbController {
     };
     
     static upload = async (request: Request, response: Response) =>{
-        response.send({data: 'File Updload'});   
+        response.send({data: 'File updload'});   
     };
 
     static update = async (request: Request, response: Response) =>{
@@ -120,7 +120,6 @@ export class QbController {
         }catch(e){
             response.status(404).json({ message: 'Qb not found'});
         }    
-
         return response.status(201).json({message: 'Manually proccessed qb performed.'});
     };
 

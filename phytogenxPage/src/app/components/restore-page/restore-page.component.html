@@ -16,7 +16,7 @@
                        <td *matCellDef="let row"> {{row.id}}</td>
                    </ng-container>
                    <ng-container matColumnDef="MDID">
-                    <th *matHeaderCellDef mat-sort-header>Data ID </th>
+                    <th *matHeaderCellDef mat-sort-header>ID Register </th>
                     <td *matCellDef="let row"> {{row.MDID}}</td>
                 </ng-container>
 
@@ -25,15 +25,15 @@
                        <td *matCellDef="let row">{{row.PO_Number}}</td>
                    </ng-container>
                    <ng-container matColumnDef="Date_CSM_Processed">
-                       <th *matHeaderCellDef mat-sort-header> Date CSM Processed </th>
+                       <th *matHeaderCellDef mat-sort-header>CMS Process Date</th>
                        <td *matCellDef="let row">{{row.Date_CSM_Processed}} </td>
                    </ng-container>
                    <ng-container matColumnDef="PDF_Name">
-                       <th *matHeaderCellDef mat-sort-header> Lab Results PDF </th>
+                       <th *matHeaderCellDef mat-sort-header> Lab Result PDF </th>
                        <td *matCellDef="let row">{{row.PDF_Name}} </td>
                    </ng-container>
                    <ng-container matColumnDef="NamePDF">
-                       <th *matHeaderCellDef mat-sort-header> Final PDF Name </th>
+                       <th *matHeaderCellDef mat-sort-header> Merge PDF Name </th>
                        <td *matCellDef="let row">{{row.NamePDF}} </td>
                    </ng-container>
                    <ng-container matColumnDef="Invoice_Number">
@@ -45,16 +45,16 @@
                         <td *matCellDef="let row">{{row.action}} </td>
                     </ng-container>
                    <ng-container matColumnDef="Date_invoice_recieved">
-                       <th *matHeaderCellDef mat-sort-header> Date Invoice </th>
+                       <th *matHeaderCellDef mat-sort-header> Invoice Date </th>
                        <td *matCellDef="let row">{{row.Date_invoice_recieved}} </td>
                    </ng-container>
                    
                    <ng-container matColumnDef="Date_Quickbooks_Processed">
-                        <th *matHeaderCellDef mat-sort-header> Date QB Processed </th>
+                        <th *matHeaderCellDef mat-sort-header> QB Process Date </th>
                         <td *matCellDef="let row">{{row.Date_Quickbooks_Processed}} </td>
                     </ng-container>
                 <ng-container matColumnDef="date_action">
-                    <th *matHeaderCellDef mat-sort-header> Date Action </th>
+                    <th *matHeaderCellDef mat-sort-header> Action Date </th>
                     <td *matCellDef="let row">{{row.date_action}} </td>
                 </ng-container>
 

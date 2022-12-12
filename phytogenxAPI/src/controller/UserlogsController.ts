@@ -19,7 +19,7 @@ export class UserlogsController {
             response.send(userslogs);
             
         }else{
-            response.status(404).json({message: 'You have no records registered so far.'});
+            response.status(404).json({message: "There aren't records."});
         }
     }
 
@@ -37,7 +37,7 @@ export class UserlogsController {
             await userlogRepository.save(request.body);
             response.status(201).json({ message: 'Log created'});
         }catch(e){
-            response.status(400).json({ message: 'Somenthing goes wrong!'});
+            response.status(400).json({ message: 'Somenthing goes wrong.'});
         }
     };   
 }

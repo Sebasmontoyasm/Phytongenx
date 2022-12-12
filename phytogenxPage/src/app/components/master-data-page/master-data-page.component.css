@@ -51,3 +51,8 @@ input::placeholder {
     margin: 0px;
     padding: 0px;
 }
+
+.disable-link{
+    text-decoration: none;
+    color: black;
+}

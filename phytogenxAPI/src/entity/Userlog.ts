@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column, Unique, CreateDateColumn} from "typeorm"
+import { Entity, PrimaryGeneratedColumn, Column} from "typeorm"
 import { MinLength, IsNotEmpty} from "class-validator";
 
 @Entity()

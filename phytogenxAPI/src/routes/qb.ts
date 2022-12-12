@@ -6,11 +6,11 @@ import { uploadFile } from '../middlewares/uploadfile';
 
 const router = Router();
 
-router.get('',[checkJwt,checkRole(['qb','administrator'])],QbController.getAll);
-router.get('/performance',[checkJwt,checkRole(['qb','administrator'])],QbController.getPerformance);
-router.get('/:invoice',[checkJwt,checkRole(['qb','administrator'])],QbController.getByInvoice);
-router.get('/pdf/:namepdf',[checkJwt,checkRole(['qb','administrator'])],QbController.getNamePDF);
-router.patch('/:id',[checkJwt,checkRole(['qb','administrator'])],QbController.update);
-router.post('/upload',[checkJwt,checkRole(['qb','administrator']),uploadFile('qb')], QbController.upload);
+router.get('',[checkJwt,checkRole(['qb','cmsandqb','administrator'])],QbController.getAll);
+router.get('/performance',[checkJwt,checkRole(['qb','cmsandqb','administrator'])],QbController.getPerformance);
+router.get('/:invoice',[checkJwt,checkRole(['qb','cmsandqb','administrator'])],QbController.getByInvoice);
+router.get('/pdf/:namepdf',[checkJwt,checkRole(['qb','cmsandqb','administrator'])],QbController.getNamePDF);
+router.patch('/:id',[checkJwt,checkRole(['qb','cmsandqb','administrator'])],QbController.update);
+router.post('/upload',[checkJwt,checkRole(['qb','cmsandqb','administrator']),uploadFile('qb')], QbController.upload);
 
 export default router;

@@ -4,9 +4,15 @@ import { Masterdata } from  "../interface/masterdata";
 import { AppDataSource } from "../data-source";
 import { validate } from "class-validator";
 
-
+/**
+ * Web APIS de la tabla de master data
+ */
 export class MDController {
 
+    /**
+     * Obtiene la información para mostrar en la vista master data.
+     * @param response Información completa de la tabla data junto con unas consultas y comentarios. 
+     */
     static getAll = async (request: Request, response: Response) => {
         const mdRepository = AppDataSource.getRepository(Data);
         let mdList: Masterdata[];
@@ -24,6 +30,11 @@ export class MDController {
         }
     }
 
+    /**
+     * Toma un registro en la tabla data de la base de datos.
+     * @param request identificador unico.
+     * @param response registro seleccionado.
+     */
     static getById = async (request: Request, response: Response) => {
         const id = Number(request.params.id);
         const mdRepository = AppDataSource.getRepository(Data);
@@ -48,6 +59,11 @@ export class MDController {
         }
     }
 
+    /**
+     * Crea un nuevo examen de laboratorio en modulo de CMS 
+     * @param request Orden de compra que se pretende crear para revisar si esta duplicado.
+     * @param response Crea el nuevo registro en masterdata.
+     */
     static new = async (request: Request, response: Response) => {
         const mdRepository = AppDataSource.getRepository(Data);
         const validationOpt = { validationError: { target: false, value: false } };
@@ -68,7 +84,7 @@ export class MDController {
                 await mdRepository.save(request.body);
                 response.status(201).json({ message: 'CMS process created'});
             }catch(e){
-                response.status(404).json({ message: 'Somenthing goes wrong!'});
+                response.status(404).json({ message: 'Somenthing goes wrong'});
             }
           
         }else{
@@ -76,6 +92,11 @@ export class MDController {
         } 
     };
 
+    /**
+     * 
+     * @param request 
+     * @param response 
+     */
     static delete = async (request: Request, response: Response) =>{
         const mdRepository = AppDataSource.getRepository(Data);
         let md:Data;

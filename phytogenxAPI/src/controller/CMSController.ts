@@ -6,10 +6,17 @@ import { validate } from "class-validator";
 import { Labresults } from "../entity/Labresults";
 
 /**
- * 
+ * Contraladora para el modulo 
+ * CMS en el que tiene el CRUD
+ * y se actualizan los datos que no
+ * fuerón procesados automaticamente.
  */
 export class CMSController {
 
+    /**
+     * @param response obtiene las ordenes de compra incompletas 
+     * y no procesadas por falta de información.
+     */
     static getAll = async (request: Request, response: Response) => {
         const cmsRepository = AppDataSource.getRepository(Data);
         let cmsPerList: Data[];
@@ -20,14 +27,18 @@ export class CMSController {
                 response.send(cmsPerList[0]);
                 
             }else{
-                response.status(404).json({message: 'Not Result'});
+                response.status(404).json({message: 'Not results found'});
             }
 
         }catch(e){
-            response.status(404).json({message: 'Somenthing goes wrong!'});
+            response.status(404).json({message: 'Somenthing goes wrong'});
         }
     }
-
+    /**
+     * CMS detail
+     * @param request PO_Number unico para obtener los examanes de laboratorio de la orden de compra.
+     * @param response Examanes de labotorio según la Orden de Compra.
+     */
     static getById = async (request: Request, response: Response) => {
         const ponumber = request.params.ponumber;
         const labresultRepository = AppDataSource.getRepository(Labresults);
@@ -35,10 +46,14 @@ export class CMSController {
             const labresults: Labresults[] = await labresultRepository.query('call labresult_detail(?)',[ponumber])
             response.send(labresults[0]);
         }catch(e){
-            response.status(404).json({ message: 'Not result'});
+            response.status(404).json({ message: 'Not results found'});
         }
     };
-
+    /**
+     * Revisa si ya se ha almacenado ese examen de laboratorio.
+     * @param request Nombre del PDF.
+     * @param response Habita la creación del archivo o reporta que ya existe.
+     */
     static getPDF_Name = async (request: Request, response: Response) => {
         const PDF_Name = request.params.pdfname;
         const mdRepository = AppDataSource.getRepository(Data);
@@ -51,17 +66,22 @@ export class CMSController {
         if(!pdfFound[0]){
             response.status(201).json({ message: 'New File.'});
         }else{
-            response.status(404).json({ message: "The PDF already exists, please change the name or check the data."});
+            response.status(404).json({ message: "Lab Result already exists, please change name or check if file already exist in the database."});
         } 
     };
 
+    /**
+     * CMS Performance del procesamiento
+     * de Pedro en tiempos y fechas. 
+     * @param response CMS Performance información.
+     */
     static performance = async (request: Request, response: Response) => {
         const cmsPerformanceRepository = AppDataSource.getRepository(Labresults);
         let cmsPerList: CmsPerformance[];
         try{
             cmsPerList = await cmsPerformanceRepository.query('call cms_performance()');
         }catch(e){
-            response.status(404).json({message: 'Somenthing goes wrong!'});
+            response.status(404).json({message: 'Somenthing goes wrong'});
         }
 
         if(cmsPerList.length > 0){
@@ -71,11 +91,19 @@ export class CMSController {
             response.status(404).json({message: 'The requested information is not found.'});
         }
     }
-
+    /**
+     * Guardar examen de laboratorio en la ruta del middlewares.
+     * @param request middlewares para guardar archivo en la carpeta destino.
+     */
     static upload = async (request: Request, response: Response) =>{
-        response.send({data: 'File Updload'});
+        response.send({data: 'File updload'});
     };
 
+    /**
+     * Actualizar registros que no fuerón procesados correctamente
+     * de manera manual, es 1 registro por cada uno.
+     * @param request Obtiene el identificador del registro junto con la información que se debe actualizar.
+     */
     static update = async (request: Request, response: Response) =>{
         try{
             const cmsRepository = AppDataSource.getRepository(Data);

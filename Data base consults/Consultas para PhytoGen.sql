@@ -2,9 +2,6 @@
 -- @Co-Author: Sebastian Montoya
 -- @Update: 14/09/2022
 
-CMS_Performance
-============================
-
 DELIMITER //
 DROP PROCEDURE IF EXISTS cms_performance//
 CREATE PROCEDURE cms_performance()
@@ -56,7 +53,6 @@ END//
 DELIMITER ;
 
 --call labresult_detail('22167F');
-
 
 -- Estado final de la factura con metricas de PEdro RPA.
 -- NAME: QB_PERFORMANCE

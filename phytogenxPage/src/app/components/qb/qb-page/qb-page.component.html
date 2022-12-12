@@ -59,8 +59,9 @@
                                 <mat-form-field class="full-width-input">
                                     <mat-label>Select reason</mat-label>
                                     <mat-select formControlName="reason">   
-                                        <mat-option (click)="otherOption('disable')" value="Opcion 1">1</mat-option>
-                                        <mat-option (click)="otherOption('disable')" value="Opcion 2">2</mat-option>
+                                        <mat-option (click)="otherOption('disable')" value="1">Incorrect PO number on the invoice.</mat-option>
+                                        <mat-option (click)="otherOption('disable')" value="2">Invoice wasn't sent to Pedro's mailbox.</mat-option>
+                                        <mat-option (click)="otherOption('disable')" value="3">Invoice email with wrong format.</mat-option>
                                         <mat-option (click)="otherOption('enable')" value="Other">Other</mat-option>
                                     </mat-select>
                                 </mat-form-field>
@@ -84,7 +85,7 @@
 
                         <ng-container matColumnDef="NamePDF">
                             <th *matHeaderCellDef>
-                                Final PDF name
+                                Merge PDF Name
                                 <mat-error *ngIf="isValidField('file')">
                                     {{getErrorMessage("file")}}
                                 </mat-error>
@@ -108,7 +109,7 @@
 
                     <ng-container matColumnDef="Date_invoice_recieved">
                             <th *matHeaderCellDef> 
-                                Date invoice
+                                Invoice date
                                 <mat-error *ngIf="isValidField('Date_invoice_recieved')">
                                     {{getErrorMessage("Date_invoice_recieved")}}
                                 </mat-error>

@@ -12,10 +12,7 @@ router.get('/',[checkJwt,checkRole(['administrator'])], UserController.getAll);
 router.get('/:id',[checkJwt,checkRole(['administrator'])], UserController.getById);
 
 // Create a new user
-router.post('/',[checkJwt,checkRole(['administrator'])],UserController.new);
-
-// Change Password
-router.patch('/changePassword/:id',[checkJwt], UserController.changePasswordId);
+router.post('/',UserController.new);
 
 // Edit user
 router.patch('/:id',[checkJwt,checkRole(['administrator'])], UserController.update);
