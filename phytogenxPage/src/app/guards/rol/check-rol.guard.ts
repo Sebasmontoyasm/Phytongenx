@@ -17,12 +17,12 @@ export class CheckRolGuard implements CanActivate {
     const user = JSON.parse(localitem);
 
     var regexp: RegExp = /cms\S?/;
-    if(state.url.match(regexp) && (user.rol == 'administrator' || user.rol == 'cms')){
+    if(state.url.match(regexp) && (user.rol == 'administrator' || user.rol == 'cms' || user.rol == 'cmsandqb')){
       return true;
     }
 
     regexp = /qb\S?/;
-    if(state.url.match(regexp) && (user.rol == 'administrator' || user.rol == 'qb')){
+    if(state.url.match(regexp) && (user.rol == 'administrator' || user.rol == 'qb' || user.rol == 'cmsandqb')){
       return true;
     }
 

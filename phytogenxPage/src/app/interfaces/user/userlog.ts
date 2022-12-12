@@ -1,4 +1,4 @@
-export type Roles = 'administrator'|'cms'|'qb'|'guest';
+export type Roles = 'administrator'|'cmsandqb'|'cms'|'qb'|'guest';
 
 export interface UserLog{
     id?:number;

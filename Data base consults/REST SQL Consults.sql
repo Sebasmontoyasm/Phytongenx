@@ -72,7 +72,8 @@ CREATE PROCEDURE qbmanually()
 BEGIN
     SELECT a.ID,a.PO_Number,a.Invoice_Number,a.Date_invoice_recieved,a.NamePDF
     FROM ( 
-        SELECT ID,PO_Number,Invoice_Number,Date_invoice_recieved, Date_Quickbooks_Processed, NamePDF FROM data
+        SELECT ID,PO_Number,Invoice_Number,Date_invoice_recieved, Date_Quickbooks_Processed, NamePDF
+        FROM data
         WHERE (Invoice_Number IS NULL AND Date_invoice_recieved<>'')
               OR Date_invoice_recieved='' 
               OR Date_Quickbooks_Processed='' 
@@ -408,3 +409,123 @@ END//
 DELIMITER ;
 
 CALL update_labresults_format();
+
+--
+--
+--
+
+DELIMITER //
+DROP PROCEDURE IF EXISTS PO_Found//
+CREATE PROCEDURE PO_Found(IN filterStartDate VARCHAR(255), IN filterEndDate VARCHAR(255))	
+BEGIN
+	IF(filterStartDate = 'default' AND filterEndDate = 'default') THEN
+    	SELECT count(PO_Number) as PO_Found
+      	FROM `data`
+        WHERE Date_CSM_Processed!="";
+    ELSEIF(filterStartDate != 'default' AND filterEndDate = 'default') THEN
+    	SELECT count(PO_Number) as PO_Found
+    	FROM `data`
+		WHERE 
+        	Date_CSM_Processed!="" AND (
+			STR_TO_DATE(Date_CSM_Processed,'%m/%d/%Y %H:%i:%s') >= STR_TO_DATE(filterStartDate,'%m/%d/%Y %H:%i:%s'));
+    ELSEIF(filterStartDate = 'default' AND filterEndDate != 'default') THEN
+    	SELECT count(PO_Number) as PO_Found
+      	FROM `data`
+		WHERE 
+        	Date_CSM_Processed!="" AND (
+        	STR_TO_DATE(Date_CSM_Processed,'%m/%d/%Y %H:%i:%s') <= STR_TO_DATE(filterEndDate,'%m/%d/%Y %H:%i:%s'));
+    ELSE
+    	SELECT count(PO_Number) as PO_Found
+        FROM `data`
+        WHERE 
+        	Date_CSM_Processed!="" AND (
+        	STR_TO_DATE(Date_CSM_Processed,'%m/%d/%Y %H:%i:%s') >= STR_TO_DATE(filterStartDate,'%m/%d/%Y %H:%i:%s') AND
+        	STR_TO_DATE(Date_CSM_Processed,'%m/%d/%Y %H:%i:%s') <= STR_TO_DATE(filterEndDate,'%m/%d/%Y %H:%i:%s'));
+    END IF;
+END//
+DELIMITER ;
+
+--CALL PO_Found('default','default');
+
+--
+--
+--
+
+DELIMITER //
+DROP PROCEDURE IF EXISTS dash_PO//
+CREATE PROCEDURE dash_PO()
+BEGIN
+  (SELECT count(PO_Number) as PO_Found
+  FROM data
+  WHERE Date_CSM_Processed!="")
+  UNION ALL
+  (SELECT count(PO_Number) as PO_NotFound
+  FROM data
+  WHERE Date_CSM_Processed="" OR Date_CSM_Processed IS NULL);
+END//
+DELIMITER ;
+
+--CALL dash_PO();
+
+
+--
+--
+--
+DELIMITER //
+DROP PROCEDURE IF EXISTS PO_Loaded//
+CREATE PROCEDURE PO_Loaded()
+BEGIN
+  (SELECT count(NamePDF) as PO_Loaded
+  FROM data
+  WHERE NamePDF!="" OR NamePDF != NULL)
+  UNION ALL
+  (SELECT count(1) as PO_NLoaded
+  FROM data
+  WHERE NamePDF="" OR NamePDF IS NULL);
+END//
+DELIMITER ;
+
+--CALL PO_Loaded();
+
+--
+--
+--
+DELIMITER //
+DROP PROCEDURE IF EXISTS Invoice_found//
+CREATE PROCEDURE Invoice_found()
+BEGIN
+  (SELECT count(Invoice_Number) as Invoice_Found
+  FROM data
+  WHERE NamePDF!="" OR NamePDF != NULL)
+  UNION ALL
+  (SELECT count(1) as Invoice_NFound
+  FROM data
+  WHERE Invoice_Number="" OR Invoice_Number IS NULL);
+END//
+DELIMITER ;
+
+--CALL Invoice_found();
+
+--
+--
+--
+DELIMITER //
+DROP PROCEDURE IF EXISTS Invoice_Loaded//
+CREATE PROCEDURE Invoice_Loaded()
+BEGIN
+  (SELECT count(Date_Quickbooks_Processed) as Invoice_Loaded
+  FROM data
+  WHERE (
+    Date_Quickbooks_Processed != "" OR Date_Quickbooks_Processed != NULL) AND (
+    Date_invoice_recieved != "" OR Date_invoice_recieved != NULL))
+  UNION ALL
+  (SELECT count(1) as Invoice_NLoaded
+  FROM data
+  WHERE (
+    Date_Quickbooks_Processed="" OR Date_Quickbooks_Processed IS NULL) AND (
+    Date_invoice_recieved != "" OR Date_invoice_recieved != NULL)
+  );
+END//
+DELIMITER ;
+
+--CALL Invoice_Loaded();

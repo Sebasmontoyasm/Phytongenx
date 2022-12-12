@@ -39,12 +39,6 @@ export class UserService {
       catchError(this.handlerError));
    }
 
-   changePassword(id:number,changePass: ChangePass){
-    return this.http.patch<any>(`${environment.API_URL}/api/users/changePassword/${id}`,changePass).
-    pipe(
-      catchError(this.handlerError));
-   }
-
    delete(id: number): Observable<{}>{
     let response = this.http.delete<User>(`${environment.API_URL}/api/users/${id}`) .pipe(
       catchError(this.handlerError));

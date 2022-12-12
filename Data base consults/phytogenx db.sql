@@ -24,7 +24,7 @@ CREATE TABLE `data` (
 -- Tabla con la información procesada por 
 -- Pedro o manualmente.
 
-CREATE TABLE `data` (
+CREATE TABLE IF NOT EXISTS `data` (
 	`ID` int NOT NULL AUTO_INCREMENT,
 	`PO_Number` varchar(100) NULL,
 	`Date_CSM_Processed` varchar(150) NULL,
@@ -5796,7 +5796,7 @@ CREATE PROCEDURE `sp_extraer_datos`(
 	IN `in_PO_Number` VARCHAR(150)
 )
 BEGIN
-	SELECT --  FROM `Data`
+	SELECT * FROM `Data`
 	WHERE in_PO_Number = PO_Number;
 END//
 DELIMITER ;
@@ -5940,7 +5940,7 @@ DELIMITER //
 DROP PROCEDURE IF EXISTS sp_extraer_datos_observablepedro//
 CREATE PROCEDURE sp_extraer_datos_observablepedro()
 BEGIN
-	SELECT -- 
+	SELECT *
 	FROM observablepedro;
 END;
 DELIMITER ;
@@ -5966,10 +5966,6 @@ BEGIN
 	VALUES (in_PO_Number,in_Date_CSM_Processed,in_PDF_Name);
 END;
 DELIMITER //
-
---  Llamado de la funcion 
---  call sp_InsertDataCMS(var1,var2,var3); 
-
 
 --  Información en la que Pedro no proceso por que no ha encontrado la factura 
 --  Se debe mostrar para realizarla de forma Manual.

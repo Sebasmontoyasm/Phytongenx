@@ -11,11 +11,11 @@
                             <mat-icon>label_important</mat-icon>
                             <a class="disable-link" href="./dashboard"><span>Metrics</span></a>
                         </button>
-                        <button *ngIf="rol === 'cms' || rol === 'administrator'" mat-menu-item>
+                        <button *ngIf="rol === 'cms' || rol === 'administrator' || rol === 'cmsandqb'" mat-menu-item>
                             <mat-icon>label_important</mat-icon>
                             <a class="disable-link" href="./cms/performance"><span>CMS Performance</span></a>
                         </button>
-                        <button *ngIf="rol === 'qb' || rol === 'administrator'" mat-menu-item>
+                        <button *ngIf="rol === 'qb' || rol === 'administrator' || rol === 'cmsandqb'" mat-menu-item>
                             <mat-icon>label_important</mat-icon>
                             <a class="disable-link" href="./qb/performance"><span>QB Performance</span></a>
                         </button>

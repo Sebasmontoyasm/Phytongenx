@@ -52,7 +52,7 @@ export class MasterDataPageComponent implements OnInit, OnDestroy {
     const localitem: string | any = localStorage.getItem('user');
     const user = JSON.parse(localitem);
 
-    if(user.rol == 'administrator' || user.rol == 'qb'){
+    if(user.rol == 'administrator' || user.rol == 'qb' || user.rol === 'cmsandqb'){
         return true;   
     }
     return false;
@@ -62,7 +62,7 @@ export class MasterDataPageComponent implements OnInit, OnDestroy {
     const localitem: string | any = localStorage.getItem('user');
     const user = JSON.parse(localitem);
 
-    if(user.rol == 'administrator' || user.rol == 'cms'){
+    if(user.rol == 'administrator' || user.rol == 'cms' || user.rol === 'cmsandqb'){
         return true;   
     }
     return false;

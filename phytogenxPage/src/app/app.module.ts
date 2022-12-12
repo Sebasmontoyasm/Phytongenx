@@ -45,6 +45,8 @@ import { RestorePageComponent } from './components/restore-page/restore-page.com
 import {MatCheckboxModule} from '@angular/material/checkbox';
 import { ChangepassPageComponent } from './components/users/changepass-page/changepass-page.component';
 import { MetricsComponent } from './components/dashboard/metrics/metrics.component';
+import { CdkTableModule } from '@angular/cdk/table';
+import { NgxChartsModule } from '@swimlane/ngx-charts';
 
 @NgModule({
   declarations: [
@@ -98,7 +100,10 @@ import { MetricsComponent } from './components/dashboard/metrics/metrics.compone
     MatSelectModule,
     MatOptionModule,
     MatCheckboxModule,
-    MatTableModule
+    MatTableModule,
+    CdkTableModule,
+    NgxChartsModule,
+    
   ],
   providers: [
     MatDatepickerModule,

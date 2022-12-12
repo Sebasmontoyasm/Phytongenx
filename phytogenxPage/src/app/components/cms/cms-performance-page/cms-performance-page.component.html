@@ -22,11 +22,11 @@
                        <td *matCellDef="let row">{{row.PONumber}} </td>
                    </ng-container>
                    <ng-container matColumnDef="DateStart">
-                       <th *matHeaderCellDef mat-sort-header> Date Start </th>
+                       <th *matHeaderCellDef mat-sort-header> Start Date </th>
                        <td *matCellDef="let row">{{row.DateStart}} </td>
                    </ng-container>
                    <ng-container matColumnDef="DateEnd">
-                       <th *matHeaderCellDef mat-sort-header> Date End </th>
+                       <th *matHeaderCellDef mat-sort-header> End Date </th>
                        <td *matCellDef="let row">{{row.DateEnd}} </td>
                    </ng-container>
                    <ng-container matColumnDef="CountPO">
@@ -42,7 +42,7 @@
                        <td *matCellDef="let row">{{row.TestCount}} </td>
                    </ng-container>
                    <ng-container matColumnDef="CountIssue">
-                       <th *matHeaderCellDef mat-sort-header> Issue Counter </th>
+                       <th *matHeaderCellDef mat-sort-header> Alerts Counter </th>
                        <td *matCellDef="let row">{{row.CountIssue}} </td>
                    </ng-container>
                    <tr mat-header-row *matHeaderRowDef="displayedColumn"></tr>

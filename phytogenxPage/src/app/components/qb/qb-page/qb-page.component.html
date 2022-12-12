@@ -42,7 +42,7 @@
                                     {{col.Invoice_Number}} </p>
                                 <tr *ngIf="!col.Invoice_Number">
                                     <mat-form-field>
-                                        <mat-label>Invoice number</mat-label>
+                                        <mat-label>Invoice Number</mat-label>
                                         <input matInput type="text" formControlName="Invoice_Number">
                                     </mat-form-field>    
                                 </tr>                        
@@ -85,7 +85,7 @@
 
                         <ng-container matColumnDef="NamePDF">
                             <th *matHeaderCellDef>
-                                Merge PDF Name
+                                Merged PDF Name
                                 <mat-error *ngIf="isValidField('file')">
                                     {{getErrorMessage("file")}}
                                 </mat-error>
@@ -109,7 +109,7 @@
 
                     <ng-container matColumnDef="Date_invoice_recieved">
                             <th *matHeaderCellDef> 
-                                Invoice date
+                                Invoice Date
                                 <mat-error *ngIf="isValidField('Date_invoice_recieved')">
                                     {{getErrorMessage("Date_invoice_recieved")}}
                                 </mat-error>

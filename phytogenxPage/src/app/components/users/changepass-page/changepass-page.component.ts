@@ -38,7 +38,6 @@ export class ChangepassPageComponent implements OnInit, OnDestroy {
 
   constructor(
   public dialogRef: MatDialogRef<ChangepassPageComponent>,
-  private userService:UserService,
   private authService:AuthService,
   private fb:FormBuilder,
   private changePass: MatDialog,
@@ -57,18 +56,17 @@ export class ChangepassPageComponent implements OnInit, OnDestroy {
     if(this.changePassForm.invalid){
       return;
     }
-    
+
     const formValue: ChangePass = {
+      username: this.user.username,
       password: this.changePassForm.value.password,
       newpassword: this.changePassForm.value.newpassword
     };
-
-    this.userService.changePassword(this.user.id,formValue).pipe(
+    this.authService.changePassword(formValue).pipe(
       takeUntil(this.destroy)
     ).subscribe(res => {
       if(res){
         this.closechangePass();
-        this.alert.alertMessage('201',res.message);
         this.authService.loginout();
         window.location.reload();
       }

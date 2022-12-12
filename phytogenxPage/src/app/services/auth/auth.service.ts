@@ -1,6 +1,6 @@
 import { HttpClient, HttpHeaders} from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { User, UserResponse} from '../../interfaces/user/user';
+import { ChangePass, User, UserResponse} from '../../interfaces/user/user';
 import { Observable, throwError, BehaviorSubject } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { catchError, map } from 'rxjs/operators';
@@ -102,4 +102,10 @@ export class AuthService {
     }
     return throwError(status);
   }
+
+  changePassword(changePass: ChangePass){
+    return this.http.patch<any>(`${environment.API_URL}/api/auth/change-password`,changePass).
+    pipe(
+      catchError(this.handlerError));
+   }
 }

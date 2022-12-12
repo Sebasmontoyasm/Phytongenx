@@ -6,10 +6,8 @@
             <div class="collapse navbar-collapse" id="navbarResponsive">
                 <ul class="navbar-nav ms-auto">
                     <li *ngIf="isLogged" class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded" href="/masterdata">Master Data</a></li>
-                    <li *ngIf="isLogged && rol === 'administrator'" class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded" href="/cms">CMS</a></li>
-                    <li *ngIf="isLogged && rol === 'administrator'" class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded" href="/qb">QB</a></li>
-                    <li *ngIf="isLogged && rol === 'cms'" class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded" href="/cms">CMS</a></li>
-                    <li *ngIf="isLogged && rol === 'qb'" class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded" href="/qb">QB</a></li>
+                    <li *ngIf="isLogged && (rol === 'administrator' || rol === 'cms' || rol === 'cmsandqb')" class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded" href="/cms">CMS Manual Update</a></li>
+                    <li *ngIf="isLogged && (rol === 'administrator' || rol === 'qb' || rol === 'cmsandqb')" class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded" href="/qb">QB Manual Update</a></li>
                     
                     <li class="nav-item mx-0 mx-lg-1"> 
                         <button *ngIf="!isLogged" mat-icon-button>
@@ -45,7 +43,7 @@
                         </button>
                         <button *ngIf="isLogged && rol === 'administrator'" mat-menu-item>
                             <mat-icon class="icon">restore</mat-icon>
-                            <span><a class="disable-link" href="/restore">Restore Data</a></span>
+                            <span><a class="disable-link" href="/restore">Changes logs</a></span>
                         </button>
                     </mat-menu>
                 </ul>

@@ -57,7 +57,6 @@ export class UsereditPageComponent implements OnInit, OnDestroy {
       if(res){
         window.location.reload();
         this.closeEditUser();
-        this.alert.alertMessage('201',res.message);
       }
     },error => {
         this.alert.alertMessage(String(error[0]),error[1]);
