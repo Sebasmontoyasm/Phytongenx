@@ -45,6 +45,12 @@ export class CheckRolGuard implements CanActivate {
     if(state.url.match(regexp)){
       return true;
     }
+
+    regexp = /dashboard\S?/;
+    if(state.url.match(regexp)){
+      return true;
+    }
+
     this.router.navigate(['/homepage']);
     return false;
   }

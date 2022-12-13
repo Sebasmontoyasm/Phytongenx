@@ -7,7 +7,7 @@
                 <button class="icon" mat-icon-button [matMenuTriggerFor]="menu">
                     <mat-icon >assessment</mat-icon>
                     <mat-menu #menu="matMenu">
-                        <button *ngIf="rol != 'guest'" mat-menu-item>
+                        <button mat-menu-item>
                             <mat-icon>label_important</mat-icon>
                             <a class="disable-link" href="./dashboard"><span>Metrics</span></a>
                         </button>

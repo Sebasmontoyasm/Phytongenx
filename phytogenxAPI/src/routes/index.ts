@@ -7,6 +7,7 @@ import qb from './qb';
 import userlog from './userlog';
 import restore from './restore';
 import rpa from './rpa';
+import metric from './metric';
 
 const routes = Router();
 
@@ -18,5 +19,6 @@ routes.use('/api/users', user);
 routes.use('/api/userlogs', userlog);
 routes.use('/api/restore',restore);
 routes.use('/api/rpa',rpa);
+routes.use('/api/metric',metric);
 
 export default routes;

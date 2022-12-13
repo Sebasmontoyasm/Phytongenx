@@ -496,7 +496,7 @@ CREATE PROCEDURE Invoice_found()
 BEGIN
   (SELECT count(Invoice_Number) as Invoice_Found
   FROM data
-  WHERE NamePDF!="" OR NamePDF != NULL)
+  WHERE Invoice_Number!="" OR Invoice_Number != NULL)
   UNION ALL
   (SELECT count(1) as Invoice_NFound
   FROM data
@@ -524,6 +524,12 @@ BEGIN
   WHERE (
     Date_Quickbooks_Processed="" OR Date_Quickbooks_Processed IS NULL) AND (
     Date_invoice_recieved != "" OR Date_invoice_recieved != NULL)
+  )
+  UNION ALL
+  (SELECT count(1) as Invoice_NLoaded
+  FROM data
+  WHERE (Date_Quickbooks_Processed="" OR Date_Quickbooks_Processed IS NULL) AND (
+    Date_invoice_recieved = "" OR Date_invoice_recieved IS NULL)
   );
 END//
 DELIMITER ;

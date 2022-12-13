@@ -1,0 +1,48 @@
+.metric-card {
+    max-width: 50%;
+    
+}
+
+.contenedor {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+
+.search-div{
+    padding-left: 15px;
+    padding-top: 10px;
+    padding-bottom: 5px;
+    width: 100%;
+    margin: 0%;    
+}
+
+
+.inputfilter{
+    background-color: #def;
+    border-radius: 5px;
+    background-position: 10px 12px;
+    background-repeat: no-repeat;
+    width: 10%;
+    font-size: 14px;
+    padding: 5px 10px 5px 14px;
+    border: 1px solid black;
+    margin-bottom: 0px;
+    background-color: #def;
+    margin: 5px;
+    margin-left: 0px;;
+}
+
+input::placeholder {
+    color: black;
+    font-size: 1.2em;
+  }
+
+.icon{
+    margin: 3px;
+    padding: 0px;
+    padding-right: 5px;
+    align-items: center; 
+    background: none;
+    border:0ch;
+}

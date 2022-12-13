@@ -102,8 +102,7 @@ import { NgxChartsModule } from '@swimlane/ngx-charts';
     MatCheckboxModule,
     MatTableModule,
     CdkTableModule,
-    NgxChartsModule,
-    
+    NgxChartsModule
   ],
   providers: [
     MatDatepickerModule,
