@@ -19,7 +19,7 @@ export class MetricsComponent implements OnInit, OnDestroy {
   invoicesfound: any;
   invoicesloaded: any;
 
-  view: [number, number] = [728,195];
+  view: [number, number] = [776,195];
 
   gradient: boolean = false;
   showLegend: boolean = true;
@@ -99,11 +99,11 @@ export class MetricsComponent implements OnInit, OnDestroy {
 
         this.PO_FoundData = [
           {
-            "name": "PO found",
+            "name": "In filter",
             "value": this.pofound[0].PO_Found
           },
           {
-            "name": "PO not found",
+            "name": "Out filter",
             "value": this.pofound[1].PO_Found
           }
         ]
@@ -143,11 +143,11 @@ export class MetricsComponent implements OnInit, OnDestroy {
 
         this.Invoices_FoundData = [
           {
-            "name": "Invoices found",
+            "name": "With Invoice",
             "value": this.invoicesfound[0].Invoice_Found
           },
           {
-            "name": "Invoices not found",
+            "name": "Without Invoice",
             "value": this.invoicesfound[1].Invoice_Found
           }
         ]
@@ -169,7 +169,7 @@ export class MetricsComponent implements OnInit, OnDestroy {
             "value": this.invoicesloaded[0].Invoice_Loaded
           },
           {
-            "name": "Invoice not receive",
+            "name": "Without invoice",
             "value": this.invoicesloaded[2].Invoice_Loaded
           },
           {
@@ -188,3 +188,4 @@ export class MetricsComponent implements OnInit, OnDestroy {
     window.location.reload();
   }
 }
+

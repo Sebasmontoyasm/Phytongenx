@@ -13,7 +13,6 @@ export const checkJwt = (req: Request, res: Response, next: NextFunction) => {
       res.locals.jwtPayload = jwtPayload;
       
     } catch (e) {
-      console.log("token: ",jwtPayload);
       return res.status(401).json({ message: 'Not Authorized'});
     }
   
