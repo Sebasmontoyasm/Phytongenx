@@ -9,7 +9,7 @@ export const uploadFile = (process:string) => {
                 cb(null,`${file.originalname}`);
             },
             destination: function(res, file, cb){
-                cb(null,'./src/ftp/cms');
+                cb(null,'C:/Users/RPA01/Documents/UiPath/Pedro_Phytongenx - Development/Archivos/CopiaSeguridadPDF');
             },
         });
     
@@ -36,7 +36,7 @@ export const uploadFile = (process:string) => {
                 cb(null,`${file.originalname}`);
             },
             destination: function(res, file, cb){
-                cb(null,'./src/ftp/qb');
+                cb(null,'C:/Users/RPA01/OneDrive - Phytogenx/AP/Vendor Invoices/PDA LABORATORIES/PDA w Results');
             },
         });
     
